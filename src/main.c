@@ -6,6 +6,7 @@
 #include "bffile.h"
 #include "bfini.h"
 #include "bfscreen.h"
+#include "bfmouse.h"
 #include "bflog.h"
 #include "bfjoyst.h"
 
@@ -564,6 +565,7 @@ main (int argc, char **argv)
     setup_language_file_names();
 
     display_set_full_screen(cmdln_fullscreen);
+    LbMouseChangeCapture(cmdln_fullscreen);
     display_set_lowres_stretch(cmdln_lores_stretch);
 
     set_default_user_settings();
