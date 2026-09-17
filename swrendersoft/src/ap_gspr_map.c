@@ -52,11 +52,19 @@ static inline void LbDrawBufferTrRemap(unsigned char **buf_out, const char *buf_
         for (i=0; i<buf_len; i++ )
         {
             // App-specific code starts
+            TbPixel col1, col2;
             unsigned int pxmap;
-            int pxbase;
-            pxbase = dword_1DC36C + (low_trans_grey_pal_bright[*(const ubyte *)buf_inp] >> 1);
-            pxmap = pxbase + (low_trans_grey_pal_bright[**buf_out] >> 1);
-            pxmap = (low_trans_grey_bright_limit[pxmap] << 8) | ((*(const ubyte *)buf_inp));
+            short k0, k1;
+            ubyte bri;
+
+            col1 = *(const ubyte *)buf_inp;
+            col2 = **buf_out;
+
+            k0 = (low_trans_grey_pal_bright[col1] >> 1);
+            k1 = (low_trans_grey_pal_bright[col2] >> 1);
+            bri = dword_1DC36C + k0 + k1;
+            bri = low_trans_grey_bright_limit[bri];
+            pxmap = (bri << 8) | col1;
             **buf_out = transmap[pxmap];
             // App-specific code ends
             buf_inp++;
@@ -67,11 +75,19 @@ static inline void LbDrawBufferTrRemap(unsigned char **buf_out, const char *buf_
         for (i=0; i<buf_len; i++ )
         {
             // App-specific code starts
+            TbPixel col1, col2;
             unsigned int pxmap;
-            int pxbase;
-            pxbase = dword_1DC36C + (low_trans_grey_pal_bright[*(const ubyte *)buf_inp] >> 1);
-            pxmap = pxbase + (low_trans_grey_pal_bright[**buf_out] >> 1);
-            pxmap = (low_trans_grey_bright_limit[pxmap]) | ((*(const ubyte *)buf_inp) << 8);
+            short k0, k1;
+            ubyte bri;
+
+            col1 = *(const ubyte *)buf_inp;
+            col2 = **buf_out;
+
+            k0 = (low_trans_grey_pal_bright[col1] >> 1);
+            k1 = (low_trans_grey_pal_bright[col2] >> 1);
+            bri = dword_1DC36C + k0 + k1;
+            bri = low_trans_grey_bright_limit[bri];
+            pxmap = bri | (col1 << 8);
             **buf_out = transmap[pxmap];
             // App-specific code ends
             buf_inp++;
@@ -85,11 +101,19 @@ static inline void LbDrawBufferTrRemap(unsigned char **buf_out, const char *buf_
         for (i=0; i<buf_len; i++ )
         {
             // App-specific code starts
+            TbPixel col1, col2;
             unsigned int pxmap;
-            int pxbase;
-            pxbase = dword_1DC36C + (low_trans_grey_pal_bright[*(const ubyte *)buf_inp] >> 1);
-            pxmap = pxbase + (low_trans_grey_pal_bright[**buf_out] >> 1);
-            pxmap = (low_trans_grey_bright_limit[pxmap] << 8) | ((*(const ubyte *)buf_inp));
+            short k0, k1;
+            ubyte bri;
+
+            col1 = *(const ubyte *)buf_inp;
+            col2 = **buf_out;
+
+            k0 = (low_trans_grey_pal_bright[col1] >> 1);
+            k1 = (low_trans_grey_pal_bright[col2] >> 1);
+            bri = dword_1DC36C + k0 + k1;
+            bri = low_trans_grey_bright_limit[bri];
+            pxmap = (bri << 8) | col1;
             **buf_out = transmap[pxmap];
             // App-specific code ends
             buf_inp++;
@@ -100,11 +124,19 @@ static inline void LbDrawBufferTrRemap(unsigned char **buf_out, const char *buf_
         for (i=0; i<buf_len; i++ )
         {
             // App-specific code starts
+            TbPixel col1, col2;
             unsigned int pxmap;
-            int pxbase;
-            pxbase = dword_1DC36C + (low_trans_grey_pal_bright[*(const ubyte *)buf_inp] >> 1);
-            pxmap = pxbase + (low_trans_grey_pal_bright[**buf_out] >> 1);
-            pxmap = (low_trans_grey_bright_limit[pxmap]) | ((*(const ubyte *)buf_inp) << 8);
+            short k0, k1;
+            ubyte bri;
+
+            col1 = *(const ubyte *)buf_inp;
+            col2 = **buf_out;
+
+            k0 = (low_trans_grey_pal_bright[col1] >> 1);
+            k1 = (low_trans_grey_pal_bright[col2] >> 1);
+            bri = dword_1DC36C + k0 + k1;
+            bri = low_trans_grey_bright_limit[bri];
+            pxmap = bri | (col1 << 8);
             **buf_out = transmap[pxmap];
             // App-specific code ends
             buf_inp++;

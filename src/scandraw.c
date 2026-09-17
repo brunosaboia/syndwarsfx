@@ -638,7 +638,8 @@ void SCANNER_map_line_sample_blend(void)
     for (i = 0; i < n; i++)
     {
         TbPixel col1, col2;
-        ubyte bri, k0, k1;
+        short k0, k1;
+        ubyte bri;
         u32 new_frac;
 
         col2 = SCANNER_data[tile_x][tile_z];
@@ -646,8 +647,8 @@ void SCANNER_map_line_sample_blend(void)
 
         k1 = low_trans_grey_pal_bright[col2];
         k0 = (low_trans_grey_pal_bright[col1] >> 1);
-        k0 = (base_brig + k0 + k1);
-        bri = low_trans_grey_bright_limit[k0];
+        bri = base_brig + k0 + k1;
+        bri = low_trans_grey_bright_limit[bri];
 
         *p_out = pixmap.fade_table[256 * bri + col2];
         p_out++;
@@ -705,16 +706,17 @@ void SCANNER_map_line_dim(void)
 
     for (i = 0; i < n; i++)
     {
-        ubyte col1, col2;
-        ubyte k0;
+        TbPixel col1, col2;
+        short k0;
+        ubyte bri;
 
         col1 = *p_out;
         col2 = 0x49;
 
         k0 = (low_trans_grey_pal_bright[col1] >> 1);
-        k0 = (base_brig + k0);
-        // this dims the pixel so much, no need for low_trans_grey_bright_limit[k0]
-        *p_out = pixmap.fade_table[256 * k0 + col2];
+        bri = base_brig + k0;
+        // this dims the pixel so much, no need for low_trans_grey_bright_limit[bri]
+        *p_out = pixmap.fade_table[256 * bri + col2];
         p_out++;
 
         cu_x += SCANNER_dw064;
