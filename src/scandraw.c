@@ -460,21 +460,6 @@ void SCANNER_dnt_SCANNER_dw070_update(ushort flags1)
     SCANNER_dw074 = mn_val;
 }
 
-void SCANNER_dnt_sub1_sub1(void)
-{
-    asm volatile (
-      "call ASM_SCANNER_dnt_sub1_sub1\n"
-        :  :  : "eax" );
-}
-
-void SCANNER_dnt_sub1_sub2(void)
-{
-    // TODO when rewriting, use mul_shift16_sign_pad_lo()
-    asm volatile (
-      "call ASM_SCANNER_dnt_sub1_sub2\n"
-        :  :  : "eax" );
-}
-
 /** Draws one scanner floor map scanline, sampling `SCANNER_data`.
  */
 void SCANNER_map_line_sample(void)
@@ -841,7 +826,7 @@ static void SCANNER_draw_new_transparent_map_row(int cu_x2, int cu_y2)
         }
         if ((flags1 & flags2) != 0)
         {
-            SCANNER_dnt_sub1_sub1();
+            SCANNER_map_line_dim();
             break;
         }
 
@@ -854,7 +839,7 @@ static void SCANNER_draw_new_transparent_map_row(int cu_x2, int cu_y2)
             dt_val = pv_val - cu_val;
 
             if ((cu_val > 0) && (cu_val <= 400)) {
-                SCANNER_dnt_sub1_sub2();
+                SCANNER_map_line_sample_blend();
             }
             if ((dt_val > 0) && (dt_val <= 400)) {
                 SCANNER_dw074 = dt_val;

@@ -102056,35 +102056,6 @@ GLOBAL_FUNC(ASM_SCANNER_find_position)	/* 0x0AD188 */
 		ret
 
 
-GLOBAL_FUNC(ASM_SCANNER_dnt_sub1_sub1)
-		pusha
-		mov    EXPORT_SYMBOL(SCANNER_dw06C),%ecx
-		mov    EXPORT_SYMBOL(SCANNER_dw070),%ebp
-		mov    EXPORT_SYMBOL(SCANNER_screenptr),%edi
-		mov    EXPORT_SYMBOL(SCANNER_dw074),%esi
-		mov    EXPORT_SYMBOL(SCANNER_brig),%dl
-	jump_ae194:
-		xor    %eax,%eax
-		mov    (%edi),%al
-		mov    EXPORT_SYMBOL(low_trans_grey_pal_bright)(%eax),%ah
-		shr    %ah
-		add    %dl,%ah
-		mov    $0x49,%al
-		mov    EXPORT_SYMBOL(pixmap)(%eax),%dh # pixmap.fade_table[?]
-		mov    %dh,(%edi)
-		inc    %edi
-		add    EXPORT_SYMBOL(SCANNER_dw064),%ecx
-		add    EXPORT_SYMBOL(SCANNER_dw068),%ebp
-		dec    %esi
-		jne    jump_ae194
-		mov    %ecx,EXPORT_SYMBOL(SCANNER_dw06C)
-		mov    %ebp,EXPORT_SYMBOL(SCANNER_dw070)
-		mov    %edi,EXPORT_SYMBOL(SCANNER_screenptr)
-		mov    %esi,EXPORT_SYMBOL(SCANNER_dw074)
-		popa
-		ret
-
-
 GLOBAL_FUNC(ASM_SCANNER_map_line_dim)
 		pusha
 		mov    EXPORT_SYMBOL(SCANNER_dw06C),%ecx
@@ -102108,67 +102079,6 @@ GLOBAL_FUNC(ASM_SCANNER_map_line_dim)
 		jne    jump_ae3b6
 		mov    %ecx,EXPORT_SYMBOL(SCANNER_dw06C)
 		mov    %ebp,EXPORT_SYMBOL(SCANNER_dw070)
-		mov    %edi,EXPORT_SYMBOL(SCANNER_screenptr)
-		mov    %esi,EXPORT_SYMBOL(SCANNER_dw074)
-		popa
-		ret
-
-
-GLOBAL_FUNC(ASM_SCANNER_dnt_sub1_sub2)
-		pusha
-		xor    %ebx,%ebx
-		mov    EXPORT_SYMBOL(SCANNER_dw06C),%eax
-		mov    EXPORT_SYMBOL(SCANNER_dw070),%edx
-		rol    $0x10,%eax
-		rol    $0x10,%edx
-		mov    %al,%bh
-		mov    %dl,%bl
-		mov    %eax,%ecx
-		mov    %edx,%ebp
-		and    $0xffff0000,%ecx
-		and    $0xffff0000,%ebp
-		mov    EXPORT_SYMBOL(SCANNER_dw07C),%eax
-		mov    EXPORT_SYMBOL(SCANNER_screenptr),%edi
-		mov    EXPORT_SYMBOL(SCANNER_dw074),%esi
-		mov    EXPORT_SYMBOL(SCANNER_brig),%dl
-		mov    EXPORT_SYMBOL(SCANNER_cont),%dh
-		ror    $0x10,%edx
-		mov    EXPORT_SYMBOL(SCANNER_bt084),%dl
-		mov    EXPORT_SYMBOL(SCANNER_bt085),%dh
-	jump_ae30c:
-		push   %ecx
-		xor    %eax,%eax
-		ror    $0x10,%edx
-		mov    EXPORT_SYMBOL(SCANNER_data)(%ebx),%al
-		xor    %ecx,%ecx
-		mov    EXPORT_SYMBOL(low_trans_grey_pal_bright)(%eax),%ah
-		mov    (%edi),%cl
-		mov    EXPORT_SYMBOL(low_trans_grey_pal_bright)(%ecx),%cl
-		shr    %cl
-		add    %ah,%cl
-		add    %dl,%cl
-		mov    EXPORT_SYMBOL(low_trans_grey_bright_limit)(%ecx),%ah
-		ror    $0x10,%edx
-		mov    EXPORT_SYMBOL(pixmap)(%eax),%al # pixmap.fade_table[?]
-		pop    %ecx
-		mov    %al,(%edi)
-		add    EXPORT_SYMBOL(SCANNER_dw07C),%ecx
-		inc    %edi
-		adc    %dl,%bh
-		add    EXPORT_SYMBOL(SCANNER_dw080),%ebp
-		adc    %dh,%bl
-		dec    %esi
-		jne    jump_ae30c
-		mov    %ecx,%eax
-		mov    %bh,%al
-		xor    %ah,%ah
-		rol    $0x10,%eax
-		mov    %eax,EXPORT_SYMBOL(SCANNER_dw06C)
-		mov    %ebp,%eax
-		mov    %bl,%al
-		xor    %ah,%ah
-		rol    $0x10,%eax
-		mov    %eax,EXPORT_SYMBOL(SCANNER_dw070)
 		mov    %edi,EXPORT_SYMBOL(SCANNER_screenptr)
 		mov    %esi,EXPORT_SYMBOL(SCANNER_dw074)
 		popa
