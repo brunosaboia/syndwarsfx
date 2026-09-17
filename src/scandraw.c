@@ -39,7 +39,6 @@
 #include "game_options.h"
 #include "game_speed.h"
 #include "game.h"
-#include "keyboard.h"
 #include "weapon.h"
 #include "swlog.h"
 /******************************************************************************/
@@ -73,16 +72,6 @@ struct NearestPos {
     u32 dist;
     short x;
     short y;
-};
-
-/** String of keycodes for changing arrow mode.
- * Cannot be of type TbKeyCode as contains plain numeric value as well.
- */
-const int scanner_arrow_mode_code_keys[] = {
-    KC_NUMPAD3, KC_DECIMAL, KC_NUMPAD1, KC_NUMPAD4,
-    KC_NUMPAD1, KC_NUMPAD5, KC_NUMPAD9, KC_NUMPAD2,
-    KC_NUMPAD6, KC_NUMPAD5, KC_NUMPAD3, KC_NUMPAD5,
-    9999,
 };
 
 /** Points for dotted symmetric circle of size above 15 but below 17.
@@ -403,8 +392,6 @@ const struct TbPoint circle_line_sz5[] = {
 };
 #define circle_line_sz5_count (sizeof(circle_line_sz5)/sizeof(circle_line_sz5[0]))
 
-s32 scanner_next_key_no;
-
 extern long SCANNER_dw064;
 extern long SCANNER_dw068;
 extern long SCANNER_dw06C;
@@ -422,26 +409,8 @@ extern struct scanstr1 SCANNER_bbpoint[256];
 extern long SCANNER_unknarr_1DBB6C[512];
 extern TbPixel *SCANNER_screenptr;
 extern u32 SCANNER_keep_arcs;
-extern long scanner_arrow_mode; // = 1;
 
 extern struct scanstr3 SCANNER_arcpoint[20];
-
-void SCANNER_process_special_input(void)
-{
-    ushort sckey, nxkey;
-
-    sckey = scanner_arrow_mode_code_keys[scanner_next_key_no];
-    if (is_key_pressed(sckey, KMod_DONTCARE))
-    {
-        clear_key_pressed(sckey);
-        nxkey = scanner_arrow_mode_code_keys[++scanner_next_key_no];
-        if (nxkey == 9999)
-        {
-            scanner_next_key_no = 0;
-            scanner_arrow_mode = scanner_arrow_mode ^ 1;
-        }
-    }
-}
 
 void SCANNER_dnt_SCANNER_dw070_update(ushort flags1)
 {
@@ -489,13 +458,6 @@ void SCANNER_dnt_SCANNER_dw070_update(ushort flags1)
     else
         mn_val = mn_of2;
     SCANNER_dw074 = mn_val;
-}
-
-void SCANNER_process_bbpoints(void)
-{
-    asm volatile (
-      "call ASM_SCANNER_process_bbpoints\n"
-        :  :  : "eax" );
 }
 
 void SCANNER_dnt_sub1_sub1(void)
@@ -2295,14 +2257,8 @@ void SCANNER_draw_signals(void)
     SCANNER_draw_things_dots(pos_mx, pos_mz, sh_x, sh_y, pos_x1, pos_y1, range);
 }
 
-void SCANNER_draw_solid(void)
+void SCANNER_fe_draw_solid(void)
 {
-#if 0
-    asm volatile ("call ASM_SCANNER_draw_solid\n"
-        :  :  : "eax" );
-    return;
-#endif
-    SCANNER_process_bbpoints();
     SCANNER_update_shifts();
     SCANNER_draw_solid_map();
     SCANNER_draw_solid_signals();
@@ -2310,8 +2266,6 @@ void SCANNER_draw_solid(void)
 
 void SCANNER_draw_new_transparent(void)
 {
-    SCANNER_process_special_input();
-    SCANNER_process_bbpoints();
     SCANNER_update_shifts();
     SCANNER_draw_new_transparent_map();
     SCANNER_draw_signals();

@@ -89,6 +89,7 @@ extern ushort SCANNER_base_zoom_factor;
 extern ushort SCANNER_user_zoom_factor;
 extern ubyte SCANNER_scale_dots;
 extern u32 dword_1DB1A0;
+extern s32 scanner_arrow_mode; // = 1;
 
 void SCANNER_clear(void);
 void SCANNER_init(void);
@@ -98,6 +99,9 @@ void SCANNER_set_colours(struct PanelStyle *p_style);
 void SCANNER_find_position(int x, int y, int *Ua, int *Vb);
 void SCANNER_data_to_screen(void);
 void SCANNER_set_zoom(int zoom);
+
+void SCANNER_fe_process_turn(void);
+void SCANNER_process_turn(void);
 
 /** Set screen location box coordinates of the scanner view.
  *

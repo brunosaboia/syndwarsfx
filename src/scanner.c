@@ -31,6 +31,7 @@
 
 #include "bigmap.h"
 #include "campaign.h"
+#include "keyboard.h"
 #include "player.h"
 #include "thing.h"
 #include "thing_search.h"
@@ -54,6 +55,18 @@ struct BbpAdds {
 #pragma pack()
 
 /******************************************************************************/
+
+/** String of keycodes for changing arrow mode.
+ * Cannot be of type TbKeyCode as contains plain numeric value as well.
+ */
+const int scanner_arrow_mode_code_keys[] = {
+    KC_NUMPAD3, KC_DECIMAL, KC_NUMPAD1, KC_NUMPAD4,
+    KC_NUMPAD1, KC_NUMPAD5, KC_NUMPAD9, KC_NUMPAD2,
+    KC_NUMPAD6, KC_NUMPAD5, KC_NUMPAD3, KC_NUMPAD5,
+    9999,
+};
+
+s32 scanner_next_key_no;
 
 extern ushort signal_count;
 extern ulong turn_last; // = 999;
@@ -99,6 +112,30 @@ void SCANNER_init_bbpoints(void)
         SCANNER_bbpadds[i].du = lbSinTable[angle] >> 2;
         SCANNER_bbpadds[i].dv = lbSinTable[angle + 512] >> 2;
     }
+}
+
+void SCANNER_process_special_input(void)
+{
+    ushort sckey, nxkey;
+
+    sckey = scanner_arrow_mode_code_keys[scanner_next_key_no];
+    if (is_key_pressed(sckey, KMod_DONTCARE))
+    {
+        clear_key_pressed(sckey);
+        nxkey = scanner_arrow_mode_code_keys[++scanner_next_key_no];
+        if (nxkey == 9999)
+        {
+            scanner_next_key_no = 0;
+            scanner_arrow_mode = scanner_arrow_mode ^ 1;
+        }
+    }
+}
+
+void SCANNER_process_bbpoints(void)
+{
+    asm volatile (
+      "call ASM_SCANNER_process_bbpoints\n"
+        :  :  : "eax" );
 }
 
 void SCANNER_clear(void)
@@ -155,6 +192,17 @@ void SCANNER_set_colours(struct PanelStyle *p_style)
     SCANNER_colour[ScnClr_LiquidDk] = pixmap.fade_table[10 * PALETTE_8b_COLORS + bcol1];
     SCANNER_colour[ScnClr_Outline] = p_style->Colours[PanColr_Outline];
     SCANNER_colour[ScnClr_Frame] = p_style->Colours[PanColr_Frame];
+}
+
+void SCANNER_fe_process_turn(void)
+{
+    SCANNER_process_bbpoints();
+}
+
+void SCANNER_process_turn(void)
+{
+    SCANNER_process_special_input();
+    SCANNER_process_bbpoints();
 }
 
 void SCANNER_fill_in(void)
@@ -236,7 +284,8 @@ void SCANNER_init_arcpoint(int x1, int z1, int x2, int z2, int c)
 
 void SCANNER_data_to_screen(void)
 {
-    SCANNER_draw_solid();
+    SCANNER_fe_process_turn();
+    SCANNER_fe_draw_solid();
 }
 
 void SCANNER_set_screen_box(short x, short y, short width, short height, short cutout)
