@@ -513,62 +513,6 @@ void SCANNER_dnt_sub1_sub2(void)
         :  :  : "eax" );
 }
 
-void SCANNER_dnt_sub1_sub4(void)
-{
-    asm volatile (
-      "call ASM_SCANNER_dnt_sub1_sub4\n"
-        :  :  : "eax" );
-}
-
-void SCANNER_dnt_sub1_sub5(void)
-{
-    asm volatile (
-      "call ASM_SCANNER_dnt_sub1_sub5\n"
-        :  :  : "eax" );
-}
-
-void SCANNER_dnt_sub1_sub6(void)
-{
-    asm volatile (
-      "call ASM_SCANNER_dnt_sub1_sub6\n"
-        :  :  : "eax" );
-}
-
-void SCANNER_dnt_sub1_sub7(void)
-{
-    asm volatile (
-      "call ASM_SCANNER_dnt_sub1_sub7\n"
-        :  :  : "eax" );
-}
-
-void SCANNER_dnt_sub1_sub8(void)
-{
-    asm volatile (
-      "call ASM_SCANNER_dnt_sub1_sub8\n"
-        :  :  : "eax" );
-}
-
-void SCANNER_dnt_sub1_sub9(void)
-{
-    asm volatile (
-      "call ASM_SCANNER_dnt_sub1_sub9\n"
-        :  :  : "eax" );
-}
-
-void SCANNER_dnt_sub1_sub10(void)
-{
-    asm volatile (
-      "call ASM_SCANNER_dnt_sub1_sub10\n"
-        :  :  : "eax" );
-}
-
-void SCANNER_dnt_sub1_sub11(void)
-{
-    asm volatile (
-      "call ASM_SCANNER_dnt_sub1_sub11\n"
-        :  :  : "eax" );
-}
-
 /** Draws one scanner floor map scanline, sampling `SCANNER_data`.
  */
 void SCANNER_map_line_sample(void)
@@ -772,6 +716,61 @@ static void SCANNER_map_line_blank_while_oob(ushort flags2)
     SCANNER_dw074 = n;
 }
 
+/** Dims scanner map pixels while the given out-of-map-bounds condition holds.
+ */
+static void SCANNER_map_line_dim_while_oob(ushort flags2)
+{
+    s32 cu_x, cu_y;
+    TbPixel *p_out;
+    ubyte base_brig;
+    s32 n;
+
+    cu_x = SCANNER_dw06C;
+    cu_y = SCANNER_dw070;
+    p_out = SCANNER_screenptr;
+    n = SCANNER_dw074;
+    base_brig = SCANNER_brig;
+
+    while (n > 0)
+    {
+        TbPixel col1, col2;
+        TbBool oob;
+        short k0;
+        ubyte bri;
+
+        oob = true;
+        if ((flags2 & 0x01) != 0)
+            oob = oob && (cu_x < 0);
+        if ((flags2 & 0x02) != 0)
+            oob = oob && (cu_x >= 0x1000000);
+        if ((flags2 & 0x04) != 0)
+            oob = oob && (cu_y < 0);
+        if ((flags2 & 0x08) != 0)
+            oob = oob && (cu_y >= 0x1000000);
+
+        if (!oob)
+            break;
+
+        col1 = *p_out;
+        col2 = 0x49;
+
+        k0 = (low_trans_grey_pal_bright[col1] >> 1);
+        bri = base_brig + k0;
+        // this dims the pixel so much, no need for low_trans_grey_bright_limit[bri]
+        *p_out = pixmap.fade_table[256 * bri + col2];
+        p_out++;
+
+        cu_x += SCANNER_dw064;
+        cu_y += SCANNER_dw068;
+        n--;
+    }
+
+    SCANNER_dw06C = cu_x;
+    SCANNER_dw070 = cu_y;
+    SCANNER_screenptr = p_out;
+    SCANNER_dw074 = n;
+}
+
 /** Renders one scanner floor map row.
  *
  * Uses Cohen-Sutherland-style clipping of texture within the
@@ -901,42 +900,14 @@ static void SCANNER_draw_new_transparent_map_row(int cu_x2, int cu_y2)
             }
             break;
         case 0x01:
-            SCANNER_dnt_sub1_sub4();
-            if (SCANNER_dw074)
-                continue;
-            break;
         case 0x02:
-            SCANNER_dnt_sub1_sub5();
-            if (SCANNER_dw074)
-                continue;
-            break;
         case 0x04:
-            SCANNER_dnt_sub1_sub6();
-            if (SCANNER_dw074)
-                continue;
-            break;
         case 0x05:
-            SCANNER_dnt_sub1_sub8();
-            if (SCANNER_dw074)
-                continue;
-            break;
         case 0x06:
-            SCANNER_dnt_sub1_sub9();
-            if (SCANNER_dw074)
-                continue;
-            break;
         case 0x08:
-            SCANNER_dnt_sub1_sub7();
-            if (SCANNER_dw074)
-                continue;
-            break;
         case 0x09:
-            SCANNER_dnt_sub1_sub10();
-            if (SCANNER_dw074)
-                continue;
-            break;
         case 0x0A:
-            SCANNER_dnt_sub1_sub11();
+            SCANNER_map_line_dim_while_oob(flags2);
             if (SCANNER_dw074)
                 continue;
             break;
