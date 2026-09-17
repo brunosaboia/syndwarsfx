@@ -31,6 +31,7 @@
 #include "engincam.h"
 #include "engincolour.h"
 #include "engintrns.h"
+#include "app_sprite.h"
 
 #include "campaign.h"
 #include "thing.h"
@@ -69,7 +70,7 @@ struct scanstr3 {
 };
 
 struct NearestPos {
-    ulong dist;
+    u32 dist;
     short x;
     short y;
 };
@@ -420,7 +421,7 @@ extern ubyte SCANNER_cont;
 extern struct scanstr1 SCANNER_bbpoint[256];
 extern long SCANNER_unknarr_1DBB6C[512];
 extern TbPixel *SCANNER_screenptr;
-extern ulong SCANNER_keep_arcs;
+extern u32 SCANNER_keep_arcs;
 extern long scanner_arrow_mode; // = 1;
 
 extern struct scanstr3 SCANNER_arcpoint[20];
@@ -570,7 +571,7 @@ void SCANNER_dnt_sub1_sub11(void)
 
 /** Draws one scanner floor map scanline, sampling `SCANNER_data`.
  */
-static void SCANNER_map_line_sample(void)
+void SCANNER_map_line_sample(void)
 {
     s32 n;
     s32 cu_x, cu_y;
@@ -600,17 +601,75 @@ static void SCANNER_map_line_sample(void)
     SCANNER_dw074 = n;
 }
 
-void SCANNER_dnt_sub1_sub12(void)
+/** Draws one scanner floor map scanline for the transparent map variant.
+ *
+ *  Samples `SCANNER_data` and blends it with what is already on screen.
+ */
+void SCANNER_map_line_sample_blend(void)
 {
-    // TODO when rewriting, use mul_shift16_sign_pad_lo()
+#if 0
     asm volatile (
-      "call ASM_SCANNER_dnt_sub1_sub12\n"
+      "call ASM_SCANNER_map_line_sample_blend\n"
         :  :  : "eax" );
+    return;
+#endif
+    ubyte tile_x, tile_z;
+    u32 frac_x, frac_z;
+    ubyte step_int_x, step_int_z;
+    u32 step_frac_x, step_frac_z;
+    ubyte base_brig;
+    TbPixel *p_out;
+    s32 n, i;
+
+    tile_x = (SCANNER_dw06C >> 16);
+    tile_z = (SCANNER_dw070 >> 16);
+    frac_x = (SCANNER_dw06C & 0xFFFF) << 16;
+    frac_z = (SCANNER_dw070 & 0xFFFF) << 16;
+
+    step_frac_x = SCANNER_dw07C;
+    step_frac_z = SCANNER_dw080;
+    step_int_x = SCANNER_bt084;
+    step_int_z = SCANNER_bt085;
+    base_brig = SCANNER_brig;
+
+    p_out = SCANNER_screenptr;
+    n = SCANNER_dw074;
+
+    for (i = 0; i < n; i++)
+    {
+        TbPixel col1, col2;
+        ubyte bri, k0, k1;
+        u32 new_frac;
+
+        col2 = SCANNER_data[tile_x][tile_z];
+        col1 = *p_out;
+
+        k1 = low_trans_grey_pal_bright[col2];
+        k0 = (low_trans_grey_pal_bright[col1] >> 1);
+        k0 = (base_brig + k0 + k1);
+        bri = low_trans_grey_bright_limit[k0];
+
+        *p_out = pixmap.fade_table[256 * bri + col2];
+        p_out++;
+
+        new_frac = frac_x + step_frac_x;
+        tile_x = tile_x + step_int_x + (new_frac < frac_x);
+        frac_x = new_frac;
+
+        new_frac = frac_z + step_frac_z;
+        tile_z = tile_z + step_int_z + (new_frac < frac_z);
+        frac_z = new_frac;
+    }
+
+    SCANNER_dw06C = ((frac_x >> 16) | ((u32)tile_x << 16));
+    SCANNER_dw070 = ((frac_z >> 16) | ((u32)tile_z << 16));
+    SCANNER_screenptr = p_out;
+    SCANNER_dw074 = n;
 }
 
 /** Draws blank within scanner floor map scanline.
  */
-static void SCANNER_map_line_blank(void)
+void SCANNER_map_line_blank(void)
 {
     s32 n;
     TbPixel *p_out;
@@ -626,11 +685,46 @@ static void SCANNER_map_line_blank(void)
     SCANNER_dw074 = n;
 }
 
-void SCANNER_dnt_sub1_sub3(void)
+/** Dims (greys out) the pixels within a scanner floor map scanline.
+ *
+ *  This does not blank the pixels to zero - it keeps showing whatever
+ *  underlying view is there, tinted with a translucent grey.
+ */
+void SCANNER_map_line_dim(void)
 {
-    asm volatile (
-      "call ASM_SCANNER_dnt_sub1_sub3\n"
-        :  :  : "eax" );
+    s32 cu_x, cu_y;
+    TbPixel *p_out;
+    ubyte base_brig;
+    s32 n, i;
+
+    cu_x = SCANNER_dw06C;
+    cu_y = SCANNER_dw070;
+    p_out = SCANNER_screenptr;
+    n = SCANNER_dw074;
+    base_brig = SCANNER_brig;
+
+    for (i = 0; i < n; i++)
+    {
+        ubyte col1, col2;
+        ubyte k0;
+
+        col1 = *p_out;
+        col2 = 0x49;
+
+        k0 = (low_trans_grey_pal_bright[col1] >> 1);
+        k0 = (base_brig + k0);
+        // this dims the pixel so much, no need for low_trans_grey_bright_limit[k0]
+        *p_out = pixmap.fade_table[256 * k0 + col2];
+        p_out++;
+
+        cu_x += SCANNER_dw064;
+        cu_y += SCANNER_dw068;
+    }
+
+    SCANNER_dw06C = cu_x;
+    SCANNER_dw070 = cu_y;
+    SCANNER_screenptr = p_out;
+    SCANNER_dw074 = n;
 }
 
 /** Blanks scanner map pixels from `SCANNER_screenptr` while given condition holds.
@@ -729,8 +823,7 @@ static void SCANNER_draw_solid_map_row(int cu_x2, int cu_y2)
             if ((cu_val > 0) && (cu_val <= 400)) {
                 SCANNER_map_line_sample();
             }
-            if ((dt_val > 0) && (dt_val <= 400))
-            {
+            if ((dt_val > 0) && (dt_val <= 400)) {
                 SCANNER_dw074 = dt_val;
                 SCANNER_map_line_blank();
             }
@@ -780,7 +873,7 @@ static void SCANNER_draw_new_transparent_map_row(int cu_x2, int cu_y2)
 
         if ((flags1 | flags2) == 0)
         {
-            SCANNER_dnt_sub1_sub12();
+            SCANNER_map_line_sample_blend();
             break;
         }
         if ((flags1 & flags2) != 0)
@@ -802,7 +895,7 @@ static void SCANNER_draw_new_transparent_map_row(int cu_x2, int cu_y2)
             }
             if ((dt_val > 0) && (dt_val <= 400)) {
                 SCANNER_dw074 = dt_val;
-                SCANNER_dnt_sub1_sub3();
+                SCANNER_map_line_dim();
             }
             break;
         case 0x01:

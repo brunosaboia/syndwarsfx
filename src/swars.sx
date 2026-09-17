@@ -103067,7 +103067,7 @@ GLOBAL_FUNC(ASM_SCANNER_dnt_sub1_sub1)
 		ret
 
 
-GLOBAL_FUNC(ASM_SCANNER_dnt_sub1_sub3)
+GLOBAL_FUNC(ASM_SCANNER_map_line_dim)
 		pusha
 		mov    EXPORT_SYMBOL(SCANNER_dw06C),%ecx
 		mov    EXPORT_SYMBOL(SCANNER_dw070),%ebp
@@ -103421,7 +103421,7 @@ GLOBAL_FUNC(ASM_SCANNER_dnt_sub1_sub11)
 		ret
 
 
-GLOBAL_FUNC(ASM_SCANNER_dnt_sub1_sub12)
+GLOBAL_FUNC(ASM_SCANNER_map_line_sample_blend)
 		pusha
 		xor    %ebx,%ebx
 		mov    EXPORT_SYMBOL(SCANNER_dw06C),%eax
