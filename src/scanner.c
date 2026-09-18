@@ -28,6 +28,7 @@
 
 #include "app_sprite.h"
 #include "engincolour.h"
+#include "enginsngtxtr.h"
 
 #include "bigmap.h"
 #include "campaign.h"
@@ -213,10 +214,62 @@ void SCANNER_fill_in(void)
 
 int SCANNER_find_colour(int mapx, int mapy)
 {
+#if 0
     int ret;
     asm volatile ("call ASM_SCANNER_find_colour\n"
         : "=r" (ret) : "a" (mapx), "d" (mapy));
     return ret;
+#endif
+    struct MyMapElement *p_mapel;
+    ushort textr;
+    ubyte txtr_bits, tlpos_bits;
+    int result;
+
+    tlpos_bits =  (mapx >> 6) & 2;
+    tlpos_bits |= (mapy >> 7) & 1;
+    p_mapel = &game_my_big_map[128 * MAPCOORD_TO_TILE(mapx) + MAPCOORD_TO_TILE(mapy)];
+    textr = p_mapel->Texture & 0x3FFF;
+    txtr_bits = get_my_texture_bits(textr);
+
+    switch (tlpos_bits)
+    {
+    case 0:
+        if ((txtr_bits & 0x40) != 0)
+            result = 1;
+        else if ((txtr_bits & 0x80) != 0)
+            result = 2;
+        else
+            result = 0;
+        break;
+    case 1:
+        if ((txtr_bits & 0x10) != 0)
+          result = 1;
+        else if ((txtr_bits & 0x20) != 0)
+            result = 2;
+        else
+            result = 0;
+        break;
+    case 2:
+        if ((txtr_bits & 0x01) != 0)
+            result = 1;
+        else if ((txtr_bits & 0x02) != 0)
+            result = 2;
+        else
+            result = 0;
+        break;
+    case 3:
+        if ((txtr_bits & 0x04) != 0)
+            result = 1;
+        else if ((txtr_bits & 0x08) != 0)
+            result = 2;
+        else
+            result = 0;
+        break;
+      default:
+        result = 0;
+        break;
+    }
+    return result;
 }
 
 void SCANNER_fill_in_a_little_bit(int x1, int z1, int x2, int z2)
