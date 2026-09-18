@@ -100638,7 +100638,7 @@ SCANNER_scanconvert:	/* 0x0ABBBC */
 
 
 /*----------------------------------------------------------------*/
-SCANNER_draw_road:	/* 0x0AC090 */
+GLOBAL_FUNC(ASM_SCANNER_draw_road)	/* 0x0AC090 */
 /*----------------------------------------------------------------*/
 		push   %ebx
 		push   %ecx
@@ -100748,7 +100748,7 @@ SCANNER_draw_road:	/* 0x0AC090 */
 
 
 /*----------------------------------------------------------------*/
-SCANNER_draw_object:	/* 0x0AC1B8 */
+GLOBAL_FUNC(ASM_SCANNER_draw_object)	/* 0x0AC1B8 */
 /*----------------------------------------------------------------*/
 		push   %ebx
 		push   %ecx
@@ -101122,7 +101122,7 @@ func_ac55d:
 
 
 /*----------------------------------------------------------------*/
-SCANNER_outline:	/* 0x0AC57C */
+GLOBAL_FUNC(ASM_SCANNER_outline)	/* 0x0AC57C */
 /*----------------------------------------------------------------*/
 		push   %ebx
 		push   %ecx
@@ -101374,7 +101374,7 @@ GLOBAL_FUNC (ASM_SCANNER_fill_in)	/* 0x0AC68C */
 		add    %ecx,%eax
 		mov    EXPORT_SYMBOL(SCANNER_colour)+3,%dl
 		cwtl
-		call   SCANNER_draw_object
+		call   ac_SCANNER_draw_object
 		inc    %ecx
 	jump_ac883:
 		movswl %bx,%eax
@@ -101428,7 +101428,7 @@ GLOBAL_FUNC (ASM_SCANNER_fill_in)	/* 0x0AC68C */
 		mov    %edi,%ecx
 		jmp    jump_ac883
 	jump_ac91f:
-		call   SCANNER_outline
+		call   ac_SCANNER_outline
 		mov    $0x8ee,%edx
 		xor    %ebx,%ebx
 		mov    %edx,0x10(%esp)
@@ -101485,7 +101485,7 @@ GLOBAL_FUNC (ASM_SCANNER_fill_in)	/* 0x0AC68C */
 		mov    0x8(%ecx),%bl
 		cmp    $0x15,%ebx
 		jne    jump_ac9d8
-		call   SCANNER_draw_road
+		call   ac_SCANNER_draw_road
 	jump_ac9d8:
 		movswl %dx,%edx
 		imul   $0xa8,%edx,%edx

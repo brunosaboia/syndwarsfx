@@ -31,12 +31,22 @@ extern "C" {
 #define SCANNER_GROUP_COUNT 6
 #define SCANNER_ARC_COUNT 4
 
+#define ARC_POINTS 5
+#define ARC_ANGLE 150
+
 #define SCANNER_MAPDATA_WIDTH 256
 #define SCANNER_MAPDATA_HEIGHT 256
 
 struct Objective;
 struct NetscanObjective;
 struct PanelStyle;
+
+struct scanstr3 {
+    long u1;
+    long v1;
+    long u2;
+    long v2;
+};
 
 struct BigBlip // sizeof=12
 {
@@ -83,6 +93,7 @@ struct Scanner // sizeof=0x467 (before resize)
 
 #pragma pack()
 /******************************************************************************/
+extern struct scanstr3 SCANNER_arcpoint[SCANNER_ARC_COUNT * ARC_POINTS];
 extern s32 *SCANNER_width;
 extern ubyte SCANNER_data[SCANNER_MAPDATA_HEIGHT][SCANNER_MAPDATA_WIDTH];
 extern ushort SCANNER_base_zoom_factor;
@@ -112,6 +123,8 @@ void SCANNER_process_turn(void);
  * @param cutout Depth of bottom right cutout of the screen rectangle.
  */
 void SCANNER_set_screen_box(short x, short y, short width, short height, short cutout);
+
+void SCANNER_process_arcpoints(void);
 
 TbBool mouse_move_over_scanner(void);
 void clear_all_scanner_signals(void);

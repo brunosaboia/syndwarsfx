@@ -18,6 +18,7 @@
 /******************************************************************************/
 #include "scanner.h"
 
+#include <stdlib.h>
 #include "bfgentab.h"
 #include "bfmath.h"
 #include "bfmemut.h"
@@ -32,6 +33,7 @@
 
 #include "bigmap.h"
 #include "campaign.h"
+#include "building.h"
 #include "keyboard.h"
 #include "player.h"
 #include "thing.h"
@@ -206,12 +208,25 @@ void SCANNER_process_turn(void)
     SCANNER_process_bbpoints();
 }
 
-void SCANNER_fill_in(void)
+void SCANNER_draw_object(int object_idx, int colour)
 {
-    asm volatile ("call ASM_SCANNER_fill_in\n"
-        :  :  : "eax" );
+    asm volatile ("call ASM_SCANNER_draw_object\n"
+        : : "a" (object_idx), "d" (colour) : );
 }
 
+void SCANNER_draw_road(int thing_idx)
+{
+    asm volatile ("call ASM_SCANNER_draw_road\n"
+        : : "a" (thing_idx) : );
+}
+
+void SCANNER_outline(void)
+{
+    asm volatile ("call ASM_SCANNER_outline\n"
+        : : : "eax" );
+}
+
+//TODO why coordinates are backward?
 int SCANNER_find_colour(int mapx, int mapy)
 {
 #if 0
@@ -272,20 +287,9 @@ int SCANNER_find_colour(int mapx, int mapy)
     return result;
 }
 
-void SCANNER_fill_in_a_little_bit(int x1, int z1, int x2, int z2)
+static void SCANNER_fill_in_floor(int x1, int z1, int x2, int z2)
 {
-#if 0
-    asm volatile ("call ASM_SCANNER_fill_in_a_little_bit\n"
-        : : "a" (x1), "d" (z1), "b" (x2), "c" (z2));
-#endif
     int tile_x, tile_z;
-
-    if (x1 > x2) {
-        return;
-    }
-    if (z1 > z2) {
-        return;
-    }
 
     for (tile_x = x1; tile_x <= x2; tile_x++)
     {
@@ -327,12 +331,275 @@ void SCANNER_fill_in_a_little_bit(int x1, int z1, int x2, int z2)
     }
 }
 
-void SCANNER_init_arcpoint(int x1, int z1, int x2, int z2, int c)
+/** Draw scanner outlines for all buildings located on the map.
+ */
+void SCANNER_fill_in_all_buildings(void)
 {
+    int tile_x, tile_z;
+
+    for (tile_z = 0; tile_z < MAP_TILE_HEIGHT - 1; tile_z++)
+    {
+        for (tile_x = 0; tile_x < MAP_TILE_WIDTH - 1; tile_x++)
+        {
+            struct MyMapElement *p_mapel;
+            ThingIdx thing;
+
+            p_mapel = &game_my_big_map[MAP_TILE_WIDTH * tile_z + tile_x];
+            thing = p_mapel->Child;
+            while (thing != 0)
+            {
+                if (thing <= 0) {
+                    struct SimpleThing *p_sthing;
+
+                    p_sthing = &sthings[thing];
+                    thing = p_sthing->Next;
+                } else {
+                    struct Thing *p_thing;
+
+                    p_thing = &things[thing];
+                    if ((p_thing->Type == TT_BUILDING) && (p_thing->SubType != SubTT_BLD_BEZIER_ROAD))
+                    {
+                        int i;
+
+                        for (i = 0; i < p_thing->U.UObject.NumbObjects; i++)
+                        {
+                            SCANNER_draw_object(p_thing->U.UObject.Object + i,
+                              SCANNER_colour[ScnClr_Outline]);
+                        }
+                    }
+                    thing = p_thing->Next;
+                }
+            }
+        }
+    }
+}
+
+void SCANNER_fill_in_roadways(void)
+{
+    int tile_x, tile_z;
+
+    // Draw the scanner roadway lines.
+    for (tile_z = 0; tile_z < MAP_TILE_HEIGHT - 1; tile_z++)
+    {
+        for (tile_x = 0; tile_x < MAP_TILE_WIDTH - 1; tile_x++)
+        {
+            struct MyMapElement *p_mapel;
+            ThingIdx thing;
+
+            p_mapel = &game_my_big_map[MAP_TILE_WIDTH * tile_z + tile_x];
+            thing = p_mapel->Child;
+            while (thing != 0)
+            {
+                if (thing <= 0) {
+                    struct SimpleThing *p_sthing;
+
+                    p_sthing = &sthings[thing];
+                    thing = p_sthing->Next;
+                } else {
+                    struct Thing *p_thing;
+
+                    p_thing = &things[thing];
+                    if ((p_thing->Type == TT_BUILDING) && (p_thing->SubType == SubTT_BLD_BEZIER_ROAD))
+                    {
+                        SCANNER_draw_road(thing);
+                    }
+                    thing = p_thing->Next;
+                }
+            }
+        }
+    }
+}
+
+void SCANNER_fill_in(void)
+{
+#if 0
+    asm volatile ("call ASM_SCANNER_fill_in\n"
+        :  :  : "eax" );
+    return;
+#endif
+    SCANNER_fill_in_floor(0, 0, 255, 255);
+    SCANNER_fill_in_all_buildings();
+    SCANNER_outline();
+    SCANNER_fill_in_roadways();
+}
+
+void SCANNER_fill_in_a_little_bit(int x1, int z1, int x2, int z2)
+{
+#if 0
+    asm volatile ("call ASM_SCANNER_fill_in_a_little_bit\n"
+        : : "a" (x1), "d" (z1), "b" (x2), "c" (z2));
+#endif
+    if (x1 > x2) {
+        return;
+    }
+    if (z1 > z2) {
+        return;
+    }
+
+    SCANNER_fill_in_floor(x1, z1, x2, z2);
+}
+
+static int SCANNER_arcpoint_compute_mag(int x1, int z1, int x2, int z2)
+{
+    int dx, dz, abs_dx, abs_dz;
+    int mag;
+
+    dx = x2 - x1;
+    dz = z2 - z1;
+    abs_dx = abs(dx);
+    abs_dz = abs(dz);
+
+    // Fast alpha-max-plus-beta-min approximation of hypot(dx, dz):
+    // mag ~= max*(1 - 1/32 - 1/128) + min*(1/4 + 1/8 + 1/64 + 1/128)
+    if (abs_dx >= abs_dz) {
+        mag = (abs_dx - (abs_dx >> 5) - (abs_dx >> 7))
+            + (abs_dz >> 2) + (abs_dz >> 3) + (abs_dz >> 6) + (abs_dz >> 7);
+    } else {
+        mag = (abs_dz - (abs_dz >> 5) - (abs_dz >> 7))
+            + (abs_dx >> 2) + (abs_dx >> 3) + (abs_dx >> 6) + (abs_dx >> 7);
+    }
+
+    mag <<= 7;
+    mag >>= 8;
+
+    return mag;
+}
+
+/** Spread the ARC_POINTS points across a small angle range.
+ */
+static void SCANNER_arcpoint_set_points(int arc_idx, int x1, int z1, int x2, int z2)
+{
+    int dx, dz;
+    short angle;
+    int base_i, k;
+
+    dx = x2 - x1;
+    dz = z2 - z1;
+
+    angle = arctan(dx, dz);
+
+    // Spread the ARC_POINTS points across a small angle range.
+    angle -= 2 * (ARC_ANGLE / ARC_POINTS);
+    base_i = arc_idx * ARC_POINTS;
+    for (k = 0; k < ARC_POINTS; k++)
+    {
+        struct scanstr3 *p_pt;
+        ushort widx;
+        long sin_v, cos_v;
+
+        p_pt = &SCANNER_arcpoint[base_i + k];
+        widx = angle & (2 * LbFPMath_PI - 1);
+        sin_v = lbSinTable[widx];
+        cos_v = -lbSinTable[widx + LbFPMath_PI / 2];
+
+        p_pt->u1 = x1;
+        p_pt->v1 = z1;
+        p_pt->u2 = (sin_v * 0x200) >> 8;
+        p_pt->v2 = (cos_v * 0x200) >> 8;
+
+        angle += ARC_ANGLE / ARC_POINTS;
+    }
+}
+
+/** Advance every arc point by its previously computed per-turn velocity.
+ */
+static void SCANNER_arcpoint_advance(int arc_idx)
+{
+    int base_i;
+    int k;
+
+    base_i = arc_idx * ARC_POINTS;
+    for (k = 0; k < ARC_POINTS; k++)
+    {
+        struct scanstr3 *p_pt;
+
+        p_pt = &SCANNER_arcpoint[base_i + k];
+        p_pt->u1 += p_pt->u2;
+        p_pt->v1 += p_pt->v2;
+    }
+}
+
+static void SCANNER_arcpoint_restart(int arc_idx)
+{
+    struct Arc *p_arc;
+    int mag;
+
+    p_arc = &ingame.Scanner.Arc[arc_idx];
+
+    mag = SCANNER_arcpoint_compute_mag(p_arc->X1, p_arc->Z1, p_arc->X2, p_arc->Z2);
+    SCANNER_arcpoint_set_points(arc_idx, p_arc->X1, p_arc->Z1, p_arc->X2, p_arc->Z2);
+
+    p_arc->Period = mag >> 16;
+    p_arc->Counter = p_arc->Period;
+    p_arc->ColourIsUnused = colour_lookup[1];
+}
+
+void SCANNER_process_arcpoints(void)
+{
+#if 0
+    asm volatile (
+      "call ASM_SCANNER_process_arcpoints\n"
+        :  :  : "eax" );
+    return;
+#endif
+    int arc_idx;
+
+    dword_1DB1A0 = 0;
+    for (arc_idx = 0; arc_idx < SCANNER_ARC_COUNT; arc_idx++)
+    {
+        struct Arc *p_arc;
+
+        p_arc = &ingame.Scanner.Arc[arc_idx];
+        if (p_arc->Counter == 0)
+            continue;
+
+        dword_1DB1A0++;
+
+        SCANNER_arcpoint_advance(arc_idx);
+
+        p_arc->Counter--;
+        // If counter depleted, re-generate the arc points and restart the timer.
+        if (p_arc->Counter == 0)
+        {
+            SCANNER_arcpoint_restart(arc_idx);
+        }
+    }
+}
+
+short SCANNER_init_arcpoint(int x1, int z1, int x2, int z2, int c)
+{
+#if 0
     asm volatile (
       "push %4\n"
       "call ASM_SCANNER_init_arcpoint\n"
         : : "a" (x1), "d" (z1), "b" (x2), "c" (z2), "g" (c));
+    return -1;
+#endif
+    struct Arc *p_arc;
+    int arc_idx;
+
+    // Find a free arc slot (one currently not animating/counting down).
+    p_arc = NULL;
+    for (arc_idx = 0; arc_idx < SCANNER_ARC_COUNT; arc_idx++)
+    {
+        p_arc = &ingame.Scanner.Arc[arc_idx];
+
+        if ((p_arc->Period == 0) && (p_arc->Counter == 0)) {
+            break;
+        }
+    }
+    if (arc_idx == SCANNER_ARC_COUNT) {
+        return -1;
+    }
+
+    p_arc->X1 = x1;
+    p_arc->Z1 = z1;
+    p_arc->X2 = x2;
+    p_arc->Z2 = z2;
+
+    SCANNER_arcpoint_restart(arc_idx);
+
+    return arc_idx;
 }
 
 void SCANNER_data_to_screen(void)
