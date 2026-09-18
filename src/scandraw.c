@@ -1807,8 +1807,8 @@ void SCANNER_draw_arcs(int pos_mx, int pos_mz, int sh_x, int sh_y)
         {
             int bsh_x, bsh_y;
 
-            bsh_y = 2 * SCANNER_arcpoint[bn].u1 - pos_mz;
-            bsh_x = 2 * SCANNER_arcpoint[bn].v1 - pos_mx;
+            bsh_y = 2 * SCANNER_arcpoint[bn].X - pos_mz;
+            bsh_x = 2 * SCANNER_arcpoint[bn].Z - pos_mx;
             map_coords_to_scanner(&base_x, &base_y, sh_x, sh_y, bsh_x, bsh_y);
         }
 
@@ -1822,8 +1822,8 @@ void SCANNER_draw_arcs(int pos_mx, int pos_mz, int sh_x, int sh_y)
 
             ri = base_i + i;
 
-            bsh_y = 2 * SCANNER_arcpoint[ri].u1 - pos_mz;
-            bsh_x = 2 * SCANNER_arcpoint[ri].v1 - pos_mx;
+            bsh_y = 2 * SCANNER_arcpoint[ri].X - pos_mz;
+            bsh_x = 2 * SCANNER_arcpoint[ri].Z - pos_mx;
             map_coords_to_scanner(&ssb_x, &ssb_y, sh_x, sh_y, bsh_x, bsh_y);
 
             x1 = base_x;

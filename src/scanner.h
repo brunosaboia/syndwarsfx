@@ -41,11 +41,11 @@ struct Objective;
 struct NetscanObjective;
 struct PanelStyle;
 
-struct scanstr3 {
-    long u1;
-    long v1;
-    long u2;
-    long v2;
+struct MovingPoint {
+    s32 X;
+    s32 Z;
+    s32 VelX;
+    s32 VelZ;
 };
 
 struct BigBlip // sizeof=12
@@ -93,7 +93,7 @@ struct Scanner // sizeof=0x467 (before resize)
 
 #pragma pack()
 /******************************************************************************/
-extern struct scanstr3 SCANNER_arcpoint[SCANNER_ARC_COUNT * ARC_POINTS];
+extern struct MovingPoint SCANNER_arcpoint[SCANNER_ARC_COUNT * ARC_POINTS];
 extern s32 *SCANNER_width;
 extern ubyte SCANNER_data[SCANNER_MAPDATA_HEIGHT][SCANNER_MAPDATA_WIDTH];
 extern ushort SCANNER_base_zoom_factor;

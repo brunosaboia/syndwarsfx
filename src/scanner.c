@@ -208,15 +208,15 @@ void SCANNER_process_turn(void)
     SCANNER_process_bbpoints();
 }
 
-void SCANNER_draw_object(int object_idx, int colour)
+void SCANNER_fill_in_object(int object_idx, int colour)
 {
-    asm volatile ("call ASM_SCANNER_draw_object\n"
+    asm volatile ("call ASM_SCANNER_fill_in_object\n"
         : : "a" (object_idx), "d" (colour) : );
 }
 
-void SCANNER_draw_road(int thing_idx)
+void SCANNER_fill_in_road(int thing_idx)
 {
-    asm volatile ("call ASM_SCANNER_draw_road\n"
+    asm volatile ("call ASM_SCANNER_fill_in_road\n"
         : : "a" (thing_idx) : );
 }
 
@@ -333,7 +333,7 @@ static void SCANNER_fill_in_floor(int x1, int z1, int x2, int z2)
 
 /** Draw scanner outlines for all buildings located on the map.
  */
-void SCANNER_fill_in_all_buildings(void)
+static void SCANNER_fill_in_all_buildings(void)
 {
     int tile_x, tile_z;
 
@@ -363,7 +363,7 @@ void SCANNER_fill_in_all_buildings(void)
 
                         for (i = 0; i < p_thing->U.UObject.NumbObjects; i++)
                         {
-                            SCANNER_draw_object(p_thing->U.UObject.Object + i,
+                            SCANNER_fill_in_object(p_thing->U.UObject.Object + i,
                               SCANNER_colour[ScnClr_Outline]);
                         }
                     }
@@ -374,11 +374,12 @@ void SCANNER_fill_in_all_buildings(void)
     }
 }
 
-void SCANNER_fill_in_roadways(void)
+/** Draw the scanner bezier roadway surfaces.
+ */
+static void SCANNER_fill_in_roadways(void)
 {
     int tile_x, tile_z;
 
-    // Draw the scanner roadway lines.
     for (tile_z = 0; tile_z < MAP_TILE_HEIGHT - 1; tile_z++)
     {
         for (tile_x = 0; tile_x < MAP_TILE_WIDTH - 1; tile_x++)
@@ -401,7 +402,7 @@ void SCANNER_fill_in_roadways(void)
                     p_thing = &things[thing];
                     if ((p_thing->Type == TT_BUILDING) && (p_thing->SubType == SubTT_BLD_BEZIER_ROAD))
                     {
-                        SCANNER_draw_road(thing);
+                        SCANNER_fill_in_road(thing);
                     }
                     thing = p_thing->Next;
                 }
@@ -465,7 +466,7 @@ static int SCANNER_arcpoint_compute_mag(int x1, int z1, int x2, int z2)
     return mag;
 }
 
-/** Spread the ARC_POINTS points across a small angle range.
+/** Spread the points linked to given arc across a small angle range.
  */
 static void SCANNER_arcpoint_set_points(int arc_idx, int x1, int z1, int x2, int z2)
 {
@@ -478,12 +479,11 @@ static void SCANNER_arcpoint_set_points(int arc_idx, int x1, int z1, int x2, int
 
     angle = arctan(dx, dz);
 
-    // Spread the ARC_POINTS points across a small angle range.
     angle -= 2 * (ARC_ANGLE / ARC_POINTS);
     base_i = arc_idx * ARC_POINTS;
     for (k = 0; k < ARC_POINTS; k++)
     {
-        struct scanstr3 *p_pt;
+        struct MovingPoint *p_pt;
         ushort widx;
         long sin_v, cos_v;
 
@@ -492,10 +492,10 @@ static void SCANNER_arcpoint_set_points(int arc_idx, int x1, int z1, int x2, int
         sin_v = lbSinTable[widx];
         cos_v = -lbSinTable[widx + LbFPMath_PI / 2];
 
-        p_pt->u1 = x1;
-        p_pt->v1 = z1;
-        p_pt->u2 = (sin_v * 0x200) >> 8;
-        p_pt->v2 = (cos_v * 0x200) >> 8;
+        p_pt->X = x1;
+        p_pt->Z = z1;
+        p_pt->VelX = (sin_v * 0x200) >> 8;
+        p_pt->VelZ = (cos_v * 0x200) >> 8;
 
         angle += ARC_ANGLE / ARC_POINTS;
     }
@@ -511,11 +511,11 @@ static void SCANNER_arcpoint_advance(int arc_idx)
     base_i = arc_idx * ARC_POINTS;
     for (k = 0; k < ARC_POINTS; k++)
     {
-        struct scanstr3 *p_pt;
+        struct MovingPoint *p_pt;
 
         p_pt = &SCANNER_arcpoint[base_i + k];
-        p_pt->u1 += p_pt->u2;
-        p_pt->v1 += p_pt->v2;
+        p_pt->X += p_pt->VelX;
+        p_pt->Z += p_pt->VelZ;
     }
 }
 
