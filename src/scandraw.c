@@ -48,11 +48,6 @@ enum ScannerArrowModes {
     SCANNER_ARROW_ORIENTATION,
 };
 
-struct scanstr1 {
-    long u;
-    long v;
-};
-
 struct scanstr2 {
     long du;
     long dv;
@@ -395,7 +390,6 @@ extern ubyte SCANNER_bt085;
 extern ubyte SCANNER_brig;
 extern ubyte SCANNER_cont;
 
-extern struct scanstr1 SCANNER_bbpoint[256];
 extern long SCANNER_unknarr_1DBB6C[512];
 extern TbPixel *SCANNER_screenptr;
 extern u32 SCANNER_keep_arcs;
@@ -1671,8 +1665,8 @@ static void SCANNER_draw_solid_blips(int pos_mx, int pos_mz, int sh_x, int sh_y)
             int bsh_x, bsh_y;
             int sc_x, sc_y;
 
-            bsh_y = 2 * SCANNER_bbpoint[i].u - pos_mz;
-            bsh_x = 2 * SCANNER_bbpoint[i].v - pos_mx;
+            bsh_y = 2 * SCANNER_bbpoint[i].X - pos_mz;
+            bsh_x = 2 * SCANNER_bbpoint[i].Z - pos_mx;
             map_coords_to_scanner(&sc_x, &sc_y, sh_x, sh_y, bsh_x, bsh_y);
 
             SCANNER_unknarr_1DBB6C[2 * (base_i + i) + 0] = sc_x;
@@ -1741,8 +1735,8 @@ void SCANNER_draw_blips(int pos_mx, int pos_mz, int sh_x, int sh_y)
             int bsh_x, bsh_y;
             int sc_x, sc_y;
 
-            bsh_y = 2 * SCANNER_bbpoint[i].u - pos_mz;
-            bsh_x = 2 * SCANNER_bbpoint[i].v - pos_mx;
+            bsh_y = 2 * SCANNER_bbpoint[i].X - pos_mz;
+            bsh_x = 2 * SCANNER_bbpoint[i].Z - pos_mx;
             map_coords_to_scanner(&sc_x, &sc_y, sh_x, sh_y, bsh_x, bsh_y);
 
             SCANNER_unknarr_1DBB6C[2 * (base_i + i) + 0] = sc_x;
@@ -1812,9 +1806,9 @@ void SCANNER_draw_arcs(int pos_mx, int pos_mz, int sh_x, int sh_y)
             map_coords_to_scanner(&base_x, &base_y, sh_x, sh_y, bsh_x, bsh_y);
         }
 
-        base_i = bn * ARC_POINTS;
+        base_i = bn * SCANNER_POINTS_PER_ARC;
 
-        for (i = 1; i < ARC_POINTS; i++)
+        for (i = 1; i < SCANNER_POINTS_PER_ARC; i++)
         {
             int bsh_x, bsh_y;
             int ri;

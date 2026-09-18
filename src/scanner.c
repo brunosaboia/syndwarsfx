@@ -48,7 +48,7 @@
 /******************************************************************************/
 #pragma pack(1)
 
-#define BBP_ADDS_COUNT 16
+#define ARC_ANGLE 150
 
 struct BbpAdds {
     s32 du;
@@ -74,7 +74,7 @@ s32 scanner_next_key_no;
 extern ushort signal_count;
 extern ulong turn_last; // = 999;
 extern ulong SCANNER_keep_arcs;
-extern struct BbpAdds SCANNER_bbpadds[BBP_ADDS_COUNT];
+extern struct BbpAdds SCANNER_bbpadds[SCANNER_BBP_ADDS_COUNT];
 
 ushort SCANNER_base_zoom_factor = 180;
 ushort SCANNER_user_zoom_factor = 192;
@@ -109,7 +109,7 @@ void SCANNER_init_bbpoints(void)
     int i;
 
     k = 0;
-    for (i = 0; i < BBP_ADDS_COUNT; i++, k += 2048)
+    for (i = 0; i < SCANNER_BBP_ADDS_COUNT; i++, k += 2048)
     {
         angle = (k >> 4);
         SCANNER_bbpadds[i].du = lbSinTable[angle] >> 2;
@@ -136,9 +136,50 @@ void SCANNER_process_special_input(void)
 
 void SCANNER_process_bbpoints(void)
 {
-    asm volatile (
-      "call ASM_SCANNER_process_bbpoints\n"
-        :  :  : "eax" );
+    int i;
+
+    for (i = 0; i < SCANNER_BIG_BLIP_COUNT; i++)
+    {
+        struct BigBlip *p_bbl;
+        int pt_base;
+        ubyte counter;
+        int k;
+
+        p_bbl = &ingame.Scanner.BigBlip[i];
+        if (p_bbl->Period == 0)
+            continue;
+
+        pt_base = i * SCANNER_BBP_ADDS_COUNT;
+        counter = p_bbl->Counter + 1;
+        p_bbl->Counter = counter;
+
+        if ((counter == p_bbl->Period) && (i == SCANNER_BIG_BLIP_COUNT - 1))
+        {
+            // The last blip slot is disabled once its cycle completes
+            p_bbl->Period = 0;
+        } else
+        if (counter >= p_bbl->Period)
+        {
+            // Cycle completed (or overrun) - reposition all of this blip's
+            // points to the blip's current location, and rebase the counter.
+            for (k = 0; k < SCANNER_BBP_ADDS_COUNT; k++)
+            {
+                SCANNER_bbpoint[pt_base + k].X = p_bbl->Z;
+                SCANNER_bbpoint[pt_base + k].Z = p_bbl->X;
+            }
+            p_bbl->Counter -= p_bbl->Period;
+        }
+
+        // Spread the points further apart, at the speed set for this blip.
+        for (k = 0; k < SCANNER_BBP_ADDS_COUNT; k++)
+        {
+            struct SimplePoint *p_pt;
+
+            p_pt = &SCANNER_bbpoint[pt_base + k];
+            p_pt->X += SCANNER_bbpadds[k].du << p_bbl->Speed;
+            p_pt->Z += SCANNER_bbpadds[k].dv << p_bbl->Speed;
+        }
+    }
 }
 
 void SCANNER_clear(void)
@@ -479,9 +520,9 @@ static void SCANNER_arcpoint_set_points(int arc_idx, int x1, int z1, int x2, int
 
     angle = arctan(dx, dz);
 
-    angle -= 2 * (ARC_ANGLE / ARC_POINTS);
-    base_i = arc_idx * ARC_POINTS;
-    for (k = 0; k < ARC_POINTS; k++)
+    angle -= 2 * (ARC_ANGLE / SCANNER_POINTS_PER_ARC);
+    base_i = arc_idx * SCANNER_POINTS_PER_ARC;
+    for (k = 0; k < SCANNER_POINTS_PER_ARC; k++)
     {
         struct MovingPoint *p_pt;
         ushort widx;
@@ -497,7 +538,7 @@ static void SCANNER_arcpoint_set_points(int arc_idx, int x1, int z1, int x2, int
         p_pt->VelX = (sin_v * 0x200) >> 8;
         p_pt->VelZ = (cos_v * 0x200) >> 8;
 
-        angle += ARC_ANGLE / ARC_POINTS;
+        angle += ARC_ANGLE / SCANNER_POINTS_PER_ARC;
     }
 }
 
@@ -508,8 +549,8 @@ static void SCANNER_arcpoint_advance(int arc_idx)
     int base_i;
     int k;
 
-    base_i = arc_idx * ARC_POINTS;
-    for (k = 0; k < ARC_POINTS; k++)
+    base_i = arc_idx * SCANNER_POINTS_PER_ARC;
+    for (k = 0; k < SCANNER_POINTS_PER_ARC; k++)
     {
         struct MovingPoint *p_pt;
 
