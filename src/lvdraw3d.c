@@ -69,8 +69,7 @@ s32 dword_152E50 = 256;
 s32 dword_152E54 = 80;
 s32 dword_152E58 = 410;
 
-extern s32 dword_176CBC;
-extern s32 dword_176CC0;
+s32 dword_176CBC = 0;
 
 short word_19CC64;
 short word_19CC66;

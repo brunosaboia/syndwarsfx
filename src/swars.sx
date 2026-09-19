@@ -67,6 +67,10 @@
 .global EXPORT_SYMBOL(people_frames);	/* 0x153D5C */
 .global EXPORT_SYMBOL(follow_dist);	/* 0x153398 */
 
+.global EXPORT_SYMBOL(target_old_frameno);	/* 0x176CB8 */
+.global EXPORT_SYMBOL(mouse_over_unkn2_tng);	/* 0x176CC8 */
+.global EXPORT_SYMBOL(mouse_over_unkn2_x);	/* 0x176CCC */
+.global EXPORT_SYMBOL(mouse_over_unkn2_y);	/* 0x176CD0 */
 .global EXPORT_SYMBOL(dword_176D00);		/* 0x176D00 */
 .global EXPORT_SYMBOL(dword_176D04);		/* 0x176D04 */
 .global EXPORT_SYMBOL(tnext_floor_texture);	/* 0x176d08 */
@@ -2329,7 +2333,7 @@ GLOBAL_FUNC(ASM_draw_engine_net_text)	/* 0x020B50 */
 		push   %edi
 		push   %ebp
 		sub    $0x28,%esp
-		mov    EXPORT_SYMBOL(dword_176CC8),%edx
+		mov    EXPORT_SYMBOL(mouse_over_unkn2_tng),%edx
 		test   %edx,%edx
 		je     jump_20c57
 		mov    0x54(%edx),%ax
@@ -2367,7 +2371,7 @@ GLOBAL_FUNC(ASM_draw_engine_net_text)	/* 0x020B50 */
 		test   %bl,%bl
 		jne    jump_20ba2
 	jump_20bb5:
-		mov    EXPORT_SYMBOL(dword_176CC8),%eax
+		mov    EXPORT_SYMBOL(mouse_over_unkn2_tng),%eax
 		mov    %esp,%edi
 		mov    0x54(%eax),%ax
 		and    $0xffff,%eax
@@ -2376,8 +2380,8 @@ GLOBAL_FUNC(ASM_draw_engine_net_text)	/* 0x020B50 */
 		mov    EXPORT_SYMBOL(net_player_colours)(%eax),%al
 		mov    (%esp),%bh
 		mov    %al,0x24(%esp)
-		mov    EXPORT_SYMBOL(dword_176CD0),%eax
-		mov    EXPORT_SYMBOL(dword_176CCC),%esi
+		mov    EXPORT_SYMBOL(mouse_over_unkn2_y),%eax
+		mov    EXPORT_SYMBOL(mouse_over_unkn2_x),%esi
 		mov    %eax,0x20(%esp)
 		xor    %eax,%eax
 		test   %bh,%bh
@@ -2420,7 +2424,7 @@ GLOBAL_FUNC(ASM_draw_engine_net_text)	/* 0x020B50 */
 		jne    jump_20c19
 	jump_20c4f:
 		xor    %ebx,%ebx
-		mov    %ebx,EXPORT_SYMBOL(dword_176CC8)
+		mov    %ebx,EXPORT_SYMBOL(mouse_over_unkn2_tng)
 	jump_20c57:
 		add    $0x28,%esp
 		pop    %ebp
@@ -3940,13 +3944,13 @@ GLOBAL_FUNC(ASM_check_mouse_over_unkn2)
 		je     jump_2541f
 	jump_25401:
 		mov    -0xc(%ebp),%eax
-		mov    %eax,EXPORT_SYMBOL(dword_176CC8)
+		mov    %eax,EXPORT_SYMBOL(mouse_over_unkn2_tng)
 		mov    -0x8(%ebp),%eax
 		sar    %eax
 		sub    $0x8,%esi
 		add    %eax,%edi
-		mov    %esi,EXPORT_SYMBOL(dword_176CD0)
-		mov    %edi,EXPORT_SYMBOL(dword_176CCC)
+		mov    %esi,EXPORT_SYMBOL(mouse_over_unkn2_y)
+		mov    %edi,EXPORT_SYMBOL(mouse_over_unkn2_x)
 	jump_2541f:
 		mov    %ebp,%esp
 		pop    %ebp
@@ -128967,7 +128971,7 @@ ascS_7:	/* 0x15EB57 */
 
 GLOBAL (net_agents__FourPacks)	/* 0x176C04 */
 		.fill   0x0a0
-data_176ca4:
+data_176ca4:			/* 0x176ca4 no purpose, remove pending */
 		.fill   0x8
 GLOBAL (dword_176CAC)	/* 0x176CAC */
 		.long	0x0
@@ -128977,26 +128981,7 @@ data_176cb4:
 		.short  0x0
 data_176cb6:
 		.short  0x0
-GLOBAL (target_old_frameno)	/* 0x176CB8 */
-		.long	0x0
-GLOBAL (dword_176CBC)	/* 0x176CBC */
-		.long	0x0
-GLOBAL (dword_176CC0)	/* 0x176CC0 */
-		.long	0x0
 		.align  4
-
-GLOBAL (dword_176CC8)	/* 0x176CC8 */
-		.long	0x0
-GLOBAL (dword_176CCC)	/* 0x176CCC */
-		.long	0x0
-GLOBAL (dword_176CD0)	/* 0x176CD0 */
-		.long	0x0
-GLOBAL (unkn1_pos_x)	/* 0x176CD4 */
-		.long	0x0
-GLOBAL (unkn1_pos_y)	/* 0x176CD8 */
-		.long	0x0
-GLOBAL (unkn1_spr)		/* 0x176CDC */
-		.long	0x0
 
 GLOBAL (dword_176D6C)	/* 0x176d6c */
 		.long	0x0

@@ -44,7 +44,7 @@
 
 TbBool hud_show_target_health = false;
 
-extern s32 target_old_frameno; // = 0
+s32 target_old_frameno= 0;
 
 /******************************************************************************/
 

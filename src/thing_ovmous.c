@@ -34,9 +34,9 @@
 
 /******************************************************************************/
 
-extern struct Thing *dword_176CC8;
-extern int dword_176CCC;
-extern int dword_176CD0;
+struct Thing *mouse_over_unkn2_tng = NULL;
+int mouse_over_unkn2_x;
+int mouse_over_unkn2_y;
 
 extern short word_1A5834;
 extern short word_1A5836;
@@ -213,9 +213,9 @@ ubyte check_mouse_over_unkn2(ushort sspr, struct Thing *p_thing)
 
     if (in_box(lbDisplay.MMouseX, lbDisplay.MMouseY, box.X, box.Y, box.Width, box.Height))
     {
-        dword_176CC8 = p_thing;
-        dword_176CD0 = box.Y - 8;
-        dword_176CCC = box.X + (box.Height >> 1);
+        mouse_over_unkn2_tng = p_thing;
+        mouse_over_unkn2_y = box.Y - 8;
+        mouse_over_unkn2_x = box.X + (box.Height >> 1);
         return 1;
     }
     return 0;
