@@ -67,7 +67,7 @@ struct UnkFLight { // sizeof=0x0A
 struct UnkFLight unkn_full_lights[50];
 ushort next_unkn_full_light = 1;
 
-extern u32 things_init_times; // = 0;
+u32 things_init_times = 0;
 
 ubyte debug_log_things = 0;
 

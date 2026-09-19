@@ -298,6 +298,9 @@ extern long dword_1AAB74;
 extern long dword_1AAB78;
 extern ushort word_1AABD0;
 
+ubyte old_screentype;
+ubyte screentype = 0;
+
 ubyte exit_game = 0;
 
 ubyte in_network_game = 0;

@@ -229,6 +229,7 @@
 .global EXPORT_SYMBOL(build_packet3);
 .global EXPORT_SYMBOL(build_packet4);
 
+.global EXPORT_SYMBOL(things_init_times);	/* 0x1AABCC */
 .global EXPORT_SYMBOL(Ex);				/* 0x1AAE48 */
 .global EXPORT_SYMBOL(Ey);				/* 0x1AAFD8 */
 .global EXPORT_SYMBOL(ixE);
@@ -254,6 +255,7 @@
 .global EXPORT_SYMBOL(route_bak);		/* 0x1BF9C8 */
 
 .global EXPORT_SYMBOL(byte_1C47EA);		/* 0x1C47EA */
+.global EXPORT_SYMBOL(screentype);		/* 0x1C4AA5 */
 .global EXPORT_SYMBOL(map_from_mission);	/* 0x1C4B79 */
 .global EXPORT_SYMBOL(reload_background_flag);	/* 0x1C4B80 */
 .global EXPORT_SYMBOL(cryo_agents);		/* 0x1C4BA0 */
@@ -60627,17 +60629,17 @@ GLOBAL_FUNC (ASM_setup_host_sub6)	/* 0x6DE00 */
 		xor    %ebx,%ebx
 	jump_6de06:
 		add    $0x70,%eax
-		mov    %bx,data_1aaa28(%eax)
-		mov    %bx,data_1aaa2a(%eax)
-		mov    %bx,data_1aaa8a(%eax)
-		mov    data_1aaa26(%eax),%edx
-		mov    %bx,data_1aaa24(%eax)
+		mov    %bx,EXPORT_SYMBOL(animations)-0x64(%eax)
+		mov    %bx,EXPORT_SYMBOL(animations)-0x62(%eax)
+		mov    %bx,EXPORT_SYMBOL(animations)-0x02(%eax) # animations[].Type
+		mov    EXPORT_SYMBOL(animations)-0x66(%eax),%edx
+		mov    %bx,EXPORT_SYMBOL(animations)-0x68(%eax)
 		sar    $0x10,%edx
-		mov    %bx,data_1aaa26(%eax)
-		mov    %edx,data_1aaa20(%eax)
-		movl   $0xffffffff,data_1aaa54(%eax)
-		mov    data_1aaa8a(%eax),%dl
-		mov    %dl,data_1aaa58(%eax)
+		mov    %bx,EXPORT_SYMBOL(animations)-0x66(%eax)
+		mov    %edx,EXPORT_SYMBOL(animations)-0x6C(%eax)
+		movl   $0xffffffff,EXPORT_SYMBOL(animations)-0x38(%eax)
+		mov    EXPORT_SYMBOL(animations)-0x02(%eax),%dl
+		mov    %dl,EXPORT_SYMBOL(animations)-0x34(%eax)
 		cmp    $0xe0,%eax
 		jne    jump_6de06
 		pop    %edx
@@ -128384,7 +128386,7 @@ GLOBAL_FUNC(ASM_do_unkn1_CANCEL)	/* 0x0D33E8 */
 		mov    $0x1,%ah
 		mov    $0x63,%dl
 		mov    %ah,EXPORT_SYMBOL(reload_background_flag)
-		mov    %dl,screentype
+		mov    %dl,EXPORT_SYMBOL(screentype)
 		xor    %al,%al
 		pop    %edx
 		ret
@@ -129121,28 +129123,6 @@ data_1aa680:
 		.long	0x0
 		.align  4
 
-data_1aaa20:
-		.long	0x0
-data_1aaa24:
-		.short  0x0
-data_1aaa26:
-		.short  0x0
-data_1aaa28:
-		.short  0x0
-data_1aaa2a:
-		.fill   0x2a
-data_1aaa54:
-		.long	0x0
-data_1aaa58:
-		.fill   0x30
-		.align  4
-data_1aaa8a:
-		.short  0x0
-GLOBAL (animations)	/* 0x1AAA8C */
-		.fill   0x70
-		.fill   0x70
-GLOBAL (ASM_active_anim)	/* 0x1AAB6C */
-		.fill   0x8
 GLOBAL (dword_1AAB74)	/* 0x1AAB74 */
 		.long	0x0
 GLOBAL (dword_1AAB78)	/* 0x1AAB78 */
@@ -129152,8 +129132,6 @@ data_1aab7c:
 data_1aab80:
 		.long	0x0
 
-GLOBAL (things_init_times)	/* 0x1AABCC */
-		.long	0x0
 GLOBAL (word_1AABD0)	/* 0x1AABD0 */
 		.short  0x0
 GLOBAL (unkn01_thing_idx)	/* 0x1AABD2 */
@@ -129370,10 +129348,6 @@ GLOBAL (data_1c4aa2)	/* 0x1c4aa2 */
 		.byte	0x0
 GLOBAL (open_ref)	/* 0x1c4aa3 */
 		.byte	0x0
-GLOBAL (old_screentype)	/* 0x1C4AA4 */
-		.byte	0x0
-GLOBAL (screentype)	/* 0x1C4AA5 */
-		.ascii  "\x00\x00\x00"
 		.align  4
 
 GLOBAL (dword_1C4B84)	/* 0x1C4B84 no function - remove pending */

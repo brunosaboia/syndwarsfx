@@ -46,7 +46,7 @@ TbBool anim_can_change_palette = false;
 
 ubyte active_anim;
 extern ubyte anim_slots[];
-extern struct Animation animations[2];
+struct Animation animations[2];
 
 uint embanim_current_frame_number(ubyte anislot)
 {
