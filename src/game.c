@@ -3562,7 +3562,7 @@ ubyte load_game_slot(ubyte click)
     int ldslot;
     int ret;
 
-    if (login_control__State != LognCt_Unkn6) {
+    if (login_control[0].State != LognCt_Unkn6) {
         return 0;
     }
     if (save_slot == -1) {
@@ -3623,26 +3623,26 @@ ubyte save_game_slot(ubyte click)
 
 void reinit_unkn6_always_reset_variables(void)
 {
-    login_control__TechLevel = 4;
-    login_control__Money = starting_cash_amounts[login_control__TechLevel];
-    if (login_control__State == LognCt_Unkn6)
+    login_control[0].TechLevel = 4;
+    login_control[0].Money = starting_cash_amounts[login_control[0].TechLevel];
+    if (login_control[0].State == LognCt_Unkn6)
     {
         ingame.Credits = 50000;
         ingame.CashAtStart = 50000;
     }
     else
     {
-        ingame.Credits = login_control__Money;
-        ingame.CashAtStart = login_control__Money;
+        ingame.Credits = login_control[0].Money;
+        ingame.CashAtStart = login_control[0].Money;
     }
     ingame.Expenditure = 0;
-    login_control__State = LognCt_Unkn6;
+    login_control[0].State = LognCt_Unkn6;
     net_game_play_flags = NGPF_Unkn20 | NGPF_Unkn10 | NGPF_Unkn08 | NGPF_Unkn04;
 }
 
 void reinit_unkn6_adjustable_variables(void)
 {
-    login_control__City = -1;
+    login_control[0].City = -1;
 
     reinit_unkn6_always_reset_variables();
 }
@@ -3650,8 +3650,8 @@ void reinit_unkn6_adjustable_variables(void)
 void init_unkn6_adjustable_variables(void)
 {
     ingame.MissionStatus = ObvStatu_COMPLETED;
-    login_control__City = 19; // Tokyo
-    login_control__Team = 0;
+    login_control[0].City = 19; // Tokyo
+    login_control[0].Team = 0;
 
     reinit_unkn6_always_reset_variables();
 }
@@ -4501,7 +4501,7 @@ void net_new_game_prepare(void)
 
 ubyte do_storage_NEW_MORTAL(ubyte click)
 {
-    if (login_control__State != LognCt_Unkn6)
+    if (login_control[0].State != LognCt_Unkn6)
         return 0;
 
     if (strlen(login_name) == 0)
@@ -5723,7 +5723,7 @@ void show_menu_screen_st0(void)
     player_mission_agents_toggle_reset(local_player_no);
     global_date_new_game_reset();
     ingame.Credits = 50000;
-    login_control__State = LognCt_Unkn6;
+    login_control[0].State = LognCt_Unkn6;
 
     debug_trace_place(17);
     // Need to set screen type before gfx background is reloaded
@@ -5865,8 +5865,8 @@ void show_load_and_prep_mission(void)
             ushort missi;
             ingame.MissionNo = 1;
             missi = 0;
-            if (login_control__City != -1)
-                missi = find_first_mission_with_map(cities[login_control__City].MapID);
+            if (login_control[0].City != -1)
+                missi = find_first_mission_with_map(cities[login_control[0].City].MapID);
             if (missi > 0) {
                 ingame.MissionNo = missi;
             }
@@ -6289,11 +6289,11 @@ void show_menu_screen(void)
 
     input_processing_end();
 
-    if (login_control__State == LognCt_NetStarted)
+    if (login_control[0].State == LognCt_NetStarted)
     {
         net_unkn_func_33();
     }
-    else if (login_control__State == LognCt_Unkn8)
+    else if (login_control[0].State == LognCt_Unkn8)
     {
         start_into_mission = 1;
         in_network_game = 1;

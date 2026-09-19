@@ -355,7 +355,7 @@ ubyte do_serial_speed_switch(ubyte click)
 
 ubyte do_net_SET2(ubyte click)
 {
-    if (!net_local_player_hosts_the_game() || login_control__State != LognCt_NetStarted)
+    if (!net_local_player_hosts_the_game() || login_control[0].State != LognCt_NetStarted)
         return 0;
 
     net_game_play_flags |= NGPF_Unkn02;
@@ -365,7 +365,7 @@ ubyte do_net_SET2(ubyte click)
 
 ubyte do_net_SET(ubyte click)
 {
-    if (!net_local_player_hosts_the_game() || login_control__State != LognCt_NetStarted)
+    if (!net_local_player_hosts_the_game() || login_control[0].State != LognCt_NetStarted)
         return 0;
 
     net_game_play_flags |= NGPF_Unkn01;
@@ -430,7 +430,7 @@ skip_modem_init:
         goto out_fail;
     }
 
-    login_control__State = LognCt_NetStarted;
+    login_control[0].State = LognCt_NetStarted;
     net_host_player_no = LbNetworkHostPlayerNumber();
     net_players_num = LbNetworkSessionNumberPlayers();
     selected_net_session = -1;
@@ -514,7 +514,7 @@ skip_modem_init:
         alert_box_text_fmt("%s", gui_strings[579]);
         goto out_fail;
     }
-    login_control__State = LognCt_NetStarted;
+    login_control[0].State = LognCt_NetStarted;
     net_host_player_no = LbNetworkHostPlayerNumber();
     net_players_num = LbNetworkSessionNumberPlayers();
     byte_1C6D4A = 1;
@@ -557,7 +557,7 @@ void netgame_state_enter_5(void)
     srm_reset_research();
     init_agents();
 
-    login_control__State = LognCt_NetStarted;
+    login_control[0].State = LognCt_NetStarted;
     for (plyr = 0; plyr < PLAYERS_LIMIT; plyr++) {
         player_mission_agents_toggle_reset(plyr);
     }
@@ -570,7 +570,7 @@ ubyte do_net_INITIATE(ubyte click)
         LOGWARN("Cannot init protocol %d - not ready", (int)nsvc.I.Type);
         return 0;
     }
-    if (login_control__State == LognCt_Unkn6)
+    if (login_control[0].State == LognCt_Unkn6)
     {
         if (net_unkn_func_32()) {
             netgame_state_enter_5();
@@ -579,13 +579,13 @@ ubyte do_net_INITIATE(ubyte click)
             LOGWARN("Enter NetStarted from Unkn6, %s", "fail");
         }
     }
-    else if (login_control__State == LognCt_NetStarted)
+    else if (login_control[0].State == LognCt_NetStarted)
     {
         int plyr;
         plyr = LbNetworkPlayerNumber();
         if (plyr == net_host_player_no)
         {
-            if (login_control__City == -1) {
+            if (login_control[0].City == -1) {
                 LOGWARN("Cannot init protocol %d player %d - city not selected", (int)nsvc.I.Type, plyr);
                 return 0;
             }
@@ -605,7 +605,7 @@ ubyte do_net_groups_LOGON(ubyte click)
         return 0;
     }
 
-    if (login_control__State == LognCt_NetStarted)
+    if (login_control[0].State == LognCt_NetStarted)
     {
         net_schedule_local_player_logout();
         selected_net_user = -1;
@@ -613,7 +613,7 @@ ubyte do_net_groups_LOGON(ubyte click)
         switch_net_screen_boxes_to_initiate();
         net_unkn_func_33();
     }
-    else if (login_control__State == LognCt_Unkn6)
+    else if (login_control[0].State == LognCt_Unkn6)
     {
         struct TbNetworkSession *p_nsession;
 
@@ -706,7 +706,7 @@ void show_net_benefits_sub2(short x0, short y0, TbPixel *colours)
         short delta;
 
         p_sprite = &fe_icons_sprites[spridx];
-        if (i < login_control__TechLevel)
+        if (i < login_control[0].TechLevel)
         {
             lbDisplay.DrawFlags = Lb_TEXT_ONE_COLOR;
             lbDisplay.DrawColour = colours[i];
@@ -719,8 +719,8 @@ void show_net_benefits_sub2(short x0, short y0, TbPixel *colours)
             {
                 lbDisplay.LeftButton = 0;
                 if (net_local_player_hosts_the_game() && ((net_game_play_flags & NGPF_Unkn02) == 0)
-                  && (login_control__State == LognCt_NetStarted))
-                    login_control__TechLevel = i + 1;
+                  && (login_control[0].State == LognCt_NetStarted))
+                    login_control[0].TechLevel = i + 1;
             }
         }
         if (i < 2)
@@ -754,11 +754,11 @@ void show_net_benefits_sub3(struct ScreenBox *box)
             {
                 lbDisplay.LeftButton = 0;
                 if (net_local_player_hosts_the_game() && ((net_game_play_flags & NGPF_Unkn02) == 0)
-                  && (login_control__State == LognCt_NetStarted))
+                  && (login_control[0].State == LognCt_NetStarted))
                 {
-                    login_control__TechLevel--;
-                    if (login_control__TechLevel < 1)
-                        login_control__TechLevel = 1;
+                    login_control[0].TechLevel--;
+                    if (login_control[0].TechLevel < 1)
+                        login_control[0].TechLevel = 1;
                 }
             }
         }
@@ -780,11 +780,11 @@ void show_net_benefits_sub4(struct ScreenBox *box)
             {
                 lbDisplay.LeftButton = 0;
                 if (net_local_player_hosts_the_game() && ((net_game_play_flags & NGPF_Unkn02) == 0)
-                    && (login_control__State == LognCt_NetStarted))
+                    && (login_control[0].State == LognCt_NetStarted))
                 {
-                    login_control__TechLevel++;
-                    if (login_control__TechLevel > 8)
-                        login_control__TechLevel = 8;
+                    login_control[0].TechLevel++;
+                    if (login_control[0].TechLevel > 8)
+                        login_control[0].TechLevel = 8;
                 }
             }
         }
@@ -800,7 +800,7 @@ ubyte get_current_starting_cash_level(void)
     lv_curr = 0;
     for (i = 0; i < 8; i++)
     {
-      if (login_control__Money == starting_cash_amounts[i])
+      if (login_control[0].Money == starting_cash_amounts[i])
           break;
       lv_curr++;
     }
@@ -820,7 +820,7 @@ uint reinit_starting_credits(sbyte change)
         lv = 7;
 
     creds = starting_cash_amounts[lv];
-    login_control__Money = creds;
+    login_control[0].Money = creds;
     ingame.Credits = creds;
     ingame.CashAtStart = creds;
     ingame.Expenditure = 0;
@@ -843,7 +843,7 @@ void show_net_benefits_sub5(short x0, short y0, TbPixel *colours)
         short delta;
 
         p_sprite = &fe_icons_sprites[spridx];
-        if (login_control__Money >= starting_cash_amounts[i])
+        if (login_control[0].Money >= starting_cash_amounts[i])
         {
             lbDisplay.DrawFlags = Lb_TEXT_ONE_COLOR;
             lbDisplay.DrawColour = colours[i];
@@ -856,10 +856,10 @@ void show_net_benefits_sub5(short x0, short y0, TbPixel *colours)
             {
                 lbDisplay.LeftButton = 0;
                 if (net_local_player_hosts_the_game() && ((net_game_play_flags & NGPF_Unkn01) == 0)
-                  && (login_control__State == LognCt_NetStarted))
+                  && (login_control[0].State == LognCt_NetStarted))
                 {
-                    login_control__Money = starting_cash_amounts[i];
-                    ingame.Credits = login_control__Money;
+                    login_control[0].Money = starting_cash_amounts[i];
+                    ingame.Credits = login_control[0].Money;
                 }
             }
         }
@@ -894,7 +894,7 @@ void show_net_benefits_sub6(struct ScreenBox *box)
             {
                 lbDisplay.LeftButton = 0;
                 if (net_local_player_hosts_the_game() && ((net_game_play_flags & NGPF_Unkn01) == 0)
-                    && (login_control__State == LognCt_NetStarted))
+                    && (login_control[0].State == LognCt_NetStarted))
                 {
                     reinit_starting_credits(-1);
                 }
@@ -920,7 +920,7 @@ void show_net_benefits_sub7(struct ScreenBox *box)
             {
                 lbDisplay.LeftButton = 0;
                 if (net_local_player_hosts_the_game() && ((net_game_play_flags & NGPF_Unkn01) == 0)
-                    && (login_control__State == LognCt_NetStarted))
+                    && (login_control[0].State == LognCt_NetStarted))
                 {
                     reinit_starting_credits(1);
                 }
@@ -964,7 +964,7 @@ ubyte show_net_benefits_box(struct ScreenBox *box)
     show_net_benefits_sub7(box);
 
     lbDisplay.DrawFlags = 0;
-    if (net_local_player_hosts_the_game() && (login_control__State == LognCt_NetStarted))
+    if (net_local_player_hosts_the_game() && (login_control[0].State == LognCt_NetStarted))
     {
         drawn = net_SET2_button.DrawFn(&net_SET2_button);
         drawn = net_SET_button.DrawFn(&net_SET_button);
@@ -1057,7 +1057,7 @@ ubyte show_net_grpaint(struct ScreenBox *p_box)
             dy += 24;
         }
         draw_flic_purple_list(purple_unkn3_data_to_screen);
-        if (login_control__State != LognCt_NetStarted)
+        if (login_control[0].State != LognCt_NetStarted)
             draw_flic_purple_list(purple_unkn1_data_to_screen);
 
         copy_box_purple_list(p_box->X - 3, p_box->Y - 3,
@@ -1154,7 +1154,7 @@ ubyte show_net_comms_box(struct ScreenBox *p_box)
         reset_buffered_keys();
     }
 
-    if (login_control__State != 5)
+    if (login_control[0].State != 5)
     {
         edit_flag = 0;
         return 0;
@@ -1181,7 +1181,7 @@ ubyte show_net_comms_box(struct ScreenBox *p_box)
         }
     }
 
-    if (user_read_value(net_unkn1_text, 20, 0) && (login_control__State == LognCt_NetStarted)
+    if (user_read_value(net_unkn1_text, 20, 0) && (login_control[0].State == LognCt_NetStarted)
       && (net_unkn1_text[0] != '\0'))
     {
         net_schedule_player_chat_message_sync(net_unkn1_text);
@@ -1291,7 +1291,7 @@ ubyte show_net_protocol_box(struct ScreenBox *p_box)
 
     my_set_text_window(p_box->X + 4, p_box->Y + 4, p_box->Width - 8, p_box->Height - 8);
 
-    if (login_control__State == LognCt_NetStarted)
+    if (login_control[0].State == LognCt_NetStarted)
     {
         lbFontPtr = small_med_font;
         tx_height = my_char_height('A');
@@ -1591,7 +1591,7 @@ ubyte show_net_faction_box(struct ScreenBox *p_box)
     scr_y = 16;
     for (i = 0; i < 3; i++)
     {
-        if (login_control__Faction == i)
+        if (login_control[0].Faction == i)
         {
             lbDisplay.DrawFlags = (0x0040 | 0x0100);
             lbDisplay.DrawColour = 87;
@@ -1618,7 +1618,7 @@ ubyte show_net_faction_box(struct ScreenBox *p_box)
             if (lbDisplay.LeftButton)
             {
               lbDisplay.LeftButton = 0;
-              login_control__Faction = i;
+              login_control[0].Faction = i;
               net_schedule_player_faction_change_sync();
             }
         }
@@ -1669,7 +1669,7 @@ ubyte show_net_team_box(struct ScreenBox *p_box)
     scr_y = 13;
     for (i = 0; i < 4; i++)
     {
-        if (login_control__Team == i + 1)
+        if (login_control[0].Team == i + 1)
         {
             lbDisplay.DrawFlags = 0x0100|0x0040;
             lbDisplay.DrawColour = 87;
@@ -1696,10 +1696,10 @@ ubyte show_net_team_box(struct ScreenBox *p_box)
             if (lbDisplay.LeftButton)
             {
               lbDisplay.LeftButton = 0;
-              if (login_control__Team == i + 1)
-                  login_control__Team = 0;
+              if (login_control[0].Team == i + 1)
+                  login_control[0].Team = 0;
               else
-                  login_control__Team = i + 1;
+                  login_control[0].Team = i + 1;
               net_schedule_player_team_change_sync();
             }
         }
@@ -1758,7 +1758,7 @@ ubyte show_net_groups_box(struct ScreenBox *p_box)
 
     scr_y = 19;
     lbDisplay.DrawFlags = Lb_TEXT_HALIGN_CENTER;
-    if (login_control__State == LognCt_NetStarted)
+    if (login_control[0].State == LognCt_NetStarted)
     {
         text = net_group_name_to_gtext(nsvc.S.Name);
         draw_text_purple_list2(0, scr_y, text, 0);
@@ -1811,7 +1811,7 @@ ubyte show_net_groups_box(struct ScreenBox *p_box)
             unkn8_EJECT_button.DrawFn(&unkn8_EJECT_button);
         }
     }
-    if ((selected_net_session != -1) || (login_control__State == LognCt_NetStarted))
+    if ((selected_net_session != -1) || (login_control[0].State == LognCt_NetStarted))
     {
         net_groups_LOGON_button.DrawFn(&net_groups_LOGON_button);
     }
@@ -1857,7 +1857,7 @@ ubyte show_net_users_box(struct ScreenBox *p_box)
     short tx_width, tx_height;
 
     // data refresh before draw
-    if (login_control__State == LognCt_NetStarted)
+    if (login_control[0].State == LognCt_NetStarted)
     {
         refresh_users_in_net_game();
     }
@@ -1892,7 +1892,7 @@ ubyte show_net_users_box(struct ScreenBox *p_box)
     lbFontPtr = small_med_font;
     tx_height = my_char_height('A');
     scr_y = 18;
-    if (login_control__State == LognCt_NetStarted)
+    if (login_control[0].State == LognCt_NetStarted)
     {
         for (plyr = 0; plyr < PLAYERS_LIMIT; plyr++)
         {
@@ -1954,7 +1954,7 @@ ubyte show_net_users_box(struct ScreenBox *p_box)
 
     // input
     scr_y = 18;
-    if (login_control__State == LognCt_NetStarted)
+    if (login_control[0].State == LognCt_NetStarted)
     {
         for (plyr = 0; plyr < PLAYERS_LIMIT; plyr++)
         {
@@ -2051,7 +2051,7 @@ void show_netgame_unkn_case1(void)
     net_comms_box.DrawFn(&net_comms_box);
     net_grpaint.DrawFn(&net_grpaint);
 
-    if ((login_control__State == 6) && (nsvc.I.Type == NetSvc_IPX)) {
+    if ((login_control[0].State == 6) && (nsvc.I.Type == NetSvc_IPX)) {
         net_unkn_func_30();
     }
 }

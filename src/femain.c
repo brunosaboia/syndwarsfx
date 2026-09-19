@@ -587,7 +587,7 @@ void show_sysmenu_screen(void)
             reset_options_gfx_boxes_flags();
             break;
         case SySc_LOGOUT:
-            if (login_control__State == LognCt_NetStarted)
+            if (login_control[0].State == LognCt_NetStarted)
             {
                 net_schedule_local_player_logout();
                 selected_net_user = -1;
@@ -956,10 +956,10 @@ static void global_citydrop_box_draw(void)
     lbFontPtr = small_med_font;
     my_set_text_window(cx + 1, cy + 1, 198, global_top_bar_box.Height - 2);
 
-    if (login_control__City == -1) {
+    if (login_control[0].City == -1) {
         subtext = "";
     } else {
-        map_hl_city_id = login_control__City;
+        map_hl_city_id = login_control[0].City;
         subtext = city_full_name(map_hl_city_id);
     }
     sprintf(locstr, "%s: %s", gui_strings[446], subtext);
@@ -985,7 +985,7 @@ static void global_techlevel_box_draw(void)
     lbFontPtr = small_med_font;
     my_set_text_window(cx + 1, cy + 1, 154, global_top_bar_box.Height - 2);
 
-    sprintf(locstr, "%s: %d", gui_strings[447], login_control__TechLevel);
+    sprintf(locstr, "%s: %d", gui_strings[447], login_control[0].TechLevel);
     text = loctext_to_gtext(locstr);
     draw_text_purple_list2(3, 3, text, 0);
 }
@@ -995,7 +995,7 @@ void show_purple_status_top_bar(void)
     global_date_box_draw();
     global_time_box_draw();
 
-    if (login_control__State == LognCt_NetStarted)
+    if (login_control[0].State == LognCt_NetStarted)
     {
         global_citydrop_box_draw();
         global_techlevel_box_draw();

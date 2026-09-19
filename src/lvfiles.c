@@ -74,6 +74,10 @@ struct BillboardNBreakout {
 
 TbBool level_deep_fix = false;
 
+ushort game_level_unique_id = 0;
+ubyte game_level_unkn1[40];
+ubyte game_level_unkn2[40];
+
 ulong stored_g3d_next_object;
 ulong stored_g3d_next_object_face3;
 ulong stored_g3d_next_object_face4;

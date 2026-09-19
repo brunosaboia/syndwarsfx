@@ -888,7 +888,7 @@ ubyte load_game(int slot, char *desc)
     }
 
     read_user_settings();
-    login_control__Money = ingame.Credits;
+    login_control[0].Money = ingame.Credits;
     ingame.CashAtStart = ingame.Credits;
     ingame.Expenditure = 0;
     return 0;

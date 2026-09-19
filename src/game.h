@@ -120,6 +120,16 @@ struct LevelDef {
   ubyte field_2B;
 };
 
+struct LoginControl { // sizeof=0x0a
+    ubyte lcunkn0;
+    ubyte State;
+    ubyte TechLevel;
+    ubyte Faction;
+    u32 Money;
+    sbyte City;
+    ubyte Team;
+};
+
 struct UnkPlayerGroup {
     ubyte AgentWeapons[4];
     short AgentOwners[4];
@@ -139,12 +149,8 @@ extern ubyte is_single_game;
 extern ubyte cmdln_colour_tables;
 extern ubyte cmdln_param_bcg;
 
-extern ubyte login_control__State;
-extern ulong login_control__Money;
-extern sbyte login_control__City;
-extern ubyte login_control__TechLevel;
-extern ubyte login_control__Faction;
-extern ubyte login_control__Team;
+//TODO do something with the array - currently only 1st element is in use
+extern struct LoginControl login_control[4];
 
 extern ubyte exit_game;
 
@@ -156,10 +162,6 @@ extern ushort current_map;
 extern short current_level;
 
 extern ubyte *scratch_buf1;
-
-extern ushort game_level_unique_id;
-extern ubyte game_level_unkn1[40];
-extern ubyte game_level_unkn2[40];
 
 extern ushort word_1531E0;
 

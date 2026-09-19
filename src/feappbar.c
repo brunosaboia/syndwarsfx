@@ -150,7 +150,7 @@ TbBool is_purple_apps_utility_visible(short iconid)
     }
 
 
-    if (login_control__State == LognCt_NetStarted)
+    if (login_control[0].State == LognCt_NetStarted)
     {
         TbBool visible;
 

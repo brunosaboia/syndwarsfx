@@ -535,7 +535,7 @@ void activate_cities(ubyte brief)
 
     deactivate_cities();
 
-    if (login_control__State == LognCt_NetStarted)
+    if (login_control[0].State == LognCt_NetStarted)
     {
         clear_cities_decor(0x01);
         return;

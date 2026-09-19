@@ -29,6 +29,10 @@
 #include "engincolour.h"
 /******************************************************************************/
 
+ubyte low_trans_grey_pal_bright[PALETTE_8b_COLORS];
+
+/******************************************************************************/
+
 void LowTransGrey_InitPaletteBright(void)
 {
     ubyte *pal;

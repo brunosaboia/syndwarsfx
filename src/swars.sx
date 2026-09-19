@@ -103,6 +103,7 @@
 .global EXPORT_SYMBOL(player_message_text);	/* 0x180CC9 */
 .global EXPORT_SYMBOL(tmaps_extra_buf);		/* 0x1810D1 */
 .global EXPORT_SYMBOL(tmaps_extra_len);		/* 0x1810D5 */
+.global EXPORT_SYMBOL(game_level_unique_id);	/* 0x1810E4 */
 .global EXPORT_SYMBOL(colour_mix_lookup);	/* 0x181136 */
 .global EXPORT_SYMBOL(colour_sel_grey);		/* 0x181142 */
 .global EXPORT_SYMBOL(colour_sel_green);	/* 0x181146 */
@@ -223,6 +224,7 @@
 .global EXPORT_SYMBOL(save_slot_base);	/* 0x1C82FC */
 .global EXPORT_SYMBOL(alert_text);		/* 0x1C8300 */
 .global EXPORT_SYMBOL(text_buf_pos);	/* 0x1C83C8 */
+.global EXPORT_SYMBOL(low_trans_grey_pal_bright);	/* 0x1CAB64 */
 
 .global EXPORT_SYMBOL(phwoar_num_used);	/* 0x1DC4DC */
 .global EXPORT_SYMBOL(phwoar_num_free);	/* 0x1DC4E0 */
@@ -1043,7 +1045,7 @@ GLOBAL_FUNC(ASM_unkn1_handle_agent_groups)	/* 0x010F94 */
 		mov    (%esp),%edi
 		xor    %eax,%eax
 		mov    %ebx,%edx
-		mov    login_control__TechLevel,%al
+		mov    EXPORT_SYMBOL(login_control)+0x02,%al # login_control.TechLevel
 		inc    %edi
 		call   ac_process_things_unkn_sub2
 		mov    %edi,(%esp)
@@ -36698,7 +36700,7 @@ GLOBAL_FUNC (ASM_process_things)	/* 0x572F8 */
 		xor    %eax,%eax
 		xor    %edx,%edx
 	jump_573d8:
-		mov    login_control__TechLevel,%al
+		mov    EXPORT_SYMBOL(login_control)+0x02,%al # login_control.TechLevel
 		call   ac_process_things_unkn_sub2
 	jump_573e2:
 		xor    %eax,%eax
@@ -94382,7 +94384,7 @@ GLOBAL_FUNC(ASM_show_net_grpaint)	/* 0x08E3C0 */
 		mov    $ac_purple_unkn3_data_to_screen,%eax
 		call   ac_draw_flic_purple_list
 		xor    %eax,%eax
-		mov    login_control__State,%al
+		mov    EXPORT_SYMBOL(login_control)+0x01,%al # login_control.State
 		cmp    $0x5,%eax
 		je     jump_8e479
 		mov    $ac_purple_unkn1_data_to_screen,%eax
@@ -129839,7 +129841,7 @@ GLOBAL_FUNC(ASM_save_game_slot)	/* 0x0D38B0 */
 		push   %edx
 		push   %esi
 		xor    %eax,%eax
-		mov    login_control__State,%al
+		mov    EXPORT_SYMBOL(login_control)+0x01,%al # login_control.State
 		cmp    $0x6,%eax
 		je     jump_d38c7
 		xor    %al,%al
@@ -130598,26 +130600,13 @@ data_17fa52:	/* 0x17fa52 remove pending */
 		.short  0x0
 		.align	4
 
-GLOBAL (game_level_unique_id)	/* 0x1810E4 */
-		.short  0x0
-GLOBAL (game_level_unkn1)	/* 0x1810E6 */
-		.fill   0x28
-GLOBAL (game_level_unkn2)	/* 0x18110E */
-		.fill   0x28
-
-data_181180:
+GLOBAL (login_control)	/* 0x181180 */
 		.byte	0x0
-GLOBAL (login_control__State)	/* 0x181181 */
 		.byte	0x0
-GLOBAL (login_control__TechLevel)	/* 0x181182 */
 		.byte	0x0
-GLOBAL (login_control__Faction)
 		.byte	0x0
-GLOBAL (login_control__Money)	/* 0x181184 */
 		.long	0x0
-GLOBAL (login_control__City)	/* 0x181188 */
 		.byte	0x0
-GLOBAL (login_control__Team)
 		.byte	0x0
 		.fill   0x1e
 
@@ -131530,8 +131519,6 @@ data_1c8a5c:
 		.fill   0x2104
 		.align  4
 
-GLOBAL (low_trans_grey_pal_bright)	/* 0x1CAB64 */
-		.fill   0x424
 GLOBAL (SCANNER_map)	/* 0x1CAF88 */
 		.fill   0xdc
 GLOBAL (SCANNER_dw064)
