@@ -47,8 +47,10 @@ ushort netgame_agent_pos_x[PLAYERS_LIMIT][4];
 ushort netgame_agent_pos_z[PLAYERS_LIMIT][4];
 
 struct AgentInfo cryo_agents;
-
 ubyte playable_agents;
+
+PlayerInfo players[PLAYERS_LIMIT];
+PlayerIdx local_player_no;
 /******************************************************************************/
 
 void player_mission_agents_toggle_reset(PlayerIdx plyr)

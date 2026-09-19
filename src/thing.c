@@ -153,10 +153,12 @@ const char *state_change_result_names[] = {
     "goal unattainable",
 };
 
+struct Thing *things = NULL;
 ushort things_used;
 ThingIdx things_used_head;
 ThingIdx things_empty_head;
 
+struct SimpleThing *sthings = NULL;
 ushort sthings_used;
 ThingIdx sthings_used_head;
 ThingIdx sthings_empty_head;

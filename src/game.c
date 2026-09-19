@@ -298,6 +298,13 @@ extern long dword_1AAB74;
 extern long dword_1AAB78;
 extern ushort word_1AABD0;
 
+ubyte exit_game = 0;
+
+ubyte in_network_game = 0;
+ubyte is_single_game = 0;
+ubyte cmdln_colour_tables = 0;
+ubyte cmdln_param_bcg = 0;
+
 ubyte unkn_flags_01 = 0;
 
 ubyte start_into_mission = false;

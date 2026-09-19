@@ -179,6 +179,8 @@
 .global EXPORT_SYMBOL(game_full_lights);	/* 0x1a09d0 */
 .global EXPORT_SYMBOL(game_textures);		/* 0x1a09d4 */
 .global EXPORT_SYMBOL(game_face_textures);	/* 0x1a09d8 */
+.global EXPORT_SYMBOL(things);				/* 0x1A09DC */
+.global EXPORT_SYMBOL(sthings);				/* 0x1A09E0 */
 .global EXPORT_SYMBOL(game_object_points);	/* 0x1a09e4 */
 .global EXPORT_SYMBOL(game_object_faces3);	/* 0x1a09e8 */
 .global EXPORT_SYMBOL(game_object_faces4);	/* 0x1a09ec */
@@ -193,6 +195,14 @@
 .global EXPORT_SYMBOL(display_palette);		/* 0x1A5878 */
 .global EXPORT_SYMBOL(gui_strings);			/* 0x1A5888 */
 .global EXPORT_SYMBOL(gameturn);			/* 0x1A62DC */
+.global EXPORT_SYMBOL(players);				/* 0x1a62e0 */
+.global EXPORT_SYMBOL(packets);				/* 0x1A7030 */
+.global EXPORT_SYMBOL(local_player_no);		/* 0x1A71B0 */
+.global EXPORT_SYMBOL(exit_game);			/* 0x1A71B1 */
+.global EXPORT_SYMBOL(in_network_game);
+.global EXPORT_SYMBOL(is_single_game);		/* 0x1A71B3 */
+.global EXPORT_SYMBOL(cmdln_colour_tables);
+.global EXPORT_SYMBOL(cmdln_param_bcg);
 .global EXPORT_SYMBOL(colour_lookup);		/* 0x1A71B8 */
 .global EXPORT_SYMBOL(pointer_hotspot);		/* 0x154874+1 */
 
@@ -358,7 +368,7 @@ GLOBAL_FUNC(ASM_place_default_player)	/* 0x0101F0 */
 		cmp    $0x1,%dl
 		je     jump_10270
 	jump_102a3:
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		je     jump_102b4
 		movl   $0x4,0x8(%esp)
 	jump_102b4:
@@ -371,7 +381,7 @@ GLOBAL_FUNC(ASM_place_default_player)	/* 0x0101F0 */
 		xor    %edx,%edx
 		mov    EXPORT_SYMBOL(default_agent_tiles_z)(%eax),%dl
 		shl    $0x8,%edx
-		mov    in_network_game,%cl
+		mov    EXPORT_SYMBOL(in_network_game),%cl
 		mov    %edx,0xc(%esp)
 		test   %cl,%cl
 		je     jump_102fc
@@ -400,7 +410,7 @@ GLOBAL_FUNC(ASM_place_default_player)	/* 0x0101F0 */
 		mov    %ebx,0x18(%esp)
 		mov    %eax,0x2c(%esp)
 	jump_10329:
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		je     jump_10354
 		mov    0x18(%esp),%eax
 		mov    EXPORT_SYMBOL(netgame_agent_pos_x)-2(%eax),%eax
@@ -479,7 +489,7 @@ GLOBAL_FUNC(ASM_place_default_player)	/* 0x0101F0 */
 		mov    %ax,EXPORT_SYMBOL(ingame)+0x973 # ingame.TrackZ
 		jmp    jump_10482
 	jump_1044c:
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		je     jump_1046b
 		test   %dl,%dl
 		je     jump_1046b
@@ -542,7 +552,7 @@ GLOBAL_FUNC(ASM_place_default_player)	/* 0x0101F0 */
 		mov    %ax,%dx
 		cmp    $0x20,%edx
 		jl     jump_10524
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		je     jump_1056a
 		xor    %eax,%eax
 		mov    %si,%ax
@@ -908,7 +918,7 @@ GLOBAL_FUNC(ASM_fill_netgame_agent_pos)	/* 0x010F10 */
 		push   %esi
 		push   %edi
 		push   %ebp
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		mov    %eax,%esi
 		mov    %edx,%ecx
 		mov    %ebx,%ebp
@@ -947,7 +957,7 @@ GLOBAL_FUNC(ASM_fill_netgame_agent_pos)	/* 0x010F10 */
 		test   %eax,%eax
 		jne    jump_10f3e
 	jump_10f86:
-		mov    %edi,things
+		mov    %edi,EXPORT_SYMBOL(things)
 		pop    %ebp
 		pop    %edi
 		pop    %esi
@@ -1039,7 +1049,7 @@ GLOBAL_FUNC(ASM_unkn1_handle_agent_groups)	/* 0x010F94 */
 		xor    %eax,%eax
 		mov    %bx,%ax
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %eax,%edx
 		xor    %ecx,%ecx
 		xor    %eax,%eax
@@ -1390,7 +1400,7 @@ GLOBAL_FUNC(ASM_process_child_object)	/* 0x015BAC */
 		add    %ecx,%eax
 		shl    $0x2,%eax
 		add    %ecx,%eax
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		shl    $0x3,%eax
 		add    %eax,%ecx
 		mov    0x18(%ecx),%eax
@@ -1584,7 +1594,7 @@ GLOBAL_FUNC(ASM_draw_hud_lock_target)	/* 0x02017C */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		shl    $0x3,%eax
 		lea    (%ecx,%eax,1),%edx
 		testb  $0x10,0xf(%edx)
@@ -2254,7 +2264,7 @@ GLOBAL_FUNC(ASM_show_goto_point)	/* 0x020938 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		shl    $0x3,%eax
 		add    %eax,%esi
 		testb  $0x10,0xf(%esi)
@@ -2486,7 +2496,7 @@ GLOBAL_FUNC(ASM_draw_hud)	/* 0x020C80 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		testb  $0x20,0xd(%edx,%eax,8)
 		je     jump_211a4
 	jump_20cbd:
@@ -2523,7 +2533,7 @@ GLOBAL_FUNC(ASM_draw_hud)	/* 0x020C80 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %edx,%eax
 		cmpl   $0x0,0x40(%eax)
@@ -2556,7 +2566,7 @@ GLOBAL_FUNC(ASM_draw_hud)	/* 0x020C80 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%ebp
+		mov    EXPORT_SYMBOL(things),%ebp
 		shl    $0x3,%eax
 		add    %eax,%ebp
 		call   ac_draw_hud_lock_target
@@ -2650,7 +2660,7 @@ func_20e96:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%eax
 		lea    (%ebx,%eax,1),%ecx
 		testb  $0x2,0xc(%ecx)
@@ -2714,7 +2724,7 @@ func_20f64:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		mov    $0x3,%ecx
 		add    %eax,%edx
@@ -2740,7 +2750,7 @@ func_20fea:
 		add    %ebx,%edx
 		shl    $0x2,%edx
 		add    %ebx,%edx
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		shl    $0x3,%edx
 		lea    (%ecx,%edx,1),%ebx
 		xor    %edx,%edx
@@ -2777,7 +2787,7 @@ func_20fea:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		xor    %eax,%eax
@@ -4663,7 +4673,7 @@ GLOBAL_FUNC(ASM_find_nearest_object2)	/* 0x0305A8 */
 		push   %edi
 		push   %ebp
 		sub    $0x30,%esp
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		mov    %ax,0x28(%esp)
 		mov    %dx,0x2c(%esp)
 		mov    %ebx,0x24(%esp)
@@ -4801,7 +4811,7 @@ GLOBAL_FUNC(ASM_find_nearest_object2)	/* 0x0305A8 */
 		jmp    jump_30665
 	jump_3075a:
 		mov    0x20(%esp),%eax
-		mov    %esi,things
+		mov    %esi,EXPORT_SYMBOL(things)
 		add    $0x30,%esp
 		pop    %ebp
 		pop    %edi
@@ -4837,7 +4847,7 @@ GLOBAL_FUNC(ASM_level_misc_update)	/* 0x030A9C */
 		imul   $0xa8,%eax,%edi
 		mov    EXPORT_SYMBOL(game_level_miscs),%ecx
 		add    %ecx,%esi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		mov    0x6(%esi),%dl
 		mov    %dl,0x50(%edi,%eax,1)
 		mov    0x8(%esi),%dl
@@ -4917,7 +4927,7 @@ GLOBAL_FUNC (ASM_unkn_f_pressed_func)	/* 0x030C24 */
 		jge    jump_30cee
 		and    $0xffff,%eax
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		lea    (%edx,%eax,1),%ebp
 		mov    0x52(%ebp),%dx
 		xor    %ecx,%ecx
@@ -4995,7 +5005,7 @@ GLOBAL_FUNC(ASM_search_things_for_uniqueid)	/* 0x0318C8 */
 		push   %esi
 		push   %edi
 		push   %ebp
-		mov    things,%ebp
+		mov    EXPORT_SYMBOL(things),%ebp
 		mov    %eax,%ebx
 		test   %dl,%dl
 		je     jump_31912
@@ -5045,7 +5055,7 @@ GLOBAL_FUNC(ASM_search_things_for_uniqueid)	/* 0x0318C8 */
 	jump_31943:
 		xor    %eax,%eax
 	jump_31945:
-		mov    %ebp,things
+		mov    %ebp,EXPORT_SYMBOL(things)
 		pop    %ebp
 		pop    %edi
 		pop    %esi
@@ -5297,7 +5307,7 @@ GLOBAL_FUNC(ASM_update_map_thing_and_traffic_refs)	/* 0x031C38 */
 		test   %eax,%eax
 		jle    jump_31cbf
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %eax,%edx
 		xor    %eax,%eax
 		mov    0x9(%edx),%al
@@ -5427,7 +5437,7 @@ GLOBAL_FUNC(ASM_update_map_thing_and_traffic_refs)	/* 0x031C38 */
 		test   %eax,%eax
 		jle    jump_31dd6
 		imul   $0xa8,%eax,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %ebx,%eax
 		xor    %ebx,%ebx
 		mov    0x9(%eax),%bl
@@ -5461,7 +5471,7 @@ GLOBAL_FUNC(ASM_update_map_thing_and_traffic_refs)	/* 0x031C38 */
 		test   %eax,%eax
 		jle    jump_31e3e
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -5948,7 +5958,7 @@ GLOBAL_FUNC(ASM_PacketRecord_Write)	/* 0x035210 */
 		push   %edx
 		sub    $0xc,%esp
 		mov    %eax,%edx
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		jne    jump_3527c
 		cmpl   $0xffffffff,EXPORT_SYMBOL(packet_rec_fh)
 		je     jump_3527c
@@ -6182,7 +6192,7 @@ GLOBAL_FUNC(ASM_unkn_player_group_prot)	/* 0x3631C */
 		xor    %eax,%eax
 		mov    %dx,%ax
 		imul   $0xa8,%eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %edx,%eax
 		mov    %esi,%edx
 		call   ac_call_protect_specific
@@ -6414,7 +6424,7 @@ GLOBAL_FUNC(ASM_weapon_select_input)	/* 0x036D14 */
 		shl    $0x4,%eax
 		mov    %edx,%ebx
 		mov    $0x21,%edx
-		add    $packets,%eax
+		add    $EXPORT_SYMBOL(packets),%eax
 		call   ac_my_build_packet
 		mov    $0x1,%al
 		pop    %esi
@@ -6463,7 +6473,7 @@ GLOBAL_FUNC(ASM_weapon_select_input)	/* 0x036D14 */
 		shl    $0x4,%eax
 		mov    %edx,%ebx
 		mov    $0x21,%edx
-		add    $packets,%eax
+		add    $EXPORT_SYMBOL(packets),%eax
 		call   ac_my_build_packet
 		mov    $0x1,%al
 		pop    %esi
@@ -6514,7 +6524,7 @@ GLOBAL_FUNC(ASM_weapon_select_input)	/* 0x036D14 */
 		push   $0x0
 		shl    $0x4,%eax
 		mov    $0x21,%edx
-		add    $packets,%eax
+		add    $EXPORT_SYMBOL(packets),%eax
 		call   ac_my_build_packet
 		mov    $0x1,%al
 		pop    %esi
@@ -6561,7 +6571,7 @@ GLOBAL_FUNC(ASM_weapon_select_input)	/* 0x036D14 */
 		push   $0x0
 		shl    $0x4,%eax
 		mov    $0x21,%edx
-		add    $packets,%eax
+		add    $EXPORT_SYMBOL(packets),%eax
 		call   ac_my_build_packet
 		mov    $0x1,%al
 		pop    %esi
@@ -6614,7 +6624,7 @@ GLOBAL_FUNC(ASM_weapon_select_input)	/* 0x036D14 */
 		shl    $0x4,%eax
 		mov    %edx,%ebx
 		mov    $0x21,%edx
-		add    $packets,%eax
+		add    $EXPORT_SYMBOL(packets),%eax
 		call   ac_my_build_packet
 		mov    $0x1,%al
 		pop    %esi
@@ -6661,7 +6671,7 @@ GLOBAL_FUNC(ASM_weapon_select_input)	/* 0x036D14 */
 		push   $0x0
 		shl    $0x4,%eax
 		mov    $0x21,%edx
-		add    $packets,%eax
+		add    $EXPORT_SYMBOL(packets),%eax
 		call   ac_my_build_packet
 		mov    $0x1,%al
 		pop    %esi
@@ -6688,7 +6698,7 @@ GLOBAL_FUNC(ASM_get_next_player_agent)	/* 0x038bec */
 		push   %edi
 		push   %ebp
 		sub    $0x4,%esp
-		mov    things,%ebp
+		mov    EXPORT_SYMBOL(things),%ebp
 		mov    %eax,%esi
 		mov    $0xa8,%edi
 		xor    %ebx,%ebx
@@ -6771,7 +6781,7 @@ GLOBAL_FUNC(ASM_get_next_player_agent)	/* 0x038bec */
 		idiv   %ecx
 		mov    %eax,%edx
 		mov    %edx,%eax
-		mov    %ebp,things
+		mov    %ebp,EXPORT_SYMBOL(things)
 		add    $0x4,%esp
 		pop    %ebp
 		pop    %edi
@@ -6798,7 +6808,7 @@ GLOBAL_FUNC(ASM_process_send_person)	/* 0x038CE8 */
 		mov    %eax,%ebx
 		shl    $0x2,%eax
 		sub    %ebx,%eax
-		mov    $players,%ebx
+		mov    $EXPORT_SYMBOL(players),%ebx
 		add    %eax,%ebx
 		lea    (%ebx,%edx,1),%eax
 		xor    %ecx,%ecx
@@ -6970,7 +6980,7 @@ GLOBAL_FUNC (ASM_process_mouse_inputs)	/* 0x03AA04 */
 		add    %edi,%edx
 		shl    $0x2,%edx
 		add    %edx,%edi
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%edi
 		add    %edi,%edx
 		xor    %edi,%edi
@@ -7026,7 +7036,7 @@ func_3ab94:
 		push   $0x0
 		shl    $0x4,%eax
 		mov    $0x26,%edx
-		add    $packets,%eax
+		add    $EXPORT_SYMBOL(packets),%eax
 		call   ac_build_packet
 		mov    $0x1,%al
 		add    $0xc,%esp
@@ -7054,7 +7064,7 @@ func_3ac31:
 		sub    %edx,%edi
 		lea    0x0(,%esi,4),%edx
 		sub    %esi,%edx
-		mov    $packets,%esi
+		mov    $EXPORT_SYMBOL(packets),%esi
 		shl    $0x4,%edx
 		add    %edx,%esi
 		cmp    $0x7,%edi
@@ -7116,7 +7126,7 @@ func_3acde:
 		sub    %edx,%edi
 		lea    0x0(,%esi,4),%edx
 		sub    %esi,%edx
-		mov    $packets,%esi
+		mov    $EXPORT_SYMBOL(packets),%esi
 		shl    $0x4,%edx
 		add    %edx,%esi
 		cmp    $0x7,%edi
@@ -7188,7 +7198,7 @@ func_3ad8b:
 		mov    $0x25,%edx
 		shl    $0x4,%eax
 		mov    %esi,%ebx
-		add    $packets,%eax
+		add    $EXPORT_SYMBOL(packets),%eax
 		call   ac_my_build_packet
 		mov    $0x1,%al
 		add    $0xc,%esp
@@ -7271,7 +7281,7 @@ func_3adf0:
 		sub    %esi,%eax
 		mov    EXPORT_SYMBOL(mouse_map_x),%ecx
 		mov    %eax,%esi
-		mov    $packets,%eax
+		mov    $EXPORT_SYMBOL(packets),%eax
 		shl    $0x4,%esi
 		mov    $0x2a,%edx
 		add    %esi,%eax
@@ -7300,7 +7310,7 @@ func_3adf0:
 		mov    EXPORT_SYMBOL(players)+0x088(%ebx),%ebx # players[0].DirectControl[0]
 		shl    $0x4,%eax
 		mov    $0x27,%edx
-		add    $packets,%eax
+		add    $EXPORT_SYMBOL(packets),%eax
 		call   ac_my_build_packet
 		mov    $0x1,%al
 		add    $0xc,%esp
@@ -7367,7 +7377,7 @@ func_3adf0:
 		shl    $0x2,%ecx
 		shl    $0x4,%eax
 		lea    (%edi,%ecx,1),%ebx
-		add    $packets,%eax
+		add    $EXPORT_SYMBOL(packets),%eax
 		cmp    $0x7,%ebp
 		jae    jump_3b06d
 		mov    EXPORT_SYMBOL(mouse_map_z),%ebp
@@ -7448,7 +7458,7 @@ func_3adf0:
 		add    %esi,%eax
 		shl    $0x2,%eax
 		add    %eax,%esi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%esi
 		mov    0x99(%esi,%eax,1),%al
 		cmp    $0x12,%al
@@ -7474,7 +7484,7 @@ func_3adf0:
 		sub    %edi,%eax
 		shl    $0x4,%eax
 		mov    (%esp),%ebp
-		add    $packets,%eax
+		add    $EXPORT_SYMBOL(packets),%eax
 		cmp    $0x7,%ebp
 		jae    jump_3b20e
 		xor    %edi,%edi
@@ -7579,7 +7589,7 @@ func_3adf0:
 		add    %edx,%ebx
 		shl    $0x4,%eax
 		mov    (%esp),%edi
-		add    $packets,%eax
+		add    $EXPORT_SYMBOL(packets),%eax
 		cmp    $0x7,%edi
 		jae    jump_3b35b
 		xor    %edi,%edi
@@ -7701,7 +7711,7 @@ func_3adf0:
 		sub    %ebx,%eax
 		shl    $0x4,%eax
 		sar    $0x10,%esi
-		add    $packets,%eax
+		add    $EXPORT_SYMBOL(packets),%eax
 		cmp    $0x3,%esi
 		jne    jump_3b4c3
 		mov    EXPORT_SYMBOL(mouse_map_z),%ebx
@@ -7785,7 +7795,7 @@ func_3adf0:
 		mov    $0x1a,%edx
 		shl    $0x4,%eax
 		mov    %esi,%ebx
-		add    $packets,%eax
+		add    $EXPORT_SYMBOL(packets),%eax
 		call   ac_my_build_packet
 		mov    $0x1,%al
 		add    $0xc,%esp
@@ -8832,7 +8842,7 @@ GLOBAL_FUNC (ASM_net_unkn_check_1)	/* 0x03FF04 */
 		mov    EXPORT_SYMBOL(pktrec_mode),%al
 		cmp    $0x2,%eax
 		jne    jump_3ff6e
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		je     jump_3ff6e
 		xor    %edx,%edx
 		jmp    jump_3ff3d
@@ -8851,7 +8861,7 @@ GLOBAL_FUNC (ASM_net_unkn_check_1)	/* 0x03FF04 */
 		test   %esi,%eax
 		je     jump_3ff3c
 		imul   $0x30,%ebx,%eax
-		add    $packets,%eax
+		add    $EXPORT_SYMBOL(packets),%eax
 		call   ac_PacketRecord_Read
 		jmp    jump_3ff3c
 	jump_3ff6e:
@@ -8868,7 +8878,7 @@ GLOBAL_FUNC (ASM_net_unkn_check_1)	/* 0x03FF04 */
 		shl    $0x2,%eax
 		shl    $0x4,%edx
 		sub    %ebx,%eax
-		mov    packets(%edx),%bx
+		mov    EXPORT_SYMBOL(packets)(%edx),%bx
 		mov    %bx,EXPORT_SYMBOL(shpackets)(%eax)
 		mov    EXPORT_SYMBOL(packets)+0x02(%edx),%bx # packets[].Data
 		mov    %bx,EXPORT_SYMBOL(shpackets)+0x02(%eax)
@@ -8894,7 +8904,7 @@ GLOBAL_FUNC (ASM_net_unkn_check_1)	/* 0x03FF04 */
 		imul   $0xb,%edx,%ebx
 		imul   $0x30,%edx,%edx
 		mov    EXPORT_SYMBOL(shpackets)(%ebx),%cx
-		mov    %cx,packets(%edx)
+		mov    %cx,EXPORT_SYMBOL(packets)(%edx)
 		mov    %si,EXPORT_SYMBOL(packets)+0x0A(%edx) # packets[].Action2
 		mov    %si,EXPORT_SYMBOL(packets)+0x14(%edx) # packets[].Action3
 		mov    %si,EXPORT_SYMBOL(packets)+0x1E(%edx) # packets[].Action4
@@ -8930,7 +8940,7 @@ GLOBAL_FUNC (ASM_net_unkn_check_1)	/* 0x03FF04 */
 		lea    0xc8(%esp),%eax
 		mov    $0x30,%edx
 		call   ac_net_unkn_func_12
-		mov    $packets,%eax
+		mov    $EXPORT_SYMBOL(packets),%eax
 		call   ac_LbNetworkExchange
 		mov    EXPORT_SYMBOL(gameturn),%ebx
 		mov    %eax,%edx
@@ -9081,13 +9091,13 @@ GLOBAL_FUNC (ASM_net_unkn_check_1)	/* 0x03FF04 */
 		mov    EXPORT_SYMBOL(pktrec_mode),%al
 		cmp    $0x1,%eax
 		jne    jump_402e2
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		je     jump_402e2
 		mov    net_host_player_no,%al
 		cmp    EXPORT_SYMBOL(local_player_no),%al
 		jne    jump_402e2
 		imul   $0x30,%ebx,%eax
-		add    $packets,%eax
+		add    $EXPORT_SYMBOL(packets),%eax
 		call   ac_PacketRecord_Write
 	jump_402e2:
 		xor    %eax,%eax
@@ -9125,7 +9135,7 @@ GLOBAL_FUNC (ASM_net_unkn_check_1)	/* 0x03FF04 */
 		call   ac_show_message
 		xor    %al,%al
 		mov    %al,EXPORT_SYMBOL(lbKeyOn)+19
-		movb   $0x2,in_network_game
+		movb   $0x2,EXPORT_SYMBOL(in_network_game)
 		call   ac_StopCD
 		mov    $0x1,%eax
 		call   ac_test_missions
@@ -9151,7 +9161,7 @@ GLOBAL_FUNC (ASM_net_unkn_check_1)	/* 0x03FF04 */
 		mov    %esi,%eax
 		mov    %esi,EXPORT_SYMBOL(lbSeed)
 		call   ac_srand
-		mov    %dh,in_network_game
+		mov    %dh,EXPORT_SYMBOL(in_network_game)
 	jump_403cc:
 		add    $0xe0,%esp
 		pop    %ebp
@@ -9191,7 +9201,7 @@ GLOBAL_FUNC (ASM_veh_add)	/* 0x041A80 */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %ebx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%eax
 		add    %eax,%ebx
 		movw   $0x0,0x5e(%ebx)
@@ -9247,7 +9257,7 @@ GLOBAL_FUNC (ASM_veh_add)	/* 0x041A80 */
 		mov    $0xa8,%ebx
 		dec    %edx
 		movb   $0x21,0x9(%eax)
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		mov    %dx,0x52(%eax)
 		mov    (%esp),%edx
 		mov    0x4(%esp),%eax
@@ -9277,7 +9287,7 @@ GLOBAL_FUNC (ASM_veh_add)	/* 0x041A80 */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %eax,%ebx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%ebx
 		add    %ebx,%eax
 		movw   $0x0,0x5e(%eax)
@@ -9333,7 +9343,7 @@ GLOBAL_FUNC (ASM_veh_add)	/* 0x041A80 */
 		mov    $0xa8,%ebx
 		dec    %edx
 		movb   $0x21,0x9(%eax)
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		mov    %dx,0x52(%eax)
 		mov    (%esp),%edx
 		mov    0x4(%esp),%eax
@@ -9363,7 +9373,7 @@ GLOBAL_FUNC (ASM_veh_add)	/* 0x041A80 */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %ebx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%eax
 		add    %eax,%ebx
 		movw   $0x0,0x5e(%ebx)
@@ -9418,7 +9428,7 @@ GLOBAL_FUNC (ASM_veh_add)	/* 0x041A80 */
 		mov    (%esp),%eax
 		dec    %edx
 		movb   $0x21,0x9(%eax)
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		mov    %dx,0x52(%eax)
 		mov    (%esp),%edx
 		mov    0x4(%esp),%eax
@@ -9754,7 +9764,7 @@ GLOBAL_FUNC(ASM_map_things_unkn_func_04)	/* 0x0428B8 */
 		push   %edi
 		push   %ebp
 		sub    $0x28,%esp
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		mov    %eax,%edi
 		xor    %edx,%edx
 		mov    $0x7fffffff,%ebx
@@ -9886,7 +9896,7 @@ GLOBAL_FUNC(ASM_map_things_unkn_func_04)	/* 0x0428B8 */
 		jmp    jump_42966
 	jump_42a6d:
 		mov    0x4(%esp),%eax
-		mov    %esi,things
+		mov    %esi,EXPORT_SYMBOL(things)
 		add    $0x28,%esp
 		pop    %ebp
 		pop    %edi
@@ -10051,7 +10061,7 @@ GLOBAL_FUNC(ASM_apply_full_light)	/* 0x042BA0 */
 		testb  $0x2,EXPORT_SYMBOL(ingame)+0x92F # ingame.Flags+0
 		je     jump_42cee
 		xor    %eax,%eax
-		mov    in_network_game,%al
+		mov    EXPORT_SYMBOL(in_network_game),%al
 		test   %eax,%eax
 		jne    jump_42cee
 		mov    -0x2(%esp),%ebx
@@ -10277,7 +10287,7 @@ light_cmd_unkn_func_06:	/* 0x0434A4 */
 		test   %ebx,%ebx
 		jle    jump_4353d
 		imul   $0xa8,%ebx,%esi
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		mov    0x9(%esi,%ebx,1),%bl
 		and    $0xff,%ebx
 		cmp    $0x3,%ebx
@@ -10790,7 +10800,7 @@ GLOBAL_FUNC(ASM_quick_light_unkn_func_04)	/* 0x043B68 */
 	jump_43bc9:
 		movswl %bx,%eax
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		movswl %cx,%edx
 		movzbl 0x56(%eax),%esi
@@ -10799,7 +10809,7 @@ GLOBAL_FUNC(ASM_quick_light_unkn_func_04)	/* 0x043B68 */
 	jump_43be5:
 		movswl %bx,%edx
 		imul   $0xa8,%edx,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		mov    EXPORT_SYMBOL(sthings),%ebp
 		jmp    jump_43c00
 	jump_43bfb:
@@ -10868,7 +10878,7 @@ GLOBAL_FUNC(ASM_quick_light_unkn_func_04)	/* 0x043B68 */
 		test   %eax,%eax
 		jle    jump_43bfb
 		imul   $0xa8,%eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		mov    0x9(%edx,%eax,1),%al
 		and    $0xff,%eax
 		mov    %ebp,EXPORT_SYMBOL(sthings)
@@ -10879,7 +10889,7 @@ GLOBAL_FUNC(ASM_quick_light_unkn_func_04)	/* 0x043B68 */
 	jump_43cf0:
 		movswl %bx,%eax
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0x8(%edx,%eax,1),%al
 		and    $0xff,%eax
 		cmp    $0x20,%eax
@@ -10988,7 +10998,7 @@ quick_light_unkn_func_05:	/* 0x043D2C */
 	jump_43e55:
 		movswl %si,%eax
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		xor    %edx,%edx
 		movswl %di,%ecx
@@ -10998,7 +11008,7 @@ quick_light_unkn_func_05:	/* 0x043D2C */
 	jump_43e72:
 		movswl %si,%eax
 		imul   $0xa8,%eax,%eax
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		jmp    jump_43e8c
 	jump_43e83:
 		imul   $0x3c,%eax,%eax
@@ -11062,7 +11072,7 @@ quick_light_unkn_func_05:	/* 0x043D2C */
 		test   %eax,%eax
 		jle    jump_43e83
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -13211,7 +13221,7 @@ GLOBAL_FUNC (ASM_map_lights_update)	/* 0x04557C */
 		cmp    $0x3e8,%eax
 		jge    jump_45876
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -13315,7 +13325,7 @@ GLOBAL_FUNC (ASM_map_lights_update)	/* 0x04557C */
 		cmp    $0x3e8,%eax
 		jge    jump_459ce
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -13890,7 +13900,7 @@ GLOBAL_FUNC(ASM_add_node_thing)	/* 0x046C80 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		shl    $0x3,%eax
 		add    %esi,%eax
 		mov    0x18(%eax),%edx
@@ -13998,7 +14008,7 @@ GLOBAL_FUNC(ASM_add_node_sthing)	/* 0x046D40 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		mov    %bx,(%edx,%eax,1)
 		jmp    jump_46ddf
@@ -14045,7 +14055,7 @@ GLOBAL_FUNC(ASM_delete_node)	/* 0x046DEC */
 		add    %ebx,%edx
 		shl    $0x2,%edx
 		add    %ebx,%edx
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		shl    $0x3,%edx
 		add    %edx,%ecx
 		mov    0x2(%eax),%dx
@@ -14086,7 +14096,7 @@ GLOBAL_FUNC(ASM_delete_node)	/* 0x046DEC */
 		add    %ebx,%edx
 		shl    $0x2,%edx
 		add    %ebx,%edx
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%edx
 		add    %ebx,%edx
 		mov    (%eax),%bx
@@ -14128,7 +14138,7 @@ GLOBAL_FUNC(ASM_delete_snode)	/* 0x046EEC */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %ebx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%eax
 		add    %eax,%ebx
 		mov    0x2(%edx),%ax
@@ -14169,7 +14179,7 @@ GLOBAL_FUNC(ASM_delete_snode)	/* 0x046EEC */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %ebx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%eax
 		add    %eax,%ebx
 		mov    (%edx),%ax
@@ -14274,7 +14284,7 @@ GLOBAL_FUNC(ASM_move_mapwho)	/* 0x046FB0 */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %eax,%ebx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%ebx
 		mov    %dx,(%ebx,%eax,1)
 		jmp    jump_470c8
@@ -14366,7 +14376,7 @@ move_smapwho:	/* 0x0470FC */
 		add    %edi,%eax
 		shl    $0x2,%eax
 		add    %edi,%eax
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		shl    $0x3,%eax
 		jmp    jump_471c6
 	jump_471ab:
@@ -14534,7 +14544,7 @@ GLOBAL_FUNC(ASM_get_weapon_range)	/* 0x047300 */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %eax,%ebx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%ebx
 		mov    0x8(%ebx,%eax,1),%al
 		and    $0xff,%eax
@@ -15027,7 +15037,7 @@ GLOBAL_FUNC(ASM_set_interrupt_target)	/* 0x04783C */
 		push   %esi
 		mov    %eax,%ebx
 		mov    %edx,%ecx
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		cmp    %edx,%ecx
 		jb     jump_479bc
 		lea    0x29040(%edx),%eax
@@ -15056,7 +15066,7 @@ GLOBAL_FUNC(ASM_set_interrupt_target)	/* 0x04783C */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		testb  $0x10,0xd(%edx,%eax,8)
 		jne    jump_479bc
 	jump_478b5:
@@ -15205,10 +15215,10 @@ person_drops_weapons:	/* 0x0479C0 */
 		jne    jump_47a54
 		testb  $0x20,0xd(%esi)
 		jne    jump_47a54
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		jne    jump_47a2f
 	jump_47a54:
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		je     jump_47aa9
 		testb  $0x8,EXPORT_SYMBOL(net_game_play_flags)
 		je     jump_47aa9
@@ -15426,7 +15436,7 @@ scare_civs:	/* 0x047BD4 */
 		test   %eax,%eax
 		jle    jump_47cba
 		imul   $0xa8,%eax,%eax
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		add    %eax,%esi
 		testb  $0x40,0x46(%esi)
 		je     jump_47c2c
@@ -15586,7 +15596,7 @@ GLOBAL_FUNC(ASM_alert_peeps)	/* 0x047D40 */
 		test   %eax,%eax
 		jle    jump_47e94
 		imul   $0xa8,%eax,%eax
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		add    %eax,%esi
 		testb  $0x40,0x46(%esi)
 		je     jump_47da6
@@ -15824,7 +15834,7 @@ GLOBAL_FUNC(ASM_set_person_dead)	/* 0x0480DC */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %edx,%eax
 		jmp    jump_48169
@@ -15992,7 +16002,7 @@ GLOBAL_FUNC(ASM_set_person_dead)	/* 0x0480DC */
 		imul   $0x1aa,%ebx,%ecx
 		cmp    EXPORT_SYMBOL(players)+0x09C(%ecx,%edx,1),%esi # players[0].MyAgent[0]
 		jne    jump_4831d
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		jne    jump_48360
 		mov    EXPORT_SYMBOL(open_brief)-2,%edx
 		sar    $0x10,%edx
@@ -16084,7 +16094,7 @@ GLOBAL_FUNC(ASM_set_person_dead)	/* 0x0480DC */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		andb   $0xbf,0xe(%edx,%eax,1)
 	jump_48494:
@@ -16459,7 +16469,7 @@ GLOBAL_FUNC(ASM_thing_hit_by_bullet)	/* 0x048868 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		shl    $0x3,%eax
 		add    %eax,%esi
 		xor    %eax,%eax
@@ -17091,7 +17101,7 @@ func_48fec:
 	jump_49023:
 		test   %ebp,%ebp
 		je     jump_49171
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		jne    jump_490c5
 		mov    EXPORT_SYMBOL(ingame)+0x959,%eax # ingame.TrainMode
 		xor    %edx,%edx
@@ -17158,7 +17168,7 @@ func_4908c:
 		add    %edi,%eax
 		shl    $0x2,%eax
 		add    %edi,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%eax
 		add    %ebx,%eax
 		testb  $0x20,0xd(%eax)
@@ -17180,7 +17190,7 @@ func_4908c:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 	jump_4913f:
@@ -17337,7 +17347,7 @@ GLOBAL_FUNC(ASM_person_hit_razor_wire)	/* 0x049294 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		shl    $0x3,%eax
 		add    %eax,%esi
 		mov    0x51(%edi),%dl
@@ -17531,7 +17541,7 @@ GLOBAL_FUNC(ASM_person_hit_razor_wire)	/* 0x049294 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		mov    $0x400,%ecx
 		add    %edx,%eax
@@ -17729,7 +17739,7 @@ GLOBAL_FUNC(ASM_person_hit_razor_wire)	/* 0x049294 */
 		mov    $0xb,%edx
 		mov    %edi,%eax
 		call   ac_set_person_dead
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		jne    jump_497df
 		mov    EXPORT_SYMBOL(ingame)+0x959,%eax # ingame.TrainMode
 		xor    %edx,%edx
@@ -17879,7 +17889,7 @@ GLOBAL_FUNC(ASM_bul_hit_vector)	/* 0x0498DC */
 		add    %esi,%eax
 		shl    $0x2,%eax
 		add    %esi,%eax
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		shl    $0x3,%eax
 		add    %eax,%esi
 		mov    0xc(%esi),%ah
@@ -18372,7 +18382,7 @@ check_for_people:	/* 0x049EA8 */
 		test   %eax,%eax
 		jle    jump_49f1a
 		imul   $0xa8,%eax,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %eax,%ebx
 		xor    %eax,%eax
 		mov    0x9(%ebx),%al
@@ -18840,7 +18850,7 @@ GLOBAL_FUNC(ASM_check_for_other_people)	/* 0x04A118 */
 		test   %eax,%eax
 		jle    jump_4a4c9
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		jmp    jump_4a4d1
 	jump_4a4c9:
 		imul   $0x3c,%eax,%edx
@@ -18890,7 +18900,7 @@ GLOBAL_FUNC(ASM_check_for_other_people)	/* 0x04A118 */
 		test   %eax,%eax
 		jle    jump_4a2cb
 		imul   $0xa8,%eax,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %eax,%ebx
 		xor    %eax,%eax
 		mov    0x9(%ebx),%al
@@ -19214,7 +19224,7 @@ GLOBAL_FUNC(ASM_create_intelligent_door)	/* 0x04A974 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		testb  $0x8,0xd(%edx,%eax,8)
 		jne    jump_4ab24
 		movswl %bx,%edx
@@ -20832,7 +20842,7 @@ GLOBAL_FUNC(ASM_process_wander)	/* 0x04BB8C */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		xor    %eax,%eax
@@ -20932,7 +20942,7 @@ GLOBAL_FUNC(ASM_process_wander)	/* 0x04BB8C */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		testb  $0x8,0xd(%edx,%eax,8)
 		je     jump_4bd6f
 	jump_4bd0b:
@@ -21237,7 +21247,7 @@ GLOBAL_FUNC(ASM_set_angle_to_avoid_group)	/* 0x04BFFC */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %ebx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%eax
 		add    %eax,%ebx
 		mov    0x18(%esi),%edx
@@ -21524,7 +21534,7 @@ GLOBAL_FUNC(ASM_find_peep_in_area)	/* 0x04C374 */
 		xor    %edx,%edx
 		mov    %di,%dx
 		imul   $0xa8,%edx,%edx
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		add    %edx,%esi
 		testb  $0x2,0xc(%esi)
 		jne    jump_4c408
@@ -21578,7 +21588,7 @@ find_bezier_nav_point:	/* 0x04C42C */
 		push   %edi
 		push   %ebp
 		sub    $0x10,%esp
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		mov    %edx,%edi
 		mov    %ebx,0x4(%esp)
 		cwtl
@@ -21679,7 +21689,7 @@ find_bezier_nav_point:	/* 0x04C42C */
 		mov    %ax,(%edx)
 		mov    %bx,(%ecx)
 	jump_4c556:
-		mov    %esi,things
+		mov    %esi,EXPORT_SYMBOL(things)
 		add    $0x10,%esp
 		pop    %ebp
 		pop    %edi
@@ -21944,7 +21954,7 @@ func_4c8bd:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0x8(%edx,%eax,8),%al
 		and    $0xff,%eax
 		cmp    $0x28,%eax
@@ -21955,7 +21965,7 @@ func_4c8bd:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		testb  $0x2,0xc(%edx,%eax,8)
 		jne    jump_4c933
 		mov    0x5c(%ebp),%edx
@@ -21964,7 +21974,7 @@ func_4c8bd:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		movw   $0x11,0xa(%edx,%eax,1)
 	jump_4c933:
@@ -22073,7 +22083,7 @@ func_4c9ff:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		xor    %ebx,%ebx
 		add    %edx,%eax
@@ -22247,7 +22257,7 @@ func_4cb87:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		mov    0x18(%esi),%bl
 		add    %eax,%edx
@@ -22329,7 +22339,7 @@ func_4cc2d:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		add    %edx,%eax
 		mov    %eax,0x40(%ebp)
@@ -22403,7 +22413,7 @@ func_4ccf9:
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
 		shl    $0x2,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %edx,%eax
 		mov    0x18(%ebx,%eax,8),%eax
 		sar    $0x8,%eax
@@ -22496,7 +22506,7 @@ func_4cdfe:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		add    %edx,%eax
 		andb   $0xdf,0xd(%eax)
@@ -22660,7 +22670,7 @@ func_4cf7b:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		add    %edx,%eax
 		xor    %edx,%edx
@@ -22762,7 +22772,7 @@ func_4d06f:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		mov    %edx,0x40(%ebp)
@@ -22809,7 +22819,7 @@ func_4d0ee:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		orb    $0x20,0xd(%edx,%eax,1)
 		mov    0x46(%ebp),%edx
@@ -22819,7 +22829,7 @@ func_4d0ee:
 		shl    $0x2,%eax
 		movw   $0x1b,0xa(%ebp)
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		movw   $0xffff,0x66(%ebp)
 		add    %eax,%edx
@@ -22868,7 +22878,7 @@ func_4d19d:
 		shl    $0x2,%eax
 		movw   $0x1b,0xa(%ebp)
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		movw   $0xffff,0x66(%ebp)
 		add    %eax,%edx
@@ -22930,7 +22940,7 @@ func_4d225:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		movw   $0x1b,0xa(%ebp)
 		add    %edx,%eax
@@ -22969,7 +22979,7 @@ func_4d2da:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		mov    %edx,0x40(%ebp)
@@ -23010,7 +23020,7 @@ func_4d32c:
 		shl    $0x2,%eax
 		movw   $0xa,0x6a(%ebp)
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		movb   $0x0,0x3f(%ebp)
 		add    %edx,%eax
@@ -23046,7 +23056,7 @@ func_4d395:
 		shl    $0x2,%eax
 		movw   $0xa,0x6a(%ebp)
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		movb   $0x0,0x3f(%ebp)
 		add    %edx,%eax
@@ -23071,7 +23081,7 @@ func_4d3fe:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		mov    %edx,0x40(%ebp)
@@ -23101,7 +23111,7 @@ func_4d450:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		mov    %edx,0x40(%ebp)
@@ -23352,7 +23362,7 @@ func_4d6b4:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0x18(%edx,%eax,8),%eax
 		sar    $0x8,%eax
 		mov    %ax,0x9a(%ebp)
@@ -23362,7 +23372,7 @@ func_4d6b4:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0x20(%edx,%eax,8),%eax
 		sar    $0x8,%eax
 		mov    0x4c(%ebp),%si
@@ -23405,7 +23415,7 @@ func_4d755:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		mov    0x8(%edx,%eax,1),%al
 		and    $0xff,%eax
@@ -23417,7 +23427,7 @@ func_4d755:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		orb    $0x40,0xc(%edx,%eax,8)
 	jump_4d79c:
 		movw   $0x0,0xa(%ebp)
@@ -23439,7 +23449,7 @@ func_4d7ab:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		orb    $0x80,0xc(%edx,%eax,1)
 		movw   $0x0,0xa(%ebp)
@@ -23461,7 +23471,7 @@ func_4d7da:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		orb    $0x8,0xd(%edx,%eax,8)
 		movw   $0x0,0xa(%ebp)
 		add    $0x8,%esp
@@ -23482,7 +23492,7 @@ func_4d807:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		andb   $0xf7,0xd(%edx,%eax,1)
 
@@ -23913,7 +23923,7 @@ do_person_gotothingindex:	/* 0x04DC14 */
 		shl    $0x2,%ebx
 		mov    0x20(%esi),%eax
 		add    %edx,%ebx
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%ebx
 		sar    $0x10,%eax
 		add    %ebx,%edx
@@ -23969,7 +23979,7 @@ do_person_gotothingindex:	/* 0x04DC14 */
 		add    %edx,%ebx
 		shl    $0x2,%ebx
 		add    %edx,%ebx
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%ebx
 		add    %ebx,%edx
 		testb  $0x40,0xd(%edx)
@@ -25025,7 +25035,7 @@ GLOBAL_FUNC(ASM_person_dead)	/* 0x04EA2C */
 	jump_4ea8a:
 		mov    %bx,0x24(%edi)
 	jump_4ea8e:
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		je     jump_4e690
 		testb  $0x4,EXPORT_SYMBOL(net_game_play_flags)
 		je     jump_4e690
@@ -25216,7 +25226,7 @@ GLOBAL_FUNC(ASM_person_pickup)	/* 0x04EB0C */
 		add    %eax,%edi
 		shl    $0x2,%edi
 		add    %eax,%edi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		movw   $0x2b,0xa(%esi)
 		mov    0x54(%eax,%edi,8),%ax
 		xor    %ah,%ah
@@ -25565,7 +25575,7 @@ person_unkn_start_get_item:	/* 0x04F048 */
 	jump_4f0a5:
 		movswl %di,%eax
 		imul   $0xa8,%eax,%eax
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		add    %eax,%esi
 		testb  $0x8,0xe(%esi)
 		je     jump_4f179
@@ -25602,7 +25612,7 @@ person_unkn_start_get_item:	/* 0x04F048 */
 		jae    jump_4f179
 		movswl %di,%eax
 		imul   $0xa8,%eax,%eax
-		mov    things,%ebp
+		mov    EXPORT_SYMBOL(things),%ebp
 		add    %eax,%ebp
 		testl  $0x12004000,0xc(%ebp)
 		jne    jump_4f179
@@ -25652,7 +25662,7 @@ person_unkn_start_get_item:	/* 0x04F048 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %edx,%eax
 		orb    $0x8,0x47(%eax)
@@ -26639,7 +26649,7 @@ send_another_player_peep:	/* 0x04F9F4 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%eax
 		add    %eax,%ebx
 		mov    0x12(%esp),%edx
@@ -27313,7 +27323,7 @@ GLOBAL_FUNC(ASM_plant_mine)	/* 0x0501F0 */
 		mov    %eax,%edi
 		test   %eax,%eax
 		je     jump_502f1
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		mov    %esi,%edx
 		sub    %ecx,%edx
 		mov    $0xa8,%ecx
@@ -27531,7 +27541,7 @@ GLOBAL_FUNC(ASM_person_drop_item)	/* 0x0502F8 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		movw   $0x2b,0xa(%esi)
 		mov    0x54(%edx,%eax,1),%ax
@@ -27746,7 +27756,7 @@ GLOBAL_FUNC(ASM_person_goto_person_nav)	/* 0x050898 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		shl    $0x3,%eax
 		add    %eax,%ecx
 		testb  $0x40,0xd(%ecx)
@@ -27924,7 +27934,7 @@ GLOBAL_FUNC(ASM_person_goto_person_nav)	/* 0x050898 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		add    %edx,%eax
 		xor    %edx,%edx
@@ -27953,7 +27963,7 @@ GLOBAL_FUNC(ASM_person_goto_person_nav)	/* 0x050898 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0x8(%edx,%eax,8),%al
 		and    $0xff,%eax
 		cmp    $0x3b,%eax
@@ -27985,7 +27995,7 @@ GLOBAL_FUNC(ASM_person_goto_person_nav)	/* 0x050898 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		mov    %edi,%ebx
 		add    %edx,%eax
@@ -28127,7 +28137,7 @@ GLOBAL_FUNC(ASM_person_persuade_person)	/* 0x050CD4 */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %eax,%ebx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%ebx
 		add    %ebx,%eax
 		mov    0x46(%ecx),%ebx
@@ -28169,7 +28179,7 @@ GLOBAL_FUNC(ASM_person_persuade_person)	/* 0x050CD4 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		mov    %ecx,%eax
@@ -28313,7 +28323,7 @@ GLOBAL_FUNC(ASM_person_kill_target2)	/* 0x050E78 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%eax
 		lea    (%ebx,%eax,1),%edi
 		xor    %eax,%eax
@@ -28400,7 +28410,7 @@ GLOBAL_FUNC(ASM_person_kill_target2)	/* 0x050E78 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		shl    $0x3,%eax
 		add    %eax,%ecx
 		xor    %eax,%eax
@@ -28491,7 +28501,7 @@ GLOBAL_FUNC(ASM_person_kill_target2)	/* 0x050E78 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0x5e(%edx,%eax,8),%ax
 		cmp    0x16(%esi),%ax
 		jne    jump_511a1
@@ -28629,7 +28639,7 @@ GLOBAL_FUNC(ASM_person_kill_target2)	/* 0x050E78 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		orb    $0x1,0xf(%edx,%eax,8)
 	jump_5130b:
 		testb  $0x10,0x80(%esi)
@@ -28799,7 +28809,7 @@ GLOBAL_FUNC(ASM_person_kill_target2)	/* 0x050E78 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 	jump_51523:
@@ -28934,7 +28944,7 @@ GLOBAL_FUNC(ASM_person_kill_person)	/* 0x051590 */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %eax,%ebx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%ebx
 		andb   $0xbf,0xe(%ebx,%eax,1)
 		mov    0xc(%edx),%ecx
@@ -28967,7 +28977,7 @@ GLOBAL_FUNC(ASM_person_kill_person)	/* 0x051590 */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %eax,%ebx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%ebx
 		andb   $0xbf,0xe(%ebx,%eax,1)
 		andl   $0xff7fffbf,0xc(%edx)
@@ -29000,7 +29010,7 @@ GLOBAL_FUNC(ASM_person_kill_person)	/* 0x051590 */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %ebx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		andb   $0xbf,0xe(%ebx,%eax,8)
 		andl   $0xff7fffbf,0xc(%edx)
 		mov    0xc(%edx),%al
@@ -29096,7 +29106,7 @@ GLOBAL_FUNC(ASM_person_destroy_building)	/* 0x051778 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		mov    $0x1,%ecx
 		add    %eax,%edx
@@ -29117,7 +29127,7 @@ GLOBAL_FUNC(ASM_person_destroy_building)	/* 0x051778 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		orb    $0x1,0xf(%edx,%eax,1)
 	jump_5189d:
@@ -29226,7 +29236,7 @@ GLOBAL_FUNC(ASM_limit_mood)	/* 0x051C04 */
 		push   %esi
 		mov    %eax,%ebx
 		mov    %edx,%ecx
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		cmp    %edx,%eax
 		jb     jump_51c1f
 		lea    0x29040(%edx),%eax
@@ -29481,7 +29491,7 @@ GLOBAL_FUNC(ASM_check_persons_target2)	/* 0x051EC8 */
 		add    %ecx,%eax
 		shl    $0x2,%eax
 		add    %ecx,%eax
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		shl    $0x3,%eax
 		add    %eax,%ecx
 		mov    %ebx,%eax
@@ -29684,7 +29694,7 @@ GLOBAL_FUNC(ASM_process_soul)	/* 0x052020 */
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
 		shl    $0x2,%eax
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		add    %edx,%eax
 		mov    0x28(%esi),%dx
 		shl    $0x3,%eax
@@ -29874,7 +29884,7 @@ GLOBAL_FUNC(ASM_player_weapon_time)	/* 0x052290 */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %ebx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		mov    0x8(%ebx,%eax,8),%al
 		and    $0xff,%eax
 		cmp    $0x33,%eax
@@ -30108,7 +30118,7 @@ GLOBAL_FUNC(ASM_process_weapon)	/* 0x05247C */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0xa(%edx,%eax,8),%ax
 		and    $0xffff,%eax
 		cmp    $0x45,%eax
@@ -30190,7 +30200,7 @@ GLOBAL_FUNC(ASM_process_weapon)	/* 0x05247C */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %edx,%eax
 		mov    0x40(%eax),%edx
@@ -30562,7 +30572,7 @@ GLOBAL_FUNC(ASM_process_weapon)	/* 0x05247C */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		add    %edx,%eax
 		testb  $0x2,0x44(%eax)
@@ -30602,7 +30612,7 @@ GLOBAL_FUNC(ASM_process_weapon)	/* 0x05247C */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %edx,%eax
 		mov    %esi,%edx
@@ -30630,7 +30640,7 @@ GLOBAL_FUNC(ASM_process_weapon)	/* 0x05247C */
 		shl    $0x2,%eax
 		xor    %ebx,%ebx
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		mov    0x3c(%esp),%bx
 		add    %edx,%eax
@@ -30659,7 +30669,7 @@ GLOBAL_FUNC(ASM_process_weapon)	/* 0x05247C */
 		shl    $0x2,%eax
 		xor    %ebx,%ebx
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		mov    0x44(%esp),%bx
 		add    %edx,%eax
@@ -30746,7 +30756,7 @@ func_52d3d:  /* case 3 */
 	jump_52db7: /* inlined init_clone_disguise() */
 		testb  $0x40,0x46(%esi)
 		je     jump_52e96
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		je     jump_52de9
 		xor    %edx,%edx
 		mov    0x94(%esi),%eax
@@ -31002,7 +31012,7 @@ func_52d3d:  /* case 3 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0x54(%edx,%eax,8),%ax
 		mov    %eax,%ebx
 		and    $0xffff,%ebx
@@ -31487,7 +31497,7 @@ func_52d3d:  /* case 3 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0x54(%edx,%eax,8),%ax
 		mov    %eax,%ebx
 		and    $0xffff,%ebx
@@ -32443,7 +32453,7 @@ GLOBAL_FUNC(ASM_try_and_kill_target)	/* 0x05418C */
 		add    %eax,%esi
 		shl    $0x2,%esi
 		add    %eax,%esi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		orb    $0x1,0xf(%eax,%esi,8)
 		pop    %esi
 		pop    %edx
@@ -32598,7 +32608,7 @@ search_floor_for_item:	/* 0x054228 */
 		test   %eax,%eax
 		jle    jump_5428f
 		imul   $0xa8,%eax,%ebx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		jmp    jump_5432b
 	jump_543bb:
 		xor    %eax,%eax
@@ -32761,7 +32771,7 @@ GLOBAL_FUNC(ASM_person_use_vehicle)	/* 0x054564 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		mov    %ebx,%eax
@@ -32774,7 +32784,7 @@ GLOBAL_FUNC(ASM_person_use_vehicle)	/* 0x054564 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		mov    %ebx,%eax
@@ -32816,7 +32826,7 @@ GLOBAL_FUNC(ASM_person_attempt_to_leave_ferry)	/* 0x0545E4 */
 		add    %ebp,%eax
 		shl    $0x2,%eax
 		add    %ebp,%eax
-		mov    things,%ebp
+		mov    EXPORT_SYMBOL(things),%ebp
 		shl    $0x3,%eax
 		add    %eax,%ebp
 		xor    %eax,%eax
@@ -32977,7 +32987,7 @@ GLOBAL_FUNC(ASM_process_support_person)	/* 0x054824 */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %ebx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%eax
 		add    %eax,%ebx
 		mov    0x72(%edx),%ax
@@ -33214,7 +33224,7 @@ GLOBAL_FUNC(ASM_process_protect_person)	/* 0x054B54 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		shl    $0x3,%eax
 		add    %eax,%edi
 		testb  $0x1,0xd(%edi)
@@ -33238,7 +33248,7 @@ GLOBAL_FUNC(ASM_process_protect_person)	/* 0x054B54 */
 		jne    jump_54bc6
 		testb  $0x8,0x45(%esi)
 		jne    jump_54bc6
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		je     jump_54bc6
 		movw   $0x0,0xa(%esi)
 	jump_54bc6:
@@ -33397,7 +33407,7 @@ GLOBAL_FUNC(ASM_process_protect_person)	/* 0x054B54 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		mov    %esi,%eax
@@ -33774,7 +33784,7 @@ GLOBAL_FUNC(ASM_process_protect_person)	/* 0x054B54 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		orb    $0x1,0xf(%edx,%eax,1)
 	jump_5520b:
@@ -34001,7 +34011,7 @@ GLOBAL_FUNC(ASM_process_persuaded)	/* 0x0554B8 */
 		lea    0x0(,%ebx,4),%eax
 		add    %ebx,%eax
 		shl    $0x2,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %ebx,%eax
 		testb  $0x2,0xc(%edx,%eax,8)
 		je     jump_554f5
@@ -34013,7 +34023,7 @@ GLOBAL_FUNC(ASM_process_persuaded)	/* 0x0554B8 */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %ebx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%eax
 		add    %eax,%ebx
 		mov    0x72(%esi),%ax
@@ -34161,7 +34171,7 @@ GLOBAL_FUNC(ASM_process_persuaded)	/* 0x0554B8 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		mov    %esi,%eax
@@ -34272,7 +34282,7 @@ GLOBAL_FUNC(ASM_is_group_all_persuaded_by_me)	/* 0x0557D4 */
 		push   %esi
 		push   %edi
 		push   %ebp
-		mov    things,%ebp
+		mov    EXPORT_SYMBOL(things),%ebp
 		mov    %edx,%edi
 		mov    %ebx,%ecx
 		xor    %edx,%edx
@@ -34327,7 +34337,7 @@ GLOBAL_FUNC(ASM_is_group_all_persuaded_by_me)	/* 0x0557D4 */
 	jump_55860:
 		xor    %eax,%eax
 	jump_55862:
-		mov    %ebp,things
+		mov    %ebp,EXPORT_SYMBOL(things)
 		pop    %ebp
 		pop    %edi
 		pop    %esi
@@ -34385,7 +34395,7 @@ find_nearest_player:	/* 0x0558B8 */
 	jump_55923:
 		movswl %cx,%eax
 		imul   $0xa8,%eax,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %eax,%ebx
 		testb  $0x2,0xc(%ebx)
 		jne    jump_558e0
@@ -34432,7 +34442,7 @@ GLOBAL_FUNC(ASM_find_nearest_from_group)	/* 0x055978 */
 		mov    %bl,0x8(%esp)
 		mov    $0xffffffff,%edi
 		xor    %edx,%edx
-		mov    in_network_game,%ah
+		mov    EXPORT_SYMBOL(in_network_game),%ah
 		mov    %edx,0x4(%esp)
 		test   %ah,%ah
 		je     jump_559b3
@@ -34452,7 +34462,7 @@ GLOBAL_FUNC(ASM_find_nearest_from_group)	/* 0x055978 */
 	jump_559ca:
 		movswl %si,%eax
 		imul   $0xa8,%eax,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %eax,%ebx
 		xor    %eax,%eax
 		mov    0x8(%esp),%al
@@ -34518,7 +34528,7 @@ GLOBAL_FUNC(ASM_find_nearest_from_group)	/* 0x055978 */
 		xor    %ebx,%ebx
 		mov    EXPORT_SYMBOL(word_17FA58)(,%eax,2),%bx
 		imul   $0xa8,%ebx,%ebx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %eax,%ebx
 		xor    %eax,%eax
 		movzbl 0x51(%ebx),%ebp
@@ -34586,7 +34596,7 @@ GLOBAL_FUNC(ASM_assign_next_target_from_group)	/* 0x055AC0 */
 		shl    $0x2,%eax
 		movw   $0x1b,0xa(%ecx)
 		lea    (%esi,%eax,1),%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		movw   $0xffff,0x66(%ecx)
 		add    %edx,%eax
@@ -34620,7 +34630,7 @@ GLOBAL_FUNC(ASM_is_command_completed)	/* 0x055B60 */
 		push   %edx
 		push   %esi
 		push   %edi
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		mov    %eax,%ecx
 		xor    %esi,%esi
 		mov    0x54(%eax),%si
@@ -34658,7 +34668,7 @@ func_55b97:
 	jump_55bca:
 		mov    $0x1,%eax
 	jump_55bcf:
-		mov    %edi,things
+		mov    %edi,EXPORT_SYMBOL(things)
 		test   %ax,%ax
 		je     jump_55be1
 		mov    $0x1,%al
@@ -34670,10 +34680,10 @@ func_55b97:
 		mov    0x2(%esi),%dx
 		call   ac_assign_next_target_from_group
 		movw   $0x1b,0xa(%ecx)
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		xor    %al,%al
 	jump_55bfe:
-		mov    %edi,things
+		mov    %edi,EXPORT_SYMBOL(things)
 		pop    %edi
 		pop    %esi
 		pop    %edx
@@ -34693,8 +34703,8 @@ func_55c0a:
 		test   %ax,%ax
 		je     jump_55c35
 		mov    $0x1,%al
-		mov    things,%edi
-		mov    %edi,things
+		mov    EXPORT_SYMBOL(things),%edi
+		mov    %edi,EXPORT_SYMBOL(things)
 		pop    %edi
 		pop    %esi
 		pop    %edx
@@ -34709,9 +34719,9 @@ func_55c0a:
 		call   ac_assign_next_target_from_group
 		movw   $0x28,0xa(%ecx)
 		movb   $0x5,0x5b(%ecx)
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		xor    %al,%al
-		mov    %edi,things
+		mov    %edi,EXPORT_SYMBOL(things)
 		pop    %edi
 		pop    %esi
 		pop    %edx
@@ -34737,8 +34747,8 @@ func_55c65:
 func_55c7d:
 /*----------------------------------------------------------------*/
 		mov    $0x1,%al
-		mov    things,%edi
-		mov    %edi,things
+		mov    EXPORT_SYMBOL(things),%edi
+		mov    %edi,EXPORT_SYMBOL(things)
 		pop    %edi
 		pop    %esi
 		pop    %edx
@@ -34757,7 +34767,7 @@ func_55c91:
 		cmp    EXPORT_SYMBOL(group_actions)+0x08(%eax),%dx # group_actions[].Dead
 		jg     jump_55be1
 		mov    $0x1,%al
-		mov    %edi,things
+		mov    %edi,EXPORT_SYMBOL(things)
 		pop    %edi
 		pop    %esi
 		pop    %edx
@@ -34782,7 +34792,7 @@ GLOBAL_FUNC(ASM_person_wait_vehicle)	/* 0x055CB8 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		shl    $0x3,%eax
 		add    %eax,%edi
 		mov    0xd(%ecx),%ah
@@ -35118,7 +35128,7 @@ GLOBAL_FUNC(ASM_process_person)	/* 0x056050 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		movw   $0x2b,0xa(%esi)
 		mov    0x54(%edx,%eax,8),%ax
 		xor    %ah,%ah
@@ -35190,7 +35200,7 @@ GLOBAL_FUNC(ASM_process_person)	/* 0x056050 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		mov    %esi,%eax
@@ -35750,7 +35760,7 @@ func_56790:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		movw   $0x2b,0xa(%esi)
 		mov    0x54(%edx,%eax,1),%ax
@@ -35876,7 +35886,7 @@ func_5686f:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		orb    $0x1,0xf(%edx,%eax,8)
 	jump_568df:
 		mov    0x40(%edi),%eax
@@ -35921,7 +35931,7 @@ func_568ff:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		orb    $0x1,0xf(%edx,%eax,8)
 	jump_56963:
 		mov    0x40(%edi),%eax
@@ -36040,7 +36050,7 @@ func_56a29:
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		testb  $0x2,0xc(%edx,%eax,8)
 		je     func_5673c
 		movw   $0x0,0xa(%ecx)
@@ -36318,7 +36328,7 @@ GLOBAL_FUNC(ASM_build_same_type_headers)	/* 0x056E34 */
 		push   %ecx
 		push   %edx
 		push   %esi
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		mov    EXPORT_SYMBOL(word_1552F8)-2,%eax
 		sar    $0x10,%eax
 		xor    %cl,%cl
@@ -36343,7 +36353,7 @@ GLOBAL_FUNC(ASM_build_same_type_headers)	/* 0x056E34 */
 		mov    EXPORT_SYMBOL(things_used_head),%dx
 		test   %dx,%dx
 		jne    jump_56f5d
-		mov    %esi,things
+		mov    %esi,EXPORT_SYMBOL(things)
 		pop    %esi
 		pop    %edx
 		pop    %ecx
@@ -36429,7 +36439,7 @@ GLOBAL_FUNC(ASM_build_same_type_headers)	/* 0x056E34 */
 		mov    0x6(%eax),%dx
 		test   %dx,%dx
 		jne    jump_56f5d
-		mov    %esi,things
+		mov    %esi,EXPORT_SYMBOL(things)
 		pop    %esi
 		pop    %edx
 		pop    %ecx
@@ -36957,7 +36967,7 @@ GLOBAL_FUNC(ASM_thing_goto_point)	/* 0x05811C */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		movswl %cx,%ebx
 		add    %edx,%eax
@@ -37129,7 +37139,7 @@ GLOBAL_FUNC(ASM_thing_goto_point)	/* 0x05811C */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		movswl %cx,%ebx
 		add    %edx,%eax
@@ -37203,7 +37213,7 @@ GLOBAL_FUNC(ASM_thing_goto_point_on_face)	/* 0x05841C */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%ebp
+		mov    EXPORT_SYMBOL(things),%ebp
 		shl    $0x3,%eax
 		movswl %cx,%edi
 		lea    (%eax,%ebp,1),%esi
@@ -37506,7 +37516,7 @@ GLOBAL_FUNC(ASM_thing_shoot_at_point)	/* 0x058770 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		orb    $0x1,0xf(%edx,%eax,8)
 	jump_58807:
 		testl  $0x40000202,0xc(%esi)
@@ -37949,7 +37959,7 @@ GLOBAL_FUNC(ASM_thing_shoot_at_thing)	/* 0x058D20 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		mov    0x99(%esi),%al
@@ -38005,7 +38015,7 @@ GLOBAL_FUNC(ASM_thing_shoot_at_thing)	/* 0x058D20 */
 		add    %ecx,%eax
 		shl    $0x2,%eax
 		add    %ecx,%eax
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		orb    $0x1,0xf(%ecx,%eax,8)
 	jump_58dd4:
 		testb  $0x1,0x44(%esi)
@@ -38033,7 +38043,7 @@ GLOBAL_FUNC(ASM_thing_shoot_at_thing)	/* 0x058D20 */
 		add    %ecx,%eax
 		shl    $0x2,%eax
 		add    %eax,%ecx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%ecx
 		add    %ecx,%eax
 		cmp    %eax,%edx
@@ -38089,7 +38099,7 @@ GLOBAL_FUNC(ASM_thing_shoot_at_thing)	/* 0x058D20 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		mov    %edx,0x40(%esi)
@@ -38210,7 +38220,7 @@ GLOBAL_FUNC(ASM_can_i_enter_vehicle)	/* 0x058FF0 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		add    %edx,%eax
 		mov    0x51(%eax),%dl
@@ -38466,7 +38476,7 @@ GLOBAL_FUNC(ASM_person_attempt_to_leave_vehicle)	/* 0x059274 */
 		add    %eax,%edx
 		shl    $0x2,%edx
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		xor    %ecx,%ecx
@@ -38722,7 +38732,7 @@ yank_from_vehicle:	/* 0x0594BC */
 		push   %edx
 		push   %esi
 		push   %edi
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		mov    %eax,%edi
 		mov    0x5c(%eax),%edx
 		sar    $0x10,%edx
@@ -38772,7 +38782,7 @@ yank_from_vehicle:	/* 0x0594BC */
 		mov    0x18(%edi),%eax
 		sar    $0x8,%eax
 		cwtl
-		mov    %esi,things
+		mov    %esi,EXPORT_SYMBOL(things)
 		mov    %eax,%edx
 		movw   $0x0,0x5e(%edi)
 		call   ac_alt_at_point
@@ -38780,7 +38790,7 @@ yank_from_vehicle:	/* 0x0594BC */
 		xor    %eax,%eax
 		mov    0x16(%edi),%ax
 		call   ac_add_node_thing
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		pop    %edi
 		pop    %esi
 		pop    %edx
@@ -39160,7 +39170,7 @@ GLOBAL_FUNC(ASM_person_leave_vehicle)	/* 0x05957C */
 	jump_59999:
 		jle    jump_599fb
 		imul   $0xa8,%eax,%ebp
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0x18(%edx,%ebp,1),%ebx
 		mov    %esi,%eax
 		sar    $0x8,%ebx
@@ -39187,7 +39197,7 @@ GLOBAL_FUNC(ASM_person_leave_vehicle)	/* 0x05957C */
 		mov    %ecx,0x20(%esp)
 		jmp    jump_59a50
 	jump_599f1:
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		mov    (%eax,%ebp,1),%eax
 		jmp    jump_59a45
 	jump_599fb:
@@ -39276,7 +39286,7 @@ GLOBAL_FUNC(ASM_person_leave_vehicle)	/* 0x05957C */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		mov    0x2c(%esp),%eax
@@ -39288,7 +39298,7 @@ GLOBAL_FUNC(ASM_person_leave_vehicle)	/* 0x05957C */
 		and    $0xffff,%eax
 		imul   $0xa8,%eax,%eax
 		mov    0x30(%esp),%ecx
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		inc    %ecx
 		mov    0x60(%edx,%eax,1),%ax
 		mov    %ecx,0x30(%esp)
@@ -39430,7 +39440,7 @@ GLOBAL_FUNC(ASM_person_leave_vehicle)	/* 0x05957C */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0x54(%edx,%eax,8),%ax
 		xor    %ah,%ah
 		and    $0x3,%al
@@ -39450,7 +39460,7 @@ GLOBAL_FUNC(ASM_person_leave_vehicle)	/* 0x05957C */
 		je     jump_59dff
 		cmpl   $0x0,0x20(%esp)
 		jne    jump_59dc1
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		je     jump_59da6
 		mov    0x4a(%eax),%dx
 		test   %dx,%dx
@@ -39462,7 +39472,7 @@ GLOBAL_FUNC(ASM_person_leave_vehicle)	/* 0x05957C */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		add    %edx,%eax
 		testb  $0x20,0xd(%eax)
@@ -39563,7 +39573,7 @@ GLOBAL_FUNC(ASM_find_nth_weapon_held)	/* 0x059E0C */
 		add    %esi,%ebx
 		shl    $0x2,%ebx
 		add    %esi,%ebx
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		shl    $0x3,%ebx
 		add    %ebx,%esi
 		xor    %ebx,%ebx
@@ -39619,7 +39629,7 @@ GLOBAL_FUNC(ASM_select_new_weapon)	/* 0x059E98 */
 		add    %ecx,%ebx
 		shl    $0x2,%ebx
 		add    %ecx,%ebx
-		mov    things,%ebp
+		mov    EXPORT_SYMBOL(things),%ebp
 		shl    $0x3,%ebx
 		add    %ebx,%ebp
 		mov    0x44(%ebp),%ah
@@ -39883,7 +39893,7 @@ GLOBAL_FUNC(ASM_call_protect)	/* 0x05A06C */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		add    %edx,%eax
 		mov    %ebx,%edx
@@ -40116,7 +40126,7 @@ GLOBAL_FUNC(ASM_find_nearest_person_min)	/* 0x05A3D8 */
 	jump_5a404:
 		movswl %si,%eax
 		imul   $0xa8,%eax,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %eax,%ebx
 		mov    0x51(%ebx),%cl
 		mov    $0x1,%eax
@@ -40231,7 +40241,7 @@ init_electricity_bomb:	/* 0x05A4D0 */
 		imul   $0xa8,%ecx,%ecx
 		mov    %edi,%ebx
 		mov    %esi,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		push   $0x4
 		add    %eax,%ecx
 		mov    %ebp,%eax
@@ -40266,7 +40276,7 @@ GLOBAL_FUNC(ASM_player_change_person)	/* 0x05A568 */
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
 		shl    $0x2,%eax
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		add    %edx,%eax
 		xor    %edx,%edx
 		shl    $0x3,%eax
@@ -40338,7 +40348,7 @@ GLOBAL_FUNC(ASM_player_change_person)	/* 0x05A568 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		add    %edx,%eax
 		testl  $0x40000002,0xc(%eax)
@@ -40762,7 +40772,7 @@ GLOBAL_FUNC(ASM_person_hit_by_car)	/* 0x05AA3C */
 		je     jump_5ad4e
 		cmp    $0xd,%eax
 		je     jump_5ad4e
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		jne    jump_5abd1
 		mov    EXPORT_SYMBOL(open_brief)-2,%edx
 		sar    $0x10,%edx
@@ -40773,7 +40783,7 @@ GLOBAL_FUNC(ASM_person_hit_by_car)	/* 0x05AA3C */
 		mov    $0xa,%edx
 		mov    %esi,%eax
 		call   ac_set_person_dead
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		jne    jump_5acaf
 		mov    0x5e(%edi),%dx
 		test   %dx,%dx
@@ -40784,7 +40794,7 @@ GLOBAL_FUNC(ASM_person_hit_by_car)	/* 0x05AA3C */
 		add    %eax,%edi
 		shl    $0x2,%edi
 		add    %eax,%edi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		xor    %edx,%edx
 		mov    0x51(%eax,%edi,8),%dl
 		mov    EXPORT_SYMBOL(ingame)+0x959,%eax # ingame.TrainMode
@@ -40847,7 +40857,7 @@ func_5ac76:
 		add    %edi,%edx
 		shl    $0x2,%edx
 		add    %edi,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		add    %edx,%eax
 		testb  $0x20,0xd(%eax)
@@ -40917,7 +40927,7 @@ GLOBAL_FUNC(ASM_person_self_destruct)	/* 0x05AD58 */
 		mov    %eax,%esi
 		testw  $0x4002,0xc(%eax)
 		jne    jump_5aeee
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		je     jump_5ad91
 		mov    0x70(%esi),%ax
 		shl    $0x7,%eax
@@ -40932,7 +40942,7 @@ GLOBAL_FUNC(ASM_person_self_destruct)	/* 0x05AD58 */
 		and    $0xffff,%eax
 		cmp    $0x1,%eax
 		jl     jump_5aeee
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		je     jump_5addb
 		testb  $0x20,0xd(%esi)
 		je     jump_5addb
@@ -40967,7 +40977,7 @@ GLOBAL_FUNC(ASM_person_self_destruct)	/* 0x05AD58 */
 		shl    $0x2,%eax
 		mov    0xf(%esi),%ch
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		or     $0x2,%ch
 		add    %edx,%eax
@@ -41628,7 +41638,7 @@ GLOBAL_FUNC(ASM_do_shockwave)	/* 0x05B598 */
 		test   %eax,%eax
 		jle    jump_5b76f
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -41672,7 +41682,7 @@ GLOBAL_FUNC(ASM_do_shockwave)	/* 0x05B598 */
 		test   %eax,%eax
 		jle    jump_5ba1d
 		imul   $0xa8,%eax,%esi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		mov    0xb0(%esp),%cl
 		add    %eax,%esi
 		test   %cl,%cl
@@ -42370,7 +42380,7 @@ GLOBAL_FUNC(ASM_check_for_radius_hit_person)	/* 0x05BBE0 */
 		test   %eax,%eax
 		jle    jump_5bed2
 		imul   $0xa8,%eax,%eax
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		add    %ecx,%eax
 		cmpl   $0x0,0x40(%esp)
 		je     jump_5bc36
@@ -42910,7 +42920,7 @@ GLOBAL_FUNC(ASM_laser_hit_at)	/* 0x05C4C8 */
 		imul   $0xa8,%edx,%edx
 		push   $0x0
 		mov    0x0(%ebp),%ebx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		push   $0x1
 		add    %edx,%eax
 		xor    %ecx,%ecx
@@ -47146,7 +47156,7 @@ create_unkn_building_subtp27:	/* 0x0601FC */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %ebx,%eax
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		shl    $0x3,%eax
 		add    %ecx,%eax
 		mov    -0x2(%esp),%ecx
@@ -47313,7 +47323,7 @@ GLOBAL_FUNC(ASM_move_camera)	/* 0x060AC4 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		mov    0x18(%edx),%eax
@@ -47416,7 +47426,7 @@ GLOBAL_FUNC(ASM_track_player)	/* 0x060BC4 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%eax
 		add    %ebx,%eax
 		testb  $0x40,0xd(%eax)
@@ -47739,7 +47749,7 @@ GLOBAL_FUNC(ASM_create_train_carriage)	/* 0x61628 */
 		add    %ebp,%eax
 		shl    $0x2,%eax
 		add    %eax,%ebp
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%ebp
 		movl   $0x0,0x2c(%eax,%ebp,1)
 		movl   $0x0,0x34(%eax,%ebp,1)
@@ -47763,7 +47773,7 @@ GLOBAL_FUNC(ASM_create_train_carriage)	/* 0x61628 */
 		and    $0xffff,%eax
 		call   func_4225c
 		mov    %eax,%ebx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %ebp,%eax
 		movw   $0x7d0,0x3a(%eax)
 		movw   $0x7d0,0x86(%eax)
@@ -47814,7 +47824,7 @@ GLOBAL_FUNC(ASM_find_unused_train_track)	/* 0x617f0 */
 		push   %esi
 		push   %edi
 		push   %ebp
-		mov    things,%ebp
+		mov    EXPORT_SYMBOL(things),%ebp
 		mov    EXPORT_SYMBOL(things_used_head),%ax
 		mov    EXPORT_SYMBOL(things_used),%dx
 		xor    %ebx,%ebx
@@ -47867,7 +47877,7 @@ GLOBAL_FUNC(ASM_find_unused_train_track)	/* 0x617f0 */
 		xor    %ecx,%ecx
 	jump_61882:
 		mov    %ecx,%eax
-		mov    %ebp,things
+		mov    %ebp,EXPORT_SYMBOL(things)
 		pop    %ebp
 		pop    %edi
 		pop    %esi
@@ -47885,7 +47895,7 @@ GLOBAL_FUNC(ASM_on_mapwho)	/* 0x0618A0 */
 		push   %edx
 		push   %esi
 		mov    EXPORT_SYMBOL(sthings),%ecx
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		mov    %eax,%ebx
 		mov    0x20(%eax),%eax
 		mov    0x18(%ebx),%edx
@@ -47926,7 +47936,7 @@ GLOBAL_FUNC(ASM_on_mapwho)	/* 0x0618A0 */
 	jump_61911:
 		xor    %al,%al
 	jump_61913:
-		mov    %esi,things
+		mov    %esi,EXPORT_SYMBOL(things)
 		mov    %ecx,EXPORT_SYMBOL(sthings)
 		pop    %esi
 		pop    %edx
@@ -48076,7 +48086,7 @@ apply_unkn_vehicle50_damage:	/* 0x061E30 */
 	jump_61fa1:
 		jle    jump_61f51
 		imul   $0xa8,%edi,%esi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %eax,%esi
 		xor    %eax,%eax
 		mov    (%esi),%edi
@@ -48981,7 +48991,7 @@ GLOBAL_FUNC (ASM_mapwho_unkn01)	/* 0x62A38 */
 	jump_62b56:
 		jle    jump_62b71
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %eax,%edx
 		mov    %edx,%eax
 		call   ac_thing_explode_faces
@@ -49054,7 +49064,7 @@ GLOBAL_FUNC (ASM_mapwho_unkn01)	/* 0x62A38 */
 	jump_62c20:
 		jle    jump_62bd2
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %eax,%edx
 		mov    %edx,%eax
 		call   ac_thing_explode_faces
@@ -49067,7 +49077,7 @@ GLOBAL_FUNC (ASM_mapwho_unkn01)	/* 0x62A38 */
 		je     jump_62c93
 	jump_62c48:
 		imul   $0xa8,%ebx,%ebx
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		add    %ebx,%esi
 		xor    %eax,%eax
 		mov    0x16(%esi),%ax
@@ -49182,7 +49192,7 @@ GLOBAL_FUNC (ASM_mapwho_unkn01)	/* 0x62A38 */
 		test   %eax,%eax
 		jle    jump_62dd5
 		imul   $0xa8,%eax,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		mov    0x9(%ebx,%eax,1),%al
 		and    $0xff,%eax
 		cmp    $0x32,%eax
@@ -49382,7 +49392,7 @@ GLOBAL_FUNC(ASM_do_shockwave_person)	/* 0x062F0C */
 		jge    jump_63101
 		test   %ebp,%ebp
 		je     jump_630ec
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		jne    jump_6306d
 		mov    EXPORT_SYMBOL(ingame)+0x959,%eax # ingame.TrainMode
 		xor    %edx,%edx
@@ -49449,7 +49459,7 @@ func_63034:
 		add    %ecx,%eax
 		shl    $0x2,%eax
 		add    %ecx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %edx,%eax
 		testb  $0x20,0xd(%eax)
@@ -49879,7 +49889,7 @@ explode_thing_object:	/* 0x063484 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		xor    %eax,%eax
@@ -50685,7 +50695,7 @@ do_people_on_exploding_building:	/* 0x063E40 */
 		cmp    $0xffffffff,%esi
 		je     jump_63f2a
 		imul   $0xa8,%ecx,%ebx
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%ebx
 		xor    %eax,%eax
 		mov    0x4(%ebx),%ecx
@@ -50764,7 +50774,7 @@ GLOBAL_FUNC(ASM_explode_thing_building)	/* 0x063F34 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		mov    0x50(%edx),%eax
@@ -51423,7 +51433,7 @@ GLOBAL_FUNC(ASM_explode_thing_building)	/* 0x063F34 */
 		je     jump_64745
 		jle    jump_6491b
 		imul   $0xa8,%edi,%edi
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		add    %edi,%esi
 		xor    %eax,%eax
 		mov    (%esi),%edi
@@ -51615,7 +51625,7 @@ GLOBAL_FUNC(ASM_explode_thing_building)	/* 0x063F34 */
 	jump_64aee:
 		jle    jump_64c7d
 		imul   $0xa8,%eax,%eax
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		add    %eax,%esi
 		xor    %eax,%eax
 		mov    0x9(%esi),%al
@@ -52010,7 +52020,7 @@ GLOBAL_FUNC(ASM_collapse_building)	/* 0x064CC8 */
 		test   %eax,%eax
 		jle    jump_64fa0
 		imul   $0xa8,%eax,%edx
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		add    %edx,%esi
 		mov    0xc(%esi),%edx
 		test   %edx,%ebp
@@ -52074,7 +52084,7 @@ GLOBAL_FUNC(ASM_collapse_building)	/* 0x064CC8 */
 		test   %eax,%eax
 		jle    jump_6505c
 		imul   $0xa8,%eax,%esi
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%esi
 		mov    0xc(%esi),%ecx
 		test   %ecx,%ebp
@@ -52185,7 +52195,7 @@ GLOBAL_FUNC(ASM_collapse_building)	/* 0x064CC8 */
 	jump_65168:
 		jle    jump_651ad
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -52395,7 +52405,7 @@ do_explode:	/* 0x0652A8 */
 		test   %eax,%eax
 		jle    jump_65340
 		imul   $0xa8,%eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -57822,7 +57832,7 @@ search_for_danger:	/* 0x06B9E8 */
 		mov    %eax,%edi
 		mov    $0x7fffffff,%ecx
 		xor    %edx,%edx
-		mov    in_network_game,%ah
+		mov    EXPORT_SYMBOL(in_network_game),%ah
 		mov    %edx,(%esp)
 		mov    %edx,0x4(%esp)
 		mov    %ecx,0xc(%esp)
@@ -57873,7 +57883,7 @@ search_for_danger:	/* 0x06B9E8 */
 		jge    jump_6baca
 		cmp    $0x600,%eax
 		jge    jump_6baca
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		jne    jump_6bab7
 		mov    $0x1,%ecx
 		mov    $0x190000,%ebx
@@ -58121,7 +58131,7 @@ find_a_target:	/* 0x06BCF0 */
 		xor    %edi,%edi
 		mov    0x10(%esp),%di
 		imul   $0xa8,%edi,%edi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %eax,%edi
 		cmp    %esi,%edi
 		je     jump_6bdc2
@@ -58174,7 +58184,7 @@ find_a_target:	/* 0x06BCF0 */
 		xor    %eax,%eax
 		mov    0x1c(%esp),%ax
 		imul   $0xa8,%eax,%eax
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		add    %eax,%edi
 		testb  $0x2,0xc(%edi)
 		jne    jump_6be58
@@ -58224,7 +58234,7 @@ find_a_target:	/* 0x06BCF0 */
 		xor    %edi,%edi
 		mov    0x18(%esp),%di
 		imul   $0xa8,%edi,%edi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %eax,%edi
 		testb  $0x2,0xc(%edi)
 		jne    jump_6beef
@@ -58372,7 +58382,7 @@ find_best_guardian:	/* 0x06BFC0 */
 		cmp    $0x3e8,%eax
 		jg     jump_6c0af
 		imul   $0xa8,%eax,%ebx
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		add    %esi,%ebx
 		mov    0x16(%edi),%si
 		inc    %ebp
@@ -58428,7 +58438,7 @@ find_best_guardian:	/* 0x06BFC0 */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %ebx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%eax
 		add    %ebx,%eax
 		jmp    jump_6c0b1
@@ -58479,7 +58489,7 @@ GLOBAL_FUNC(ASM_find_and_alert_guardian)	/* 0x06C0BC */
 		mov    %dl,%al
 		and    $0xff,%eax
 		je     jump_6c16c
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		test   %eax,%eax
 		je     jump_6c0d3
 	jump_6c10d:
@@ -59628,7 +59638,7 @@ find_target_from_persuaded_peeps:	/* 0x06CE04 */
 		xor    %esi,%esi
 		mov    EXPORT_SYMBOL(word_17FA58)(,%eax,2),%si
 		imul   $0xa8,%esi,%esi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %eax,%esi
 		mov    0x51(%esi),%al
 		testb  $0x2,0xc(%esi)
@@ -59820,7 +59830,7 @@ find_target_from_group:	/* 0x06CF40 */
 	jump_6d0b2:
 		and    $0xffff,%eax
 		shl    $0x8,%eax
-		mov    in_network_game,%bh
+		mov    EXPORT_SYMBOL(in_network_game),%bh
 		add    %eax,%ebp
 		test   %bh,%bh
 		jne    jump_6d139
@@ -59886,7 +59896,7 @@ find_target_from_group:	/* 0x06CF40 */
 		xor    %eax,%eax
 		mov    %si,%ax
 		imul   $0xa8,%eax,%eax
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		add    %eax,%esi
 		mov    0x4(%esp),%edx
 		mov    0x51(%esi),%al
@@ -60152,7 +60162,7 @@ GLOBAL_FUNC(ASM_stop_being_persuaded)	/* 0x06D3D8 */
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
 		shl    $0x2,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %edx,%eax
 		xor    %ecx,%ecx
 		shl    $0x3,%eax
@@ -60175,7 +60185,7 @@ GLOBAL_FUNC(ASM_stop_being_persuaded)	/* 0x06D3D8 */
 		shl    $0x4,%eax
 		mov    EXPORT_SYMBOL(group_actions)+0x0C(%eax),%di # group_actions[].Persuaded
 		dec    %edi
-		mov    in_network_game,%dl
+		mov    EXPORT_SYMBOL(in_network_game),%dl
 		mov    %di,EXPORT_SYMBOL(group_actions)+0x0C(%eax) # group_actions[].Persuaded
 		test   %dl,%dl
 		jne    jump_6d248
@@ -60394,7 +60404,7 @@ GLOBAL_FUNC(ASM_people_intel)	/* 0x06D9F8 */
 		cmp    $0x1,%si
 		je     jump_6db16
 		imul   $0xa8,EXPORT_SYMBOL(players)+0x088(%eax,%edx,4),%ebx # players[0].DirectControl[0]
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %eax,%ebx
 		testb  $0x10,0xd(%ebx)
 		je     jump_6db16
@@ -60412,7 +60422,7 @@ GLOBAL_FUNC(ASM_people_intel)	/* 0x06D9F8 */
 		je     jump_6db06
 		and    $0xffff,%eax
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %eax,%edx
 		mov    %edx,0x40(%ebx)
 		jmp    jump_6db16
@@ -60432,7 +60442,7 @@ GLOBAL_FUNC(ASM_people_intel)	/* 0x06D9F8 */
 		test   %edx,%edx
 		je     jump_6dbdf
 		imul   $0xa8,%edx,%edx
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %edx,%ebx
 		inc    %ecx
 		mov    0x10(%ebx),%ax
@@ -60453,7 +60463,7 @@ GLOBAL_FUNC(ASM_people_intel)	/* 0x06D9F8 */
 		and    $0xffff,%eax
 		je     jump_6ddbe
 		imul   $0xa8,%eax,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %eax,%ebx
 		xor    %eax,%eax
 		mov    0x99(%ebx),%al
@@ -62537,7 +62547,7 @@ GLOBAL_FUNC(ASM_search_for_station)	/* 0x074718 */
 		push   %edi
 		push   %ebp
 		sub    $0x14,%esp
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		mov    %eax,(%esp)
 		mov    %edx,0x4(%esp)
 		xor    %edx,%edx
@@ -62645,7 +62655,7 @@ GLOBAL_FUNC(ASM_search_for_station)	/* 0x074718 */
 		jmp    jump_74787
 	jump_74857:
 		mov    0xc(%esp),%eax
-		mov    %edi,things
+		mov    %edi,EXPORT_SYMBOL(things)
 		add    $0x14,%esp
 		pop    %ebp
 		pop    %edi
@@ -62679,7 +62689,7 @@ train_related_func_01:	/* 0x07486C */
 		add    %ecx,%edi
 		shl    $0x2,%edi
 		add    %ecx,%edi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edi
 		mov    0x52(%edi,%eax,1),%ax
 		mov    $0x2,%ebx
@@ -62694,7 +62704,7 @@ train_related_func_01:	/* 0x07486C */
 		xor    %eax,%eax
 		jmp    jump_7492b
 	jump_748d8:
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    %ax,0x68(%esi)
 		mov    %ax,0x68(%edx,%edi,1)
 		xor    %eax,%eax
@@ -62714,7 +62724,7 @@ train_related_func_01:	/* 0x07486C */
 		pop    %ebx
 		ret
 	jump_7490e:
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    %ax,0x6a(%esi)
 		mov    %ax,0x6a(%edx,%edi,1)
 		mov    0x16(%esi),%ax
@@ -62774,7 +62784,7 @@ GLOBAL_FUNC(ASM_func_74934)	/* 0x74934 */
 		test   %eax,%eax
 		jle    jump_7494e
 		imul   $0xa8,%eax,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %ebx,%eax
 		xor    %ebx,%ebx
 		mov    0x9(%eax),%bl
@@ -62804,7 +62814,7 @@ GLOBAL_FUNC(ASM_func_74934)	/* 0x74934 */
 	jump_749e5:
 		movswl %dx,%eax
 		imul   $0xa8,%eax,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		jmp    jump_74957
 
 
@@ -62859,7 +62869,7 @@ GLOBAL_FUNC(ASM_create_train_for_each_track)	/* 0x749fc */
 		mov    -0x2(%esp),%eax
 		sar    $0x10,%eax
 		imul   $0xa8,%eax,%ebx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		movw   $0x0,0x3c(%ebx,%eax,1)
 		mov    %di,0x6a(%ebx,%eax,1)
 		movswl %di,%ebx
@@ -62897,7 +62907,7 @@ clear_mission_status:	/* 0x074C4C */
 		push   %ecx
 		push   %edx
 		xor    %edx,%edx
-		mov    in_network_game,%dl
+		mov    EXPORT_SYMBOL(in_network_game),%dl
 		cmp    $0x1,%edx
 		jne    jump_74c7b
 		xor    %eax,%eax
@@ -62973,7 +62983,7 @@ GLOBAL_FUNC(ASM_create_building_thing)	/* 0x7554C */
 		add    %ebx,%edx
 		shl    $0x2,%edx
 		add    %ebx,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		add    %edx,%eax
 		mov    %eax,(%esp)
@@ -63050,7 +63060,7 @@ GLOBAL_FUNC(ASM_replace_thing_given_thing_idx)	/* 0x075674 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		mov    %edx,%eax
@@ -63355,7 +63365,7 @@ GLOBAL_FUNC(ASM_new_sim_person)	/* 0x0759DC */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%eax
 		add    %eax,%ebx
 		mov    %esi,%eax
@@ -63582,11 +63592,11 @@ GLOBAL_FUNC (ASM_init_just_things)	/* 0x075CF0 */
 	jump_75d67:
 		imul   $0xa8,%eax,%edi
 		mov    $0xa8,%ebx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		xor    %edx,%edx
 		add    %edi,%eax
 		call   ac_memset
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		mov    %ecx,%edx
 		mov    %si,0x4(%edi,%eax,1)
 		inc    %edx
@@ -63599,7 +63609,7 @@ GLOBAL_FUNC (ASM_init_just_things)	/* 0x075CF0 */
 		cmp    $0x3e8,%eax
 		jl     jump_75d67
 		mov    $0x1,%ecx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		xor    %esi,%esi
 		mov    %cx,EXPORT_SYMBOL(things_empty_head)
 		mov    %si,EXPORT_SYMBOL(things_used_head)
@@ -63631,7 +63641,7 @@ GLOBAL_FUNC (ASM_init_things)	/* 0x75DDC */
 		mov    EXPORT_SYMBOL(game_user_heap),%eax
 		add    $0x1e460,%eax
 		mov    $0x1,%edx
-		mov    %eax,things
+		mov    %eax,EXPORT_SYMBOL(things)
 		mov    %eax,EXPORT_SYMBOL(sthings)
 		call   ac_init_just_things
 		mov    %dx,EXPORT_SYMBOL(next_command)
@@ -63664,7 +63674,7 @@ GLOBAL_FUNC (ASM_get_new_thing)	/* 0x075E30 */
 		shl    $0x2,%eax
 		add    %edx,%eax
 		xor    %edx,%edx
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		mov    %si,%dx
 		mov    %si,0x4(%ebx,%eax,8)
 		lea    0x0(,%edx,4),%eax
@@ -63709,7 +63719,7 @@ func_75ef8:
 		push   %edx
 		push   %esi
 		push   %edi
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		mov    EXPORT_SYMBOL(things_used_head),%di
 		mov    %eax,%ebx
 		xor    %edx,%edx
@@ -63733,7 +63743,7 @@ func_75ef8:
 		jne    jump_75f55
 		xor    %ebx,%eax
 		mov    %di,EXPORT_SYMBOL(things_used_head)
-		mov    %ecx,things
+		mov    %ecx,EXPORT_SYMBOL(things)
 		pop    %edi
 		pop    %esi
 		pop    %edx
@@ -63808,7 +63818,7 @@ func_75ef8:
 		mov    %bx,EXPORT_SYMBOL(things_used)
 	jump_7603b:
 		mov    %di,EXPORT_SYMBOL(things_used_head)
-		mov    %ecx,things
+		mov    %ecx,EXPORT_SYMBOL(things)
 		pop    %edi
 		pop    %esi
 		pop    %edx
@@ -63831,7 +63841,7 @@ GLOBAL_FUNC(ASM_remove_thing)	/* 0x076050 */
 		lea    0x0(,%ebx,4),%eax
 		add    %ebx,%eax
 		shl    $0x2,%eax
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		add    %ebx,%eax
 		mov    0x6(%edi,%eax,8),%bx
 		mov    0x4(%edi,%eax,8),%cx
@@ -63853,7 +63863,7 @@ GLOBAL_FUNC(ASM_remove_thing)	/* 0x076050 */
 		add    %esi,%eax
 		shl    $0x2,%eax
 		add    %esi,%eax
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		mov    %bx,0x6(%esi,%eax,8)
 		jmp    jump_760c3
 	jump_760bc:
@@ -63864,7 +63874,7 @@ GLOBAL_FUNC(ASM_remove_thing)	/* 0x076050 */
 		lea    0x0(,%ebx,4),%eax
 		add    %ebx,%eax
 		shl    $0x2,%eax
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		add    %ebx,%eax
 		mov    EXPORT_SYMBOL(things_empty_head),%bx
 		mov    %bx,0x6(%esi,%eax,8)
@@ -64484,7 +64494,7 @@ check_tank_collision:	/* 0x076638 */
 		xor    %edi,%edi
 		mov    0x5e(%ecx),%di
 		imul   $0xa8,%edi,%edi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %edi,%eax
 		mov    0xd(%eax),%dl
 		test   $0x20,%dl
@@ -64642,7 +64652,7 @@ check_tank_collision:	/* 0x076638 */
 	jump_7691b:
 		jle    jump_76818
 		imul   $0xa8,%esi,%ebx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %eax,%ebx
 		xor    %eax,%eax
 		mov    (%ebx),%esi
@@ -64701,7 +64711,7 @@ GLOBAL_FUNC(ASM_process_tank_stationary)	/* 0x07698C */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		mov    0x52(%edx),%ecx
@@ -65217,7 +65227,7 @@ GLOBAL_FUNC(ASM_check_person_close)	/* 0x076F2C */
 		push   %edi
 		push   %ebp
 		sub    $0x10,%esp
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		mov    EXPORT_SYMBOL(sthings),%ecx
 		movswl (%eax),%edx
 		mov    0x2(%eax),%eax
@@ -65302,7 +65312,7 @@ GLOBAL_FUNC(ASM_check_person_close)	/* 0x076F2C */
 		xor    %eax,%eax
 	jump_77029:
 		mov    %ecx,EXPORT_SYMBOL(sthings)
-		mov    %ebx,things
+		mov    %ebx,EXPORT_SYMBOL(things)
 		add    $0x10,%esp
 		pop    %ebp
 		pop    %edi
@@ -65559,7 +65569,7 @@ GLOBAL_FUNC(ASM_process_tank)	/* 0x077040 */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %ebx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%eax
 		add    %eax,%ebx
 		mov    0x52(%ebx),%edx
@@ -65883,7 +65893,7 @@ flying_alt:	/* 0x077770 */
 		push   %edi
 		push   %ebp
 		sub    $0x1c,%esp
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		mov    EXPORT_SYMBOL(sthings),%edi
 		mov    %eax,%ecx
 		mov    0x18(%eax),%ebx
@@ -66000,7 +66010,7 @@ flying_alt:	/* 0x077770 */
 	jump_778c4:
 		mov    %edx,%eax
 		mov    %edi,EXPORT_SYMBOL(sthings)
-		mov    %esi,things
+		mov    %esi,EXPORT_SYMBOL(things)
 		add    $0x1c,%esp
 		pop    %ebp
 		pop    %edi
@@ -66833,7 +66843,7 @@ GLOBAL_FUNC(ASM_start_crashing)	/* 0x07811C */
 		add    %ebx,%edx
 		shl    $0x2,%edx
 		add    %ebx,%edx
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%edx
 		add    %ebx,%edx
 		testb  $0x2,0xc(%edx)
@@ -67539,7 +67549,7 @@ check_for_a_moving_vehicle_here:	/* 0x0788CC */
 	jump_7895b:
 		jle    jump_78a7e
 		imul   $0xa8,%ebx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    (%eax),%ebx
@@ -67953,7 +67963,7 @@ exit_pod:	/* 0x078D8C */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %ebx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%eax
 		add    %eax,%ebx
 		mov    0x2c(%ecx),%eax
@@ -68010,7 +68020,7 @@ GLOBAL_FUNC(ASM_process_shuttle_pod)	/* 0x078E90 */
 		add    %ecx,%edx
 		shl    $0x2,%edx
 		add    %ecx,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		mov    0x52(%edx,%eax,1),%ax
 		mov    $0x15,%edx
@@ -68024,7 +68034,7 @@ GLOBAL_FUNC(ASM_process_shuttle_pod)	/* 0x078E90 */
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
 		shl    $0x2,%eax
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		add    %edx,%eax
 		xor    %edx,%edx
 		shl    $0x3,%eax
@@ -68048,7 +68058,7 @@ GLOBAL_FUNC(ASM_process_shuttle_pod)	/* 0x078E90 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0x52(%edx,%eax,8),%ax
 		mov    $0x15,%edx
 		and    $0xffff,%eax
@@ -68698,7 +68708,7 @@ GLOBAL_FUNC(ASM_check_for_a_vehicle_here)	/* 0x079588 */
 	jump_79618:
 		jle    jump_79749
 		imul   $0xa8,%ebx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    (%eax),%ebx
@@ -68891,7 +68901,7 @@ GLOBAL_FUNC(ASM_process_next_tnode)	/* 0x079794 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		shl    $0x3,%eax
 		mov    0xf(%edi),%dh
 		add    %eax,%esi
@@ -69054,7 +69064,7 @@ GLOBAL_FUNC(ASM_process_next_tnode)	/* 0x079794 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		add    %edx,%eax
 		mov    0xc(%eax),%dl
@@ -69084,7 +69094,7 @@ GLOBAL_FUNC(ASM_process_next_tnode)	/* 0x079794 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		orb    $0x1,0xd(%edx,%eax,8)
 	jump_79a8b:
 		mov    0x42(%esp),%eax
@@ -69714,7 +69724,7 @@ GLOBAL_FUNC(ASM_process_next_tnode)	/* 0x079794 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %edx,%eax
 		testb  $0x2,0xc(%eax)
@@ -70149,7 +70159,7 @@ GLOBAL_FUNC(ASM_process_next_tnode)	/* 0x079794 */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %ebx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%eax
 		add    %ebx,%eax
 		testb  $0x8,0x7c(%eax)
@@ -70362,7 +70372,7 @@ thing_unkn_change_speed:	/* 0x07A888 */
 		xor    %edx,%edx
 		mov    0x14(%ecx),%dx
 		lea    0x0(,%edx,4),%edi
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		sub    %edx,%edi
 		shl    $0x3,%eax
 		shl    $0x6,%edi
@@ -70436,7 +70446,7 @@ GLOBAL_FUNC(ASM_train_unkn_st18_func_2)	/* 0x07A92C */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		shl    $0x3,%eax
 		add    %eax,%edi
 		mov    0x18(%edi),%ebx
@@ -70473,7 +70483,7 @@ GLOBAL_FUNC(ASM_train_unkn_st18_func_2)	/* 0x07A92C */
 		shl    $0x2,%eax
 		xor    %ecx,%ecx
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0x3c(%esi),%cx
 		mov    0x5a(%edx,%eax,8),%ax
 		mov    %ax,0x5a(%esi)
@@ -70533,7 +70543,7 @@ GLOBAL_FUNC(ASM_train_unkn_st18_func_2)	/* 0x07A92C */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %edx,%eax
 		mov    0x7e(%eax),%dx
@@ -70573,7 +70583,7 @@ GLOBAL_FUNC(ASM_train_unkn_st18_func_2)	/* 0x07A92C */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0x4c(%edx,%eax,8),%ecx
 		sar    $0x10,%ecx
 		lea    0x0(,%ecx,4),%eax
@@ -70748,7 +70758,7 @@ GLOBAL_FUNC(ASM_train_unkn_st18_func_1)	/* 0x07ACE8 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		shl    $0x3,%eax
 		add    %eax,%edi
 		mov    0x18(%edi),%ebp
@@ -70784,7 +70794,7 @@ GLOBAL_FUNC(ASM_train_unkn_st18_func_1)	/* 0x07ACE8 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0x68(%esi),%ebx
 		mov    0x5a(%edx,%eax,8),%ax
 		sar    $0x10,%ebx
@@ -70846,7 +70856,7 @@ GLOBAL_FUNC(ASM_train_unkn_st18_func_1)	/* 0x07ACE8 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %edx,%eax
 		movw   $0x15,0xa(%esi)
@@ -70888,7 +70898,7 @@ GLOBAL_FUNC(ASM_train_unkn_st18_func_1)	/* 0x07ACE8 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0x4a(%edx,%eax,8),%ebx
 		sar    $0x10,%ebx
 		lea    0x0(,%ebx,4),%eax
@@ -71499,7 +71509,7 @@ GLOBAL_FUNC(ASM_check_vehicle_col)	/* 0x07B268 */
 		ret
 	jump_7b5a2:
 		imul   $0xa8,%eax,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %eax,%ebx
 		mov    0x9(%ebx),%al
 		cmp    $0x2,%al
@@ -71530,7 +71540,7 @@ GLOBAL_FUNC(ASM_check_vehicle_col)	/* 0x07B268 */
 		test   %ebx,%ebx
 		jle    jump_7b65a
 		imul   $0xa8,%ebx,%ebx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %ebx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -71940,7 +71950,7 @@ GLOBAL_FUNC(ASM_set_passengers_location)	/* 0x07BA34 */
 		push   %ecx
 		push   %edx
 		push   %esi
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		mov    0x45(%eax),%dl
 		mov    0x5e(%eax),%bx
 		and    $0xdf,%dl
@@ -72002,7 +72012,7 @@ GLOBAL_FUNC(ASM_set_passengers_location)	/* 0x07BA34 */
 		test   %bx,%bx
 		jne    jump_7babc
 	jump_7badf:
-		mov    %esi,things
+		mov    %esi,EXPORT_SYMBOL(things)
 		pop    %esi
 		pop    %edx
 		pop    %ecx
@@ -72327,7 +72337,7 @@ train_unkn_func_02:	/* 0x07BE58 */
 		push   %esi
 		push   %edi
 		push   %ebp
-		mov    things,%ebp
+		mov    EXPORT_SYMBOL(things),%ebp
 		mov    %eax,%edi
 		mov    EXPORT_SYMBOL(same_type_head)+2,%si
 		test   %si,%si
@@ -72391,7 +72401,7 @@ train_unkn_func_02:	/* 0x07BE58 */
 		cmp    $0x1d,%edx
 		jne    jump_7bf5e
 		mov    %esi,%eax
-		mov    %ebp,things
+		mov    %ebp,EXPORT_SYMBOL(things)
 		pop    %ebp
 		pop    %edi
 		pop    %esi
@@ -72410,7 +72420,7 @@ train_unkn_func_02:	/* 0x07BE58 */
 		xor    %esi,%esi
 	jump_7bf6d:
 		mov    %esi,%eax
-		mov    %ebp,things
+		mov    %ebp,EXPORT_SYMBOL(things)
 		pop    %ebp
 		pop    %edi
 		pop    %esi
@@ -72520,7 +72530,7 @@ GLOBAL_FUNC(ASM_train_unkn_st20_func_1)	/* 0x07BF7C */
 		xor    %edx,%edx
 		mov    %si,%dx
 		imul   $0xa8,%edx,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %eax,%edx
 		mov    (%esp),%eax
 		call   person_clear_route_and_teleport_to_vehicle
@@ -72663,7 +72673,7 @@ GLOBAL_FUNC(ASM_train_unkn_st21_exit_func_1)	/* 0x07C288 */
 		xor    %esi,%esi
 		mov    0x5e(%edi),%si
 		imul   $0xa8,%esi,%esi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		andb   $0xed,0xf(%esi,%eax,1)
 		xor    %edx,%edx
 		mov    0x5e(%edi),%dx
@@ -73206,7 +73216,7 @@ GLOBAL_FUNC(ASM_process_vehicle)	/* 0x07C624 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		testb  $0x2,0xc(%edx,%eax,8)
 		je     jump_7cd6f
 		orb    $0x2,0xc(%esi)
@@ -73318,7 +73328,7 @@ func_7ccbb:
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %ebx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		mov    0xa(%ebx,%eax,8),%ax
 		and    $0xffff,%eax
 		cmp    $0x12,%eax
@@ -73335,7 +73345,7 @@ func_7ccbb:
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %ebx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		mov    0xa(%ebx,%eax,8),%ax
 		and    $0xffff,%eax
 		cmp    $0x12,%eax
@@ -73472,7 +73482,7 @@ GLOBAL_FUNC(ASM_init_vehicle_explode)	/* 0x07CDE4 */
 		xor    %eax,%eax
 		mov    %bx,%ax
 		imul   $0xa8,%eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %edx,%eax
 		mov    %esi,%edx
 		call   ac_person_leave_vehicle
@@ -73558,7 +73568,7 @@ GLOBAL_FUNC(ASM_init_vehicle_explode)	/* 0x07CDE4 */
 		shl    $0x2,%eax
 		xor    %ecx,%ecx
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		sar    $0x8,%ebx
 		add    %edx,%eax
@@ -73742,7 +73752,7 @@ GLOBAL_FUNC(ASM_init_mgun_laser)	/* 0x07D100 */
 		add    %eax,%esi
 		shl    $0x2,%esi
 		add    %esi,%eax
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		shl    $0x3,%eax
 		add    %eax,%esi
 		cmpb   $0x0,0x57(%edi)
@@ -73792,7 +73802,7 @@ GLOBAL_FUNC(ASM_init_mgun_laser)	/* 0x07D100 */
 		sar    $0x8,%eax
 		add    $0xa,%eax
 		mov    %eax,0x30(%esi)
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		mov    0x40(%edi),%eax
 		mov    %edx,(%esp)
 		mov    %edi,%edx
@@ -73907,7 +73917,7 @@ GLOBAL_FUNC(ASM_init_mgun_laser)	/* 0x07D100 */
 		shl    $0x2,%edi
 		sub    %ebx,%ecx
 		add    %eax,%edi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		movswl %cx,%ecx
 		mov    0x2c(%esi),%ebx
 		shl    $0x3,%edi
@@ -74088,7 +74098,7 @@ GLOBAL_FUNC(ASM_aquire_target)	/* 0x07D424 */
 		test   %eax,%eax
 		jle    jump_7d4aa
 		imul   $0xa8,%eax,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %eax,%ebx
 		mov    %ebx,%edx
 		mov    %ecx,%eax
@@ -74134,7 +74144,7 @@ GLOBAL_FUNC(ASM_aquire_target)	/* 0x07D424 */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %eax,%ebx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%ebx
 		add    %ebx,%eax
 		mov    %eax,0x40(%ecx)
@@ -75415,7 +75425,7 @@ GLOBAL_FUNC(ASM_create_a_pod)	/* 0x07E4B8 */
 		add    %edi,%eax
 		shl    $0x2,%eax
 		add    %edi,%eax
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		shl    $0x3,%eax
 		add    %eax,%edi
 		movb   $0x2,0x9(%edi)
@@ -75514,7 +75524,7 @@ GLOBAL_FUNC(ASM_process_shuttle_loader)	/* 0x07E594 */
 		test   %eax,%eax
 		jle    jump_7e648
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -88650,7 +88660,7 @@ process_map_crater:	/* 0x08907C */
 		test   %eax,%eax
 		jle    jump_8942e
 		imul   $0xa8,%eax,%ebp
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		add    %ebp,%edi
 		xor    %eax,%eax
 		mov    0x9(%edi),%al
@@ -88696,7 +88706,7 @@ process_map_crater:	/* 0x08907C */
 		mov    %eax,%ecx
 		mov    %edi,%eax
 		call   ac_thing_hit_by_bullet
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		andb   $0xdf,0x47(%eax,%ebp,1)
 		mov    0x20(%eax,%ebp,1),%edx
 		mov    0x18(%eax,%ebp,1),%eax
@@ -88705,12 +88715,12 @@ process_map_crater:	/* 0x08907C */
 		movswl %dx,%edx
 		cwtl
 		call   ac_alt_at_point
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    %eax,0x1c(%edx,%ebp,1)
 	jump_8941e:
 		movswl %si,%eax
 		imul   $0xa8,%eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		jmp    jump_8947a
 	jump_8942e:
 		imul   $0x3c,%eax,%ebx
@@ -92642,7 +92652,7 @@ GLOBAL_FUNC(ASM_find_the_tall_buildings)	/* 0x08C70C */
 		push   %edi
 		push   %ebp
 		sub    $0xc,%esp
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		mov    $0x48000,%edx
 		xor    %ebx,%ebx
 		mov    %edx,(%esp)
@@ -92688,9 +92698,9 @@ GLOBAL_FUNC(ASM_find_the_tall_buildings)	/* 0x08C70C */
 		jne    jump_8c7c0
 		mov    0x52(%eax),%ax
 		and    $0xffff,%eax
-		mov    %esi,things
+		mov    %esi,EXPORT_SYMBOL(things)
 		call   calc_object_height
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		mov    %esi,%ecx
 		mov    %eax,0x88(%ecx,%ebx,1)
 	jump_8c7c0:
@@ -92707,7 +92717,7 @@ GLOBAL_FUNC(ASM_find_the_tall_buildings)	/* 0x08C70C */
 		jne    jump_8c788
 		jmp    jump_8c769
 	jump_8c7de:
-		mov    %esi,things
+		mov    %esi,EXPORT_SYMBOL(things)
 		add    $0xc,%esp
 		pop    %ebp
 		pop    %edi
@@ -93658,7 +93668,7 @@ GLOBAL_FUNC(ASM_thing_arrived_at_obj_radius)	/* 0x0A63FC */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %ebx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%eax
 		add    %eax,%ebx
 		mov    0x18(%ebx),%eax
@@ -93685,11 +93695,11 @@ GLOBAL_FUNC(ASM_mem_group_arrived_square2)	/* 0x0A6708 */
 		push   %esi
 		push   %edi
 		sub    $0x10,%esp
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		mov    %edx,%eax
 		mov    %ebx,0x8(%esp)
 		mov    %ecx,0x4(%esp)
-		mov    in_network_game,%bl
+		mov    EXPORT_SYMBOL(in_network_game),%bl
 		xor    %edx,%edx
 		test   %bl,%bl
 		je     jump_a67f7
@@ -93803,7 +93813,7 @@ GLOBAL_FUNC(ASM_mem_group_arrived_square2)	/* 0x0A6708 */
 		cmp    0x24(%esp),%dx
 		jb     jump_a6873
 		mov    $0x1,%al
-		mov    %esi,things
+		mov    %esi,EXPORT_SYMBOL(things)
 		add    $0x10,%esp
 		pop    %edi
 		pop    %esi
@@ -93817,7 +93827,7 @@ GLOBAL_FUNC(ASM_mem_group_arrived_square2)	/* 0x0A6708 */
 	jump_a6888:
 		xor    %al,%al
 	jump_a688a:
-		mov    %esi,things
+		mov    %esi,EXPORT_SYMBOL(things)
 		add    $0x10,%esp
 		pop    %edi
 		pop    %esi
@@ -93836,7 +93846,7 @@ GLOBAL_FUNC(ASM_mem_group_arrived)	/* 0x0A6898 */
 		mov    %bx,0x8(%esp)
 		mov    %cx,0x4(%esp)
 		imul   %ebp,%ebp
-		mov    in_network_game,%dl
+		mov    EXPORT_SYMBOL(in_network_game),%dl
 		xor    %edi,%edi
 		shl    $0xc,%ebp
 		test   %dl,%dl
@@ -93872,7 +93882,7 @@ GLOBAL_FUNC(ASM_mem_group_arrived)	/* 0x0A6898 */
 		mov    EXPORT_SYMBOL(colour_lookup)+1,%al
 		push   %eax
 		imul   $0xa8,%esi,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		mov    0x6(%esp),%ebx
 		mov    0x20(%eax),%edx
@@ -93891,7 +93901,7 @@ GLOBAL_FUNC(ASM_mem_group_arrived)	/* 0x0A6898 */
 		call   ac_func_6fd1c
 	jump_a6960:
 		imul   $0xa8,%esi,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		testb  $0x2,0xc(%edx,%eax,1)
 		jne    jump_a6996
 		mov    0x2(%esp),%ecx
@@ -93915,7 +93925,7 @@ GLOBAL_FUNC(ASM_mem_group_arrived)	/* 0x0A6898 */
 		jmp    jump_a6ab5
 	jump_a69a8:
 		imul   $0xa8,%esi,%esi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		mov    0x12(%esi,%eax,1),%si
 		and    $0xffff,%esi
 		test   %esi,%esi
@@ -93947,7 +93957,7 @@ GLOBAL_FUNC(ASM_mem_group_arrived)	/* 0x0A6898 */
 		mov    EXPORT_SYMBOL(colour_lookup)+1,%al
 		push   %eax
 		imul   $0xa8,%esi,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		mov    0x6(%esp),%ebx
 		mov    0x20(%eax),%edx
@@ -93966,7 +93976,7 @@ GLOBAL_FUNC(ASM_mem_group_arrived)	/* 0x0A6898 */
 		call   ac_func_6fd1c
 	jump_a6a49:
 		imul   $0xa8,%esi,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		testb  $0x2,0xc(%edx,%eax,1)
 		jne    jump_a6a7f
 		mov    0x2(%esp),%ecx
@@ -93994,7 +94004,7 @@ GLOBAL_FUNC(ASM_mem_group_arrived)	/* 0x0A6898 */
 		ret    $0x8
 	jump_a6a95:
 		imul   $0xa8,%esi,%esi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		mov    0x12(%esi,%eax,1),%si
 		and    $0xffff,%esi
 		test   %esi,%esi
@@ -94026,7 +94036,7 @@ GLOBAL_FUNC(ASM_all_group_arrived_square)	/* 0x0A6AC0 */
 		test   %eax,%eax
 		jle    jump_a6b25
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		mov    0x18(%eax),%ebx
 		mov    0x20(%eax),%edx
@@ -94086,7 +94096,7 @@ GLOBAL_FUNC(ASM_all_group_arrived)	/* 0x0A6B3C */
 		test   %eax,%eax
 		jle    jump_a6bbb
 		imul   $0xa8,%eax,%esi
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %esi,%ebx
 		testb  $0x2,0xc(%ebx)
 		je     jump_a6b88
@@ -94107,7 +94117,7 @@ GLOBAL_FUNC(ASM_all_group_arrived)	/* 0x0A6B3C */
 		mov    $0xffffffff,%eax
 		jmp    jump_a6b69
 	jump_a6baf:
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		mov    0x12(%esi,%eax,1),%ax
 		jmp    jump_a6b69
 	jump_a6bbb:
@@ -94151,7 +94161,7 @@ GLOBAL_FUNC(ASM_group_not_seen)	/* 0x0A6BD0 */
 		test   %eax,%eax
 		jle    jump_a6c48
 		imul   $0xa8,%eax,%esi
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %esi,%edx
 		testb  $0x2,0xc(%edx)
 		je     jump_a6c1d
@@ -94168,7 +94178,7 @@ GLOBAL_FUNC(ASM_group_not_seen)	/* 0x0A6BD0 */
 		mov    $0xffffffff,%eax
 		jmp    jump_a6bfe
 	jump_a6c3c:
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		mov    0x12(%esi,%eax,1),%ax
 		jmp    jump_a6bfe
 	jump_a6c48:
@@ -94262,7 +94272,7 @@ GLOBAL_FUNC(ASM_conditional_command_state_true)	/* 0x0A6C54 */
 		lea    0x0(,%edi,4),%esi
 		add    %edi,%esi
 		shl    $0x2,%esi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %edi,%esi
 		mov    0xa(%eax,%esi,8),%ax
 		and    $0xffff,%eax
@@ -94281,7 +94291,7 @@ GLOBAL_FUNC(ASM_conditional_command_state_true)	/* 0x0A6C54 */
 		add    %eax,%esi
 		shl    $0x2,%esi
 		add    %eax,%esi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		testb  $0x8,0xe(%eax,%esi,8)
 		je     jump_a73cb
 		cmpb   $0x0,0xc(%esp)
@@ -94558,7 +94568,7 @@ GLOBAL_FUNC(ASM_conditional_command_state_true)	/* 0x0A6C54 */
 		add    %eax,%esi
 		shl    $0x2,%esi
 		add    %eax,%esi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		testb  $0x2,0xc(%eax,%esi,8)
 		je     jump_a73cb
 		cmpb   $0x0,0xc(%esp)
@@ -94747,7 +94757,7 @@ GLOBAL_FUNC(ASM_conditional_command_state_true)	/* 0x0A6C54 */
 		add    %eax,%edi
 		shl    $0x2,%edi
 		add    %eax,%edi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		testb  $0x2,0xc(%eax,%edi,8)
 		jne    jump_a73cb
 	jump_a72d6:
@@ -94768,7 +94778,7 @@ GLOBAL_FUNC(ASM_conditional_command_state_true)	/* 0x0A6C54 */
 		add    %eax,%edi
 		mov    %dx,0x4(%esp)
 		shl    $0x2,%edi
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %eax,%edi
 		movswl %bx,%ebx
 		mov    0x18(%edx,%edi,8),%eax
@@ -94863,7 +94873,7 @@ GLOBAL_FUNC(ASM_post_process_blips)	/* 0x0A7CAC */
 		lea    0x0(,%ebx,4),%eax
 		add    %ebx,%eax
 		shl    $0x2,%eax
-		mov    things,%ebp
+		mov    EXPORT_SYMBOL(things),%ebp
 		add    %ebx,%eax
 		mov    $0x7fffffff,%esi
 		mov    0x18(%ebp,%eax,8),%edi
@@ -95337,7 +95347,7 @@ GLOBAL_FUNC (ASM_test_missions)	/* 0x0A8FF8 */
 		xor    %ebx,%eax
 		jmp    jump_a921c
 	jump_a9088:
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		je     jump_a90a4
 		mov    EXPORT_SYMBOL(ingame)+0x95D,%ax # ingame.CurrentMission
 		mov    $0x1,%ebx
@@ -95924,7 +95934,7 @@ VNAV_find_dropoff_point:	/* 0x0A9870 */
 	jump_a9948:
 		jle    jump_a996d
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -95961,7 +95971,7 @@ VNAV_find_dropoff_point:	/* 0x0A9870 */
 	jump_a99a9:
 		jle    jump_a99cd
 		imul   $0xa8,%eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -95998,7 +96008,7 @@ VNAV_find_dropoff_point:	/* 0x0A9870 */
 	jump_a9a08:
 		jle    jump_a9a2d
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -96034,7 +96044,7 @@ VNAV_find_dropoff_point:	/* 0x0A9870 */
 	jump_a9a65:
 		jle    jump_a9a89
 		imul   $0xa8,%eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -96071,7 +96081,7 @@ VNAV_find_dropoff_point:	/* 0x0A9870 */
 	jump_a9ac3:
 		jle    jump_a9ae8
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -96108,7 +96118,7 @@ VNAV_find_dropoff_point:	/* 0x0A9870 */
 	jump_a9b24:
 		jle    jump_a9b49
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -96144,7 +96154,7 @@ VNAV_find_dropoff_point:	/* 0x0A9870 */
 	jump_a9b81:
 		jle    jump_a9ba5
 		imul   $0xa8,%eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -96181,7 +96191,7 @@ VNAV_find_dropoff_point:	/* 0x0A9870 */
 	jump_a9bde:
 		jle    jump_a9c02
 		imul   $0xa8,%eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -96230,7 +96240,7 @@ VNAV_find_dropoff_point:	/* 0x0A9870 */
 	jump_a9c60:
 		jle    jump_a9c85
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -96271,7 +96281,7 @@ VNAV_find_dropoff_point:	/* 0x0A9870 */
 	jump_a9cc7:
 		jle    jump_a9cec
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -96312,7 +96322,7 @@ VNAV_find_dropoff_point:	/* 0x0A9870 */
 	jump_a9d2e:
 		jle    jump_a9d53
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -96351,7 +96361,7 @@ VNAV_find_dropoff_point:	/* 0x0A9870 */
 	jump_a9d92:
 		jle    jump_a9db7
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -96458,7 +96468,7 @@ VNAV_find_dropoff_point:	/* 0x0A9870 */
 	jump_a9ed7:
 		jle    jump_a990b
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -96842,7 +96852,7 @@ VNAV_do:	/* 0x0AA04C */
 		test   %ebx,%ebx
 		jle    jump_aa40b
 		imul   $0xa8,%ebx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		mov    0x1e(%esp),%esi
 		add    %ebx,%eax
 		sar    $0x10,%esi
@@ -97307,7 +97317,7 @@ VNAV_goto:	/* 0x0AA554 */
 		test   %eax,%eax
 		jle    jump_aa8b1
 		imul   $0xa8,%eax,%eax
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		mov    0x82(%esi,%eax,1),%ax
 		cmp    data_1c8560(%edx),%ax
 		je     jump_aa8b7
@@ -97430,7 +97440,7 @@ VNAV_renavigate:	/* 0x0AA978 */
 		test   %eax,%eax
 		jle    jump_aaa2a
 		imul   $0xa8,%eax,%eax
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		mov    0x82(%esi,%eax,1),%ax
 		cmp    data_1c8560(%ebx),%ax
 		je     jump_aaa41
@@ -97568,7 +97578,7 @@ GLOBAL_FUNC(ASM_VNAV_process_bezier)	/* 0x0AAAC0 */
 		test   %eax,%eax
 		jle    jump_aab84
 		imul   $0xa8,%eax,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %eax,%ebx
 		jmp    jump_aab1c
 	jump_aab84:
@@ -97667,7 +97677,7 @@ GLOBAL_FUNC(ASM_VNAV_process_bezier)	/* 0x0AAAC0 */
 		test   %eax,%eax
 		jle    jump_aac80
 		imul   $0xa8,%eax,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %eax,%ebx
 		jmp    jump_aac18
 	jump_aac80:
@@ -97976,7 +97986,7 @@ GLOBAL_FUNC(ASM_VNAV_unkn_func_207)	/* 0x0AACF4 */
 		mov    %esi,%edx
 		mov    0x1c(%esi),%ebx
 		mov    %eax,0x8(%esp)
-		sub    things,%edx
+		sub    EXPORT_SYMBOL(things),%edx
 		mov    $0xa8,%ecx
 		mov    %edx,%eax
 		sar    $0x1f,%edx
@@ -99207,7 +99217,7 @@ GLOBAL_FUNC(ASM_SCANNER_fill_in_road)	/* 0x0AC090 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		mov    0x20(%edx),%eax
@@ -99934,7 +99944,7 @@ GLOBAL_FUNC (ASM_SCANNER_fill_in)	/* 0x0AC68C */
 	jump_ac883:
 		movswl %bx,%eax
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x56(%eax),%dl
@@ -99943,7 +99953,7 @@ GLOBAL_FUNC (ASM_SCANNER_fill_in)	/* 0x0AC68C */
 	jump_ac89d:
 		movswl %bx,%eax
 		imul   $0xa8,%eax,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		mov    EXPORT_SYMBOL(sthings),%esi
 		mov    0x2(%ebx,%eax,1),%bx
 		jmp    jump_ac8c3
@@ -99969,7 +99979,7 @@ GLOBAL_FUNC (ASM_SCANNER_fill_in)	/* 0x0AC68C */
 		test   %ecx,%ecx
 		jle    jump_ac8b9
 		imul   $0xa8,%ecx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %edx,%eax
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
@@ -100029,7 +100039,7 @@ GLOBAL_FUNC (ASM_SCANNER_fill_in)	/* 0x0AC68C */
 		test   %eax,%eax
 		jle    jump_ac97b
 		imul   $0xa8,%eax,%ecx
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %ebx,%ecx
 		xor    %ebx,%ebx
 		mov    0x9(%ecx),%bl
@@ -100044,7 +100054,7 @@ GLOBAL_FUNC (ASM_SCANNER_fill_in)	/* 0x0AC68C */
 	jump_ac9d8:
 		movswl %dx,%edx
 		imul   $0xa8,%edx,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		mov    EXPORT_SYMBOL(sthings),%esi
 		jmp    jump_ac980
 	jump_ac9ee:
@@ -101542,7 +101552,7 @@ SCANNER_draw_new_transparent_sub3:	/* 0xAEFFD */
 		cmp    $0xffffffff,%ebp
 		je     jump_af96e
 		imul   $0xa8,%edx,%edx
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		add    %edx,%ecx
 		xor    %eax,%eax
 		mov    0x9(%ecx),%al
@@ -101568,7 +101578,7 @@ SCANNER_draw_new_transparent_sub3:	/* 0xAEFFD */
 		mov    0x5c(%ecx),%eax
 		sar    $0x10,%eax
 		imul   $0xa8,%eax,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %eax,%ebx
 		mov    0x20(%ebx),%edx
 		shl    $0x8,%edx
@@ -101806,7 +101816,7 @@ SCANNER_draw_new_transparent_sub3:	/* 0xAEFFD */
 		add    %edx,%ebp
 		mov    0xec(%esp),%edx
 		add    %ebx,%edx
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		je     jump_af837
 		xor    %eax,%eax
 		mov    0x54(%ecx),%ax
@@ -106959,7 +106969,7 @@ init_unkn1thing:	/* 0x0BBFC0 */
 		add    %eax,%ecx
 		shl    $0x2,%ecx
 		add    %eax,%ecx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%ecx
 		movl   $0x0,0x2c(%ecx,%eax,1)
 		movl   $0x0,0x34(%ecx,%eax,1)
@@ -106991,7 +107001,7 @@ init_unkn1thing:	/* 0x0BBFC0 */
 		add    $EXPORT_SYMBOL(local_mats),%eax
 		mov    %di,EXPORT_SYMBOL(next_local_mat)
 		call   ac_matrix_identity_fill
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %ecx,%edx
 		mov    0x52(%edx),%ecx
 		sar    $0x10,%ecx
@@ -107082,7 +107092,7 @@ GLOBAL_FUNC(ASM_mech_unkn_func_09)	/* 0x0BC178 */
 		lea    (%ebx,%eax,1),%edx
 		mov    $0xc,%ecx
 		lea    0x60(%esp),%edi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		mov    $data_155558,%esi
 		add    %edx,%eax
@@ -107157,7 +107167,7 @@ GLOBAL_FUNC(ASM_mech_unkn_func_09)	/* 0x0BC178 */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		lea    (%ebx,%eax,1),%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		mov    0x52(%edx,%eax,1),%ebx
 		sar    $0x10,%ebx
@@ -107166,7 +107176,7 @@ GLOBAL_FUNC(ASM_mech_unkn_func_09)	/* 0x0BC178 */
 		shl    $0x2,%eax
 		add    $EXPORT_SYMBOL(local_mats),%eax
 		call   ac_matrix_identity_fill
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %edx,%eax
 		movl   $0x4000000,0xc(%eax)
 		mov    EXPORT_SYMBOL(unkn_mech_var11),%dx
@@ -108052,7 +108062,7 @@ GLOBAL_FUNC(ASM_mech_unkn_func_11)	/* 0x0BCC08 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0x52(%edx,%eax,8),%edx
 		sar    $0x10,%edx
 		lea    0x0(,%edx,8),%eax
@@ -108068,7 +108078,7 @@ GLOBAL_FUNC(ASM_mech_unkn_func_11)	/* 0x0BCC08 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		shl    $0x3,%eax
 		lea    (%ecx,%eax,1),%edx
 		mov    0x30(%esp),%eax
@@ -108125,7 +108135,7 @@ GLOBAL_FUNC(ASM_mech_unkn_func_11)	/* 0x0BCC08 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		mov    0x50(%edx),%ebx
@@ -110731,7 +110741,7 @@ GLOBAL_FUNC(ASM_init_mech_explode)	/* 0x0BEE30 */
 		xor    %eax,%eax
 		mov    %dx,%ax
 		imul   $0xa8,%eax,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %eax,%ebx
 		mov    0x60(%ebx),%ax
 		mov    %ax,0x5e(%esi)
@@ -110778,7 +110788,7 @@ GLOBAL_FUNC(ASM_init_mech_explode)	/* 0x0BEE30 */
 		test   %eax,%eax
 		jle    jump_beb3c
 		imul   $0xa8,%eax,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %ebx,%eax
 		xor    %ebx,%ebx
 		mov    0x9(%eax),%bl
@@ -111981,7 +111991,7 @@ GLOBAL_FUNC(ASM_build_navigate_path_to_person)	/* 0x0BFD00 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0x8(%edx,%eax,8),%al
 		and    $0xff,%eax
 		cmp    $0x1d,%eax
@@ -112255,7 +112265,7 @@ GLOBAL_FUNC(ASM_build_navigate_path_to_person)	/* 0x0BFD00 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		add    %edx,%eax
 		xor    %edx,%edx
@@ -113894,7 +113904,7 @@ GLOBAL_FUNC(ASM_init_uzi)	/* 0x0C1C0C */
 		shl    $0x2,%eax
 		mov    EXPORT_SYMBOL(weapon_defs)+25,%esi # sizeof(struct WeaponDef) * 1
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		sar    $0x10,%esi
 		add    %edx,%eax
@@ -113936,12 +113946,12 @@ GLOBAL_FUNC(ASM_init_uzi)	/* 0x0C1C0C */
 		shl    $0x2,%esi
 		push   %eax
 		add    %edx,%esi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%esi
 		mov    %edi,%edx
 		add    %esi,%eax
 		call   ac_thing_hit_by_bullet
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %esi,%eax
 		testb  $0x2,0xc(%eax)
 		je     jump_c206d
@@ -113953,7 +113963,7 @@ GLOBAL_FUNC(ASM_init_uzi)	/* 0x0C1C0C */
 		and    $0x3f,%al
 		and    $0xffff,%eax
 		add    %eax,%ebx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		sub    $0x20,%ebx
 		mov    0x1c(%esi,%eax,1),%edx
 		mov    0x18(%esi,%eax,1),%ecx
@@ -114258,7 +114268,7 @@ GLOBAL_FUNC(ASM_init_long_range)	/* 0x0C2078 */
 		shl    $0x2,%eax
 		mov    EXPORT_SYMBOL(weapon_defs)+375,%esi # sizeof(struct WeaponDef) * 15
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		sar    $0x10,%esi
 		add    %edx,%eax
@@ -114300,12 +114310,12 @@ GLOBAL_FUNC(ASM_init_long_range)	/* 0x0C2078 */
 		shl    $0x2,%esi
 		push   %eax
 		add    %edx,%esi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%esi
 		mov    %ebp,%edx
 		add    %esi,%eax
 		call   ac_thing_hit_by_bullet
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %esi,%eax
 		testb  $0x2,0xc(%eax)
 		je     jump_c24b7
@@ -114318,7 +114328,7 @@ GLOBAL_FUNC(ASM_init_long_range)	/* 0x0C2078 */
 		sar    $0x8,%edx
 		mov    %ax,%bx
 		add    %edx,%ebx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		sub    $0x20,%ebx
 		mov    0x1c(%esi,%eax,1),%edx
 		mov    0x18(%esi,%eax,1),%ecx
@@ -114631,7 +114641,7 @@ GLOBAL_FUNC(ASM_init_minigun)	/* 0x0C24C4 */
 		shl    $0x2,%eax
 		mov    %ebx,%ecx
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		mov    %esi,%ebx
 		add    %edx,%eax
@@ -114675,12 +114685,12 @@ GLOBAL_FUNC(ASM_init_minigun)	/* 0x0C24C4 */
 		shl    $0x2,%esi
 		mov    0x20(%esp),%ebx
 		add    %edx,%esi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%esi
 		mov    %ebp,%edx
 		add    %esi,%eax
 		call   ac_thing_hit_by_bullet
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %esi,%eax
 		testb  $0x2,0xc(%eax)
 		je     jump_c2928
@@ -114693,7 +114703,7 @@ GLOBAL_FUNC(ASM_init_minigun)	/* 0x0C24C4 */
 		and    $0xffff,%eax
 		add    %edx,%eax
 		lea    -0x20(%eax),%ebx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		mov    0x1c(%esi,%eax,1),%edx
 		mov    0x18(%esi,%eax,1),%ecx
 		call   ac_LbRandomAnyShort
@@ -115383,7 +115393,7 @@ GLOBAL_FUNC(ASM_init_c_iff)	/* 0x0C2E8C */
 		add    %ecx,%ebx
 		shl    $0x2,%ebx
 		add    %ecx,%ebx
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%ebx
 		add    %edx,%ebx
 		mov    (%esp),%eax
@@ -115805,7 +115815,7 @@ create_growing_e_strand:	/* 0x0C33DC */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		orb    $0x80,0x7c(%edx,%eax,1)
 		jmp    jump_c34ab
@@ -115884,7 +115894,7 @@ create_growing_e_strand:	/* 0x0C33DC */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		push   $0xa
 		add    %edx,%eax
@@ -116296,7 +116306,7 @@ GLOBAL_FUNC(ASM_process_electric_strand)	/* 0x0C3A40 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		andb   $0xdf,0x44(%edx,%eax,8)
 		mov    %esi,%eax
 		call   ac_delete_snode
@@ -116350,7 +116360,7 @@ GLOBAL_FUNC(ASM_process_electric_strand)	/* 0x0C3A40 */
 		movswl %ax,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		shl    $0x2,%eax
 		mov    0x2e(%esi),%ebx
 		add    %edx,%eax
@@ -116411,7 +116421,7 @@ GLOBAL_FUNC(ASM_elec_hit_building)	/* 0x0C3B98 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0x50(%edx,%eax,8),%edx
 		sar    $0x10,%edx
 		lea    0x0(,%edx,8),%eax
@@ -116493,7 +116503,7 @@ GLOBAL_FUNC(ASM_elec_hit_building)	/* 0x0C3B98 */
 		mov    0x2(%ecx,%edx,1),%edx
 		sar    $0x10,%edx
 		imul   $0xa8,%edx,%ecx
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0x52(%ecx,%edx,1),%cx
 		mov    0x2c(%esp),%edx
 		mov    %cx,0x32(%eax)
@@ -116566,7 +116576,7 @@ GLOBAL_FUNC(ASM_elec_hit_building)	/* 0x0C3B98 */
 		mov    0x2(%ecx,%edx,1),%ecx
 		sar    $0x10,%ecx
 		imul   $0xa8,%ecx,%edx
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		mov    0x52(%ecx,%edx,1),%cx
 		mov    %cx,0x32(%eax)
 		mov    0x14(%esp),%ecx
@@ -116853,7 +116863,7 @@ GLOBAL_FUNC(ASM_init_taser)	/* 0x0C3FA4 */
 		test   %eax,%eax
 		jle    jump_c4119
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		add    %eax,%edx
 		xor    %eax,%eax
 		mov    0x9(%edx),%al
@@ -116931,7 +116941,7 @@ GLOBAL_FUNC(ASM_init_laser_elec)	/* 0x0C422C */
 		add    %eax,%esi
 		shl    $0x2,%esi
 		add    %eax,%esi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%esi
 		add    %eax,%esi
 		testb  $0x1,0x47(%edi)
@@ -117043,7 +117053,7 @@ GLOBAL_FUNC(ASM_init_laser_elec)	/* 0x0C422C */
 		mov    0xc(%esp),%eax
 		mov    %edi,%edx
 		mov    %eax,0x1c(%esi)
-		sub    things,%edx
+		sub    EXPORT_SYMBOL(things),%edx
 		mov    $0xa8,%ebx
 		mov    %edx,%eax
 		sar    $0x1f,%edx
@@ -117152,7 +117162,7 @@ GLOBAL_FUNC(ASM_init_laser_elec)	/* 0x0C422C */
 		shl    $0x2,%edi
 		movswl %bx,%edx
 		add    %eax,%edi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		mov    0x2c(%esi),%ebx
 		shl    $0x3,%edi
 		sub    %ebp,%ebx
@@ -117187,7 +117197,7 @@ GLOBAL_FUNC(ASM_init_laser_elec)	/* 0x0C422C */
 		shl    $0x2,%edi
 		mov    %ebp,%edx
 		add    %eax,%edi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edi
 		movswl %bx,%ebx
 		add    %edi,%eax
@@ -117345,7 +117355,7 @@ GLOBAL_FUNC(ASM_init_laser_guided)	/* 0x0C4720 */
 		je     jump_c48c0
 		and    $0xffff,%eax
 		imul   $0xa8,%eax,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %eax,%ebx
 		testb  $0x1,0x47(%esi)
 		je     jump_c47bc
@@ -117411,7 +117421,7 @@ GLOBAL_FUNC(ASM_init_laser_guided)	/* 0x0C4720 */
 		mov    %edx,0x1c(%ebx)
 		mov    %esi,%edx
 		mov    %eax,0xc(%esp)
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		mov    0xc(%esp),%ebp
 		sub    %eax,%edx
 		add    %eax,%ebp
@@ -117462,7 +117472,7 @@ GLOBAL_FUNC(ASM_init_laser_beam)	/* 0x0C48CC */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		shl    $0x3,%eax
 		add    %eax,%esi
 		mov    0x1c(%esp),%eax
@@ -117582,7 +117592,7 @@ GLOBAL_FUNC(ASM_init_laser_beam)	/* 0x0C48CC */
 		mov    $0xa8,%ebx
 		mov    %eax,0x18(%esi)
 		mov    0x18(%esp),%eax
-		mov    things,%ebp
+		mov    EXPORT_SYMBOL(things),%ebp
 		mov    %eax,0x20(%esi)
 		mov    0x14(%esp),%eax
 		sub    %ebp,%edx
@@ -117711,7 +117721,7 @@ GLOBAL_FUNC(ASM_init_laser_beam)	/* 0x0C48CC */
 		mov    0x2c(%esp),%ebx
 		movswl %dx,%ecx
 		mov    0x2c(%esi),%edx
-		mov    things,%ebp
+		mov    EXPORT_SYMBOL(things),%ebp
 		sub    %ebx,%edx
 		add    %ebp,%eax
 		movswl %dx,%ebx
@@ -117809,7 +117819,7 @@ GLOBAL_FUNC(ASM_init_laser_beam)	/* 0x0C48CC */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		movswl %bx,%ebx
 		add    %edx,%eax
@@ -117906,7 +117916,7 @@ GLOBAL_FUNC(ASM_init_air_strike)	/* 0x0C4E2C */
 		shl    $0x2,%esi
 		push   $0x0
 		add    %edx,%esi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%esi
 		push   $0x64
 		add    %eax,%esi
@@ -117915,7 +117925,7 @@ GLOBAL_FUNC(ASM_init_air_strike)	/* 0x0C4E2C */
 		call   ac_play_dist_sample
 		mov    0x18(%edi),%eax
 		mov    %eax,0x18(%esi)
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		mov    0x20(%edi),%eax
 		mov    %edi,%edx
 		mov    %eax,0x20(%esi)
@@ -118081,7 +118091,7 @@ GLOBAL_FUNC(ASM_init_razor_wire)	/* 0x0C5A78 */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %eax,%ebx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%ebx
 		mov    0x18(%esi),%ebp
 		add    %ebx,%eax
@@ -118149,7 +118159,7 @@ GLOBAL_FUNC(ASM_finalise_razor_wire)	/* 0x0C5B30 */
 		add    %eax,%esi
 		shl    $0x2,%esi
 		add    %eax,%esi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%esi
 		add    %eax,%esi
 		mov    0x18(%esi),%eax
@@ -118241,7 +118251,7 @@ GLOBAL_FUNC(ASM_update_razor_wire)	/* 0x0C5C24 */
 		add    %ebx,%edx
 		shl    $0x2,%edx
 		add    %ebx,%edx
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%edx
 		add    %ebx,%edx
 		mov    0x18(%eax),%ebx
@@ -118538,7 +118548,7 @@ GLOBAL_FUNC(ASM_process_persuadertron)	/* 0x0C5CCC */
 		test   %eax,%eax
 		jle    jump_c5ef3
 		imul   $0xa8,%eax,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %eax,%ebx
 		testb  $0x40,0x46(%ebx)
 		je     jump_c5d77
@@ -118587,7 +118597,7 @@ GLOBAL_FUNC(ASM_init_mech_rocket)	/* 0x0C5FD4 */
 		add    %eax,%esi
 		shl    $0x2,%esi
 		add    %eax,%esi
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%esi
 		mov    %ebx,%eax
 		add    %edx,%esi
@@ -118782,7 +118792,7 @@ GLOBAL_FUNC(ASM_process_vehicle_weapon)	/* 0x0C620C */
 		je     jump_c626e
 	jump_c622e:
 		imul   $0xa8,%eax,%edx
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		add    %ebx,%edx
 		xor    %ebx,%ebx
 		mov    0x9(%edx),%bl
@@ -118795,7 +118805,7 @@ GLOBAL_FUNC(ASM_process_vehicle_weapon)	/* 0x0C620C */
 		jne    jump_c63a2
 	jump_c6257:
 		imul   $0xa8,%eax,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0x5e(%edx,%eax,1),%eax
 		sar    $0x10,%eax
 		test   %eax,%eax
@@ -119391,7 +119401,7 @@ GLOBAL_FUNC(ASM_process_nuclear_bomb)	/* 0x0C67EC */
 		add    %ebx,%eax
 		shl    $0x2,%eax
 		add    %ebx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		add    %edx,%eax
 		push   %eax
@@ -119425,7 +119435,7 @@ GLOBAL_FUNC(ASM_process_nuclear_bomb)	/* 0x0C67EC */
 		shl    $0x2,%edx
 		push   $0x64
 		add    %ebx,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		mov    $0x7f,%ebx
 		add    %edx,%eax
@@ -120281,7 +120291,7 @@ GLOBAL_FUNC(ASM_process_drift_smoke)	/* 0x0C71CC */
 		mov    0x12(%esi),%ax
 		cmp    $0x3c,%eax
 		jle    jump_c7414
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		xor    %edi,%edi
 		test   %eax,%eax
 		je     jump_c7414
@@ -120318,7 +120328,7 @@ GLOBAL_FUNC(ASM_process_drift_smoke)	/* 0x0C71CC */
 		xor    %ebx,%ebx
 		mov    %cx,%bx
 		imul   $0xa8,%ebx,%ebx
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		add    %ebx,%ecx
 		mov    0x50(%eax),%bl
 		cmp    0x50(%ecx),%bl
@@ -120417,9 +120427,9 @@ GLOBAL_FUNC(ASM_process_drift_smoke)	/* 0x0C71CC */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		shl    $0x3,%eax
-		mov    in_network_game,%cl
+		mov    EXPORT_SYMBOL(in_network_game),%cl
 		add    %esi,%eax
 		test   %cl,%cl
 		jne    jump_c75be
@@ -120695,7 +120705,7 @@ GLOBAL_FUNC(ASM_process_napalm_flame)	/* 0x0C7678 */
 		add    %ecx,%eax
 		shl    $0x2,%eax
 		add    %eax,%ecx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%ecx
 		add    %eax,%ecx
 		mov    0x51(%edx),%al
@@ -120759,9 +120769,9 @@ GLOBAL_FUNC(ASM_process_napalm_flame)	/* 0x0C7678 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		shl    $0x3,%eax
-		mov    in_network_game,%dl
+		mov    EXPORT_SYMBOL(in_network_game),%dl
 		add    %edi,%eax
 		test   %dl,%dl
 		jne    jump_c7983
@@ -120968,7 +120978,7 @@ GLOBAL_FUNC(ASM_process_flame1)	/* 0x0C7A80 */
 		add    %ecx,%eax
 		shl    $0x2,%eax
 		add    %eax,%ecx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%ecx
 		add    %ecx,%eax
 		mov    0x51(%edx),%cl
@@ -121026,9 +121036,9 @@ GLOBAL_FUNC(ASM_process_flame1)	/* 0x0C7A80 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		shl    $0x3,%eax
-		mov    in_network_game,%dl
+		mov    EXPORT_SYMBOL(in_network_game),%dl
 		add    %ecx,%eax
 		test   %dl,%dl
 		jne    jump_c7c8f
@@ -121335,7 +121345,7 @@ GLOBAL_FUNC(ASM_init_rocket)	/* 0x0C7F10 */
 		add    %eax,%esi
 		shl    $0x2,%esi
 		add    %eax,%esi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%esi
 		add    %eax,%esi
 		xor    %eax,%eax
@@ -121502,7 +121512,7 @@ GLOBAL_FUNC(ASM_init_rocket)	/* 0x0C7F10 */
 		call   ac_init_shoot_recoil
 		mov    0x10(%esp),%eax
 		mov    $0xa8,%ebx
-		mov    things,%ebp
+		mov    EXPORT_SYMBOL(things),%ebp
 		mov    %eax,0x18(%esi)
 		mov    0xc(%esp),%eax
 		mov    %edi,%edx
@@ -121588,7 +121598,7 @@ GLOBAL_FUNC(ASM_init_v_rocket)	/* 0x0C8218 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		shl    $0x3,%eax
 		lea    (%edi,%eax,1),%esi
 		mov    0x18(%ebx),%eax
@@ -121697,10 +121707,10 @@ GLOBAL_FUNC(ASM_init_v_rocket)	/* 0x0C8218 */
 		 * is is non-zero. Is it a pointer to a thing, so we can be more strict
 		 * in checking it, by making sure it is in range of things allocation
 		 */
-		cmpl   things,%eax
+		cmpl   EXPORT_SYMBOL(things),%eax
 		jl     jump_c837f_bad
 		push   %ebx
-		movl   things,%ebx
+		movl   EXPORT_SYMBOL(things),%ebx
 		add    $168000,%ebx
 		cmpl   %ebx,%eax
 		pop    %ebx
@@ -121769,7 +121779,7 @@ GLOBAL_FUNC(ASM_init_v_rocket)	/* 0x0C8218 */
 		sar    $0x1f,%edx
 		idiv   %ecx
 		mov    %edi,0x2c(%esi)
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		mov    %eax,%ecx
 		mov    0x4(%esp),%eax
 		mov    %ebx,%edx
@@ -121840,7 +121850,7 @@ GLOBAL_FUNC(ASM_init_grenade)	/* 0x0C84D0 */
 		add    %eax,%ebx
 		shl    $0x2,%ebx
 		add    %ebx,%eax
-		mov    things,%ebx
+		mov    EXPORT_SYMBOL(things),%ebx
 		shl    $0x3,%eax
 		add    %eax,%ebx
 		xor    %eax,%eax
@@ -121928,7 +121938,7 @@ GLOBAL_FUNC(ASM_init_grenade)	/* 0x0C84D0 */
 		mov    %ecx,%edx
 		mov    %eax,0x20(%ebx)
 		mov    (%esp),%eax
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		mov    $0xa8,%ecx
 		sub    %esi,%edx
 		mov    %eax,0x1c(%ebx)
@@ -121985,7 +121995,7 @@ GLOBAL_FUNC(ASM_init_spark)	/* 0x0C867C */
 		xor    %edx,%edx
 		jmp    jump_c87d8
 	jump_c86a5:
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		jne    jump_c86f8
 		xor    %eax,%eax
 		mov    EXPORT_SYMBOL(pktrec_mode),%al
@@ -122204,7 +122214,7 @@ GLOBAL_FUNC(ASM_init_laser)	/* 0x0C88A4 */
 		add    %eax,%esi
 		shl    $0x2,%esi
 		add    %eax,%esi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%esi
 		add    %eax,%esi
 		testb  $0x1,0x47(%edi)
@@ -122323,7 +122333,7 @@ GLOBAL_FUNC(ASM_init_laser)	/* 0x0C88A4 */
 	jump_c8a2d:
 		mov    0x8(%esp),%eax
 		mov    $0xa8,%ebx
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		mov    %edi,%edx
 		mov    %eax,0x18(%esi)
 		mov    0x4(%esp),%eax
@@ -122423,7 +122433,7 @@ GLOBAL_FUNC(ASM_init_laser)	/* 0x0C88A4 */
 		shl    $0x2,%edi
 		movswl %bx,%ecx
 		add    %eax,%edi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		mov    0x2c(%esi),%ebx
 		shl    $0x3,%edi
 		sub    %ebp,%ebx
@@ -122470,7 +122480,7 @@ GLOBAL_FUNC(ASM_init_laser)	/* 0x0C88A4 */
 		shl    $0x2,%edi
 		movswl %dx,%edx
 		add    %eax,%edi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edi
 		movswl %bx,%ebx
 		add    %edi,%eax
@@ -122525,7 +122535,7 @@ GLOBAL_FUNC(ASM_process_laser)	/* 0x0C8D2C */
 		sar    $0x10,%eax
 		test   %eax,%eax
 		jne    jump_c8d6a
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		mov    %ebx,%edx
 		sub    %ecx,%edx
 		mov    $0xa8,%ecx
@@ -122569,7 +122579,7 @@ GLOBAL_FUNC(ASM_process_laser_guided)	/* 0x0C8D80 */
 		test   %edx,%edx
 		jne    jump_c8dc3
 		mov    %eax,%edx
-		sub    things,%edx
+		sub    EXPORT_SYMBOL(things),%edx
 		mov    $0xa8,%ebx
 		mov    %edx,%eax
 		sar    $0x1f,%edx
@@ -122599,7 +122609,7 @@ GLOBAL_FUNC(ASM_process_laser_guided)	/* 0x0C8D80 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		push   $0x3
 		add    %edx,%eax
@@ -122626,7 +122636,7 @@ GLOBAL_FUNC(ASM_process_laser_guided)	/* 0x0C8D80 */
 		cmp    $0x4000,%ebp
 		jge    jump_c8e82
 	jump_c8e51:
-		mov    things,%ebp
+		mov    EXPORT_SYMBOL(things),%ebp
 		mov    %esi,%edx
 		sub    %ebp,%edx
 		mov    $0xa8,%ebx
@@ -122716,7 +122726,7 @@ GLOBAL_FUNC(ASM_process_laser_elec)	/* 0x0C8F78 */
 		sar    $0x10,%eax
 		test   %eax,%eax
 		jne    jump_c8fb8
-		mov    things,%esi
+		mov    EXPORT_SYMBOL(things),%esi
 		mov    %ecx,%edx
 		sub    %esi,%edx
 		mov    $0xa8,%ebx
@@ -122906,7 +122916,7 @@ GLOBAL_FUNC(ASM_process_rocket)	/* 0x0C9100 */
 		 * is is non-zero. But is it a pointer to a thing, so we can be more strict
 		 * in checking it, by making sure it is within the allocation range of things.
 		 */
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		cmpl   %eax,0x40(%esi)
 		jl     jump_c9194
 		add    $168000,%eax
@@ -122919,7 +122929,7 @@ GLOBAL_FUNC(ASM_process_rocket)	/* 0x0C9100 */
 		shl    $0x2,%eax
 		mov    0x40(%esi),%ebx
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		mov    0x51(%ebx),%bl
 		mov    0x51(%edx,%eax,8),%al
 		cmp    %bl,%al
@@ -122943,7 +122953,7 @@ GLOBAL_FUNC(ASM_process_rocket)	/* 0x0C9100 */
 		/* Tanks bug WA:
 		 * We just conditionally zeroed 0x40(%esi). We need to check it again.
 		 */
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		cmpl   %eax,0x40(%esi)
 		jl     jump_c91ac
 		add    $168000,%eax
@@ -123156,7 +123166,7 @@ GLOBAL_FUNC(ASM_process_rocket)	/* 0x0C9100 */
 		shl    $0x2,%eax
 		xor    %ecx,%ecx
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		push   $0x1
 		add    %edx,%eax
@@ -123180,7 +123190,7 @@ GLOBAL_FUNC(ASM_process_rocket)	/* 0x0C9100 */
 		shl    $0x2,%eax
 		mov    0x2e(%esi),%ecx
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		mov    0x2a(%esi),%ebx
 		add    %edx,%eax
@@ -123240,7 +123250,7 @@ GLOBAL_FUNC(ASM_process_rocket)	/* 0x0C9100 */
 		sar    $0x8,%eax
 		call   ac_create_sound_effect
 	jump_c9513:
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		mov    %esi,%edx
 		sub    %edi,%edx
 		jmp    jump_c99a1
@@ -123294,7 +123304,7 @@ GLOBAL_FUNC(ASM_process_rocket)	/* 0x0C9100 */
 		shl    $0x2,%eax
 		mov    0x2e(%esi),%ecx
 		add    %eax,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		mov    0x2a(%esi),%ebx
 		add    %edx,%eax
@@ -123581,7 +123591,7 @@ GLOBAL_FUNC(ASM_process_rocket)	/* 0x0C9100 */
 		add    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    things,%edx
+		mov    EXPORT_SYMBOL(things),%edx
 		shl    $0x3,%eax
 		mov    $0x300,%ecx
 		add    %edx,%eax
@@ -123594,7 +123604,7 @@ GLOBAL_FUNC(ASM_process_rocket)	/* 0x0C9100 */
 		sar    $0x8,%edx
 		sar    $0x8,%eax
 		call   ac_do_shockwave
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		mov    %esi,%edx
 		sub    %ecx,%edx
 	jump_c99a1:
@@ -123703,7 +123713,7 @@ process_c_iff:	/* 0x0C99C8 */
 		add    %eax,%esi
 		shl    $0x2,%esi
 		add    %eax,%esi
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		orb    $0x1,0xf(%eax,%esi,8)
 		jmp    jump_c9ad0
 	jump_c9aae:
@@ -123857,7 +123867,7 @@ GLOBAL_FUNC(ASM_process_mine)	/* 0x0C9ADC */
 		shl    $0x2,%edx
 		mov    $0x200,%ecx
 		add    %edi,%edx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		shl    $0x3,%edx
 		push   $0x1
 		add    %edx,%eax
@@ -123946,7 +123956,7 @@ GLOBAL_FUNC(ASM_process_mine)	/* 0x0C9ADC */
 		cmp    $0xc,%al
 		je     jump_c9c07
 	jump_c9d49:
-		cmpb   $0x0,in_network_game
+		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		je     jump_c9ad3
 		incw   0x30(%esi)
 		pop    %edi
@@ -124050,7 +124060,7 @@ GLOBAL_FUNC(ASM_process_grenade)	/* 0x0C9D60 */
 		sar    $0x8,%eax
 		call   ac_create_sound_effect
 	jump_c9e72:
-		mov    things,%ecx
+		mov    EXPORT_SYMBOL(things),%ecx
 		mov    %esi,%edx
 		sub    %ecx,%edx
 		mov    $0xa8,%ebx
@@ -124160,7 +124170,7 @@ GLOBAL_FUNC(ASM_process_grenade)	/* 0x0C9D60 */
 		cmp    $0x5,%dl
 		jbe    jump_c9f06
 	jump_c9fc1:
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		mov    %esi,%edx
 		sub    %edi,%edx
 		mov    $0xa8,%ebx
@@ -125472,7 +125482,7 @@ find_and_time_travel:	/* 0x0CAE78 */
 		push   %edx
 		push   %esi
 		push   %edi
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		push   $0x0
 		mov    0x20(%eax),%ebx
 		push   $0x1
@@ -125487,7 +125497,7 @@ find_and_time_travel:	/* 0x0CAE78 */
 		je     jump_caf43
 		xor    %edx,%edx
 		mov    0x9(%eax),%dl
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 		cmp    $0x2,%edx
 		jne    jump_caed8
 		mov    0x5e(%eax),%ax
@@ -125504,7 +125514,7 @@ find_and_time_travel:	/* 0x0CAE78 */
 	jump_caed8:
 		xor    %eax,%eax
 		mov    0x9(%esi),%al
-		mov    %edi,things
+		mov    %edi,EXPORT_SYMBOL(things)
 		cmp    $0x5,%eax
 		je     jump_caf1d
 		cmp    $0x9,%eax
@@ -125537,7 +125547,7 @@ find_and_time_travel:	/* 0x0CAE78 */
 		mov    %esi,%eax
 		call   ac_finalise_razor_wire
 	jump_caf43:
-		mov    things,%edi
+		mov    EXPORT_SYMBOL(things),%edi
 	jump_caf49:
 		pop    %edi
 		pop    %esi
@@ -125828,7 +125838,7 @@ find_and_stasis:	/* 0x0CB0E4 */
 		test   %eax,%eax
 		jle    jump_cb196
 		imul   $0xa8,%eax,%ebx
-		mov    things,%eax
+		mov    EXPORT_SYMBOL(things),%eax
 		add    %eax,%ebx
 		xor    %ecx,%ecx
 		mov    0x9(%ebx),%cl
@@ -129044,36 +129054,6 @@ GLOBAL (link__MapColListEmptyHead)	/* 0x19EC8C */
 GLOBAL (link__MapColVectEmptyHead)	/* 0x19EC8E */
 		.short  0x0
 		.fill   0x8
-
-/* struct Thing *things;
- */
-GLOBAL (things)	/* 0x1A09DC */
-		.long	0x0
-GLOBAL (sthings)	/* 0x1A09E0 */
-		.long	0x0
-		.align  4
-
-/* PlayerInfo players[8];
- */
-GLOBAL (players)	/* 0x1a62e0 players+0x000  */
-		.fill   0xD50
-
-GLOBAL (packets)	/* 0x1A7030 */
-		.fill   0x180
-
-GLOBAL (local_player_no)	/* 0x1A71B0 */
-		.byte	0x0
-GLOBAL (exit_game)	/* 0x1A71B1 */
-		.byte	0x0
-GLOBAL (in_network_game)
-		.byte	0x0
-GLOBAL (is_single_game)	/* 0x1A71B3 */
-		.byte	0x0
-GLOBAL (cmdln_colour_tables)
-		.byte	0x0
-GLOBAL (cmdln_param_bcg)
-		.byte	0x0
-		.align  4
 
 GLOBAL (bangdetail)	/* 0x1A72BC */
 		.fill   0x54
