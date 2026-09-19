@@ -810,11 +810,11 @@ GLOBAL_FUNC(ASM_unkn_truce_groups)	/* 0x010CA0 */
 		mov    %ebp,%ebx
 		mov    0x64(%esp,%esi,1),%cl
 		shl    %cl,%ebx
-		or     %ebx,war_flags__Truce(%eax)
+		or     %ebx,EXPORT_SYMBOL(war_flags)+0x0C(%eax) # war_flags[].Truce
 		not    %ebx
 		and    %ebx,EXPORT_SYMBOL(war_flags)(%eax)
-		and    %ebx,data_19eca0(%eax)
-		and    %ebx,data_19ec9c(%eax)
+		and    %ebx,EXPORT_SYMBOL(war_flags)+0x08(%eax) # war_flags[].KillIfArmed
+		and    %ebx,EXPORT_SYMBOL(war_flags)+0x04(%eax) # war_flags[].KillIfWeaponOut
 		xor    %eax,%eax
 		mov    0x64(%esp,%esi,1),%al
 		push   %eax
@@ -4531,85 +4531,6 @@ GLOBAL_FUNC (ASM_read_primveh_obj)
 	jump_303f2:
 		xor    %al,%al
 		add    $0x4,%esp
-		pop    %ecx
-		pop    %ebx
-		ret
-
-
-/*----------------------------------------------------------------*/
-GLOBAL_FUNC(ASM_load_map_bnb)	/* 0x303FC */
-/*----------------------------------------------------------------*/
-		push   %ebx
-		push   %ecx
-		push   %edx
-		push   %esi
-		sub    $0x28,%esp
-		push   %eax
-		mov    maps_dir,%edx
-		push   %edx
-		push   $aSMap03d_bB
-		lea    0xc(%esp),%eax
-		push   %eax
-		call   ac_sprintf
-		add    $0x10,%esp
-		mov    $0x2,%edx
-		mov    %esp,%eax
-		call   ac_LbFileOpen
-		mov    %eax,%ecx
-		cmp    $0xffffffff,%eax
-		jne    jump_30454
-		xor    %ah,%ah
-		xor    %ecx,%ecx
-		mov    %ah,EXPORT_SYMBOL(map_bnb)+0x0
-		mov    %ah,EXPORT_SYMBOL(map_bnb)+0x1
-		mov    %ah,EXPORT_SYMBOL(map_bnb)+0x2
-		mov    %ah,EXPORT_SYMBOL(map_bnb)+0x3
-		mov    %ecx,EXPORT_SYMBOL(dword_177790)
-		jmp    jump_30475
-	jump_30454:
-		mov    $0x4,%ebx
-		mov    $EXPORT_SYMBOL(map_bnb),%edx
-		call   ac_LbFileRead
-		mov    %ecx,%eax
-		mov    $0x2,%ebx
-		call   ac_LbFileClose
-		mov    %ebx,EXPORT_SYMBOL(dword_177790)
-	jump_30475:
-		mov    EXPORT_SYMBOL(map_bnb)+0x0,%al
-		mov    EXPORT_SYMBOL(map_bnb)+0x2,%bh
-		cmp    %bh,%al
-		jb     jump_30486
-		mov    %bh,%al
-	jump_30486:
-		mov    EXPORT_SYMBOL(map_bnb)+0x1,%dl
-		mov    EXPORT_SYMBOL(map_bnb)+0x3,%cl
-		and    $0xff,%eax
-		cmp    %cl,%dl
-		jb     jump_3049d
-		mov    %cl,%dl
-	jump_3049d:
-		mov    EXPORT_SYMBOL(map_bnb)+0x0,%bl
-		mov    EXPORT_SYMBOL(map_bnb)+0x2,%ch
-		and    $0xff,%edx
-		cmp    %ch,%bl
-		ja     jump_304b5
-		mov    %ch,%bl
-	jump_304b5:
-		mov    EXPORT_SYMBOL(map_bnb)+0x1,%cl
-		mov    EXPORT_SYMBOL(map_bnb)+0x3,%ch
-		and    $0xff,%ebx
-		cmp    %ch,%cl
-		ja     jump_304cd
-		mov    %ch,%cl
-	jump_304cd:
-		mov    EXPORT_SYMBOL(vec_tmap)+16,%esi
-		add    $0xa040,%esi
-		push   %esi
-		and    $0xff,%ecx
-		call   ASM_BAT_unknsub_20
-		add    $0x28,%esp
-		pop    %esi
-		pop    %edx
 		pop    %ecx
 		pop    %ebx
 		ret
@@ -15559,7 +15480,7 @@ GLOBAL_FUNC(ASM_alert_peeps)	/* 0x047D40 */
 		mov    0x51(%edi),%cl
 		and    $0x1f,%cl
 		mov    $0x1,%eax
-		mov    war_flags__Truce(%edx),%ebx
+		mov    EXPORT_SYMBOL(war_flags)+0x0C(%edx),%ebx # war_flags[].Truce
 		shl    %cl,%eax
 		test   %ebx,%eax
 		jne    jump_47e8e
@@ -15588,13 +15509,13 @@ GLOBAL_FUNC(ASM_alert_peeps)	/* 0x047D40 */
 		imul   $0x28,%edx,%edx
 		mov    $0x1,%eax
 		shl    %cl,%eax
-		test   %eax,war_flags__Truce(%edx)
+		test   %eax,EXPORT_SYMBOL(war_flags)+0x0C(%edx) # war_flags[].Truce
 		jne    jump_47e8e
 		test   %eax,EXPORT_SYMBOL(war_flags)(%edx)
 		jne    jump_47e85
-		test   %eax,data_19eca0(%edx)
+		test   %eax,EXPORT_SYMBOL(war_flags)+0x08(%edx) # war_flags[].KillIfArmed
 		jne    jump_47e85
-		test   %eax,data_19ec9c(%edx)
+		test   %eax,EXPORT_SYMBOL(war_flags)+0x04(%edx) # war_flags[].KillIfWeaponOut
 		je     jump_47e8e
 	jump_47e85:
 		mov    %edi,%edx
@@ -15894,12 +15815,12 @@ GLOBAL_FUNC(ASM_set_person_dead)	/* 0x0480DC */
 		and    $0x1f,%al
 		and    $0xff,%eax
 		shl    $0x4,%eax
-		mov    data_19f1a6(%eax),%bx
+		mov    EXPORT_SYMBOL(group_actions)+0x0E(%eax),%bx # group_actions[].Storming
 		test   %bx,%bx
 		je     jump_48197
 		mov    %ebx,%ecx
 		dec    %ecx
-		mov    %cx,data_19f1a6(%eax)
+		mov    %cx,EXPORT_SYMBOL(group_actions)+0x0E(%eax) # group_actions[].Storming
 	jump_48197:
 		mov    0xc(%esi),%bh
 		or     $0x2,%bh
@@ -16189,11 +16110,11 @@ GLOBAL_FUNC(ASM_set_person_dead)	/* 0x0480DC */
 		or     $0x2,%dl
 		shl    $0x4,%eax
 		mov    %dl,0xf(%esi)
-		decw   data_19f1a2(%eax)
+		decw   EXPORT_SYMBOL(group_actions)+0x0A(%eax) # group_actions[].Alive
 		xor    %eax,%eax
 		mov    0x50(%esi),%al
 		shl    $0x4,%eax
-		incw   data_19f1a0(%eax)
+		incw   EXPORT_SYMBOL(group_actions)+0x08(%eax) # group_actions[].Dead
 		movw   $0xd,0xa(%esi)
 	jump_4855e:
 		add    $0x4,%esp
@@ -16861,7 +16782,7 @@ GLOBAL_FUNC(ASM_thing_hit_by_bullet)	/* 0x048868 */
 		and    $0x7f,%cl
 		shl    $0x3,%edx
 		shl    %cl,%ebx
-		test   %ebx,war_flags__Truce(%edx)
+		test   %ebx,EXPORT_SYMBOL(war_flags)+0x0C(%edx) # war_flags[].Truce
 		je     jump_48d24
 		mov    $0x1,%eax
 		add    $0x10,%esp
@@ -16976,7 +16897,7 @@ func_48db9:
 		and    $0x7f,%cl
 		shl    $0x3,%edx
 		mov    $0x1,%eax
-		mov    war_flags__Truce(%edx),%ebx
+		mov    EXPORT_SYMBOL(war_flags)+0x0C(%edx),%ebx # war_flags[].Truce
 		shl    %cl,%eax
 		test   %ebx,%eax
 		jne    jump_48ebe
@@ -17015,7 +16936,7 @@ func_48db9:
 		and    $0xff,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		cmpb   $0x0,data_19eca8(,%eax,8)
+		cmpb   $0x0,EXPORT_SYMBOL(war_flags)+0x10(,%eax,8) # war_flags[].Guardians[]
 		je     jump_48ebe
 		mov    %ebp,%edx
 		mov    %esi,%eax
@@ -17405,7 +17326,7 @@ GLOBAL_FUNC(ASM_person_hit_razor_wire)	/* 0x049294 */
 		and    $0x1f,%cl
 		shl    $0x3,%edx
 		mov    $0x1,%eax
-		mov    war_flags__Truce(%edx),%ebx
+		mov    EXPORT_SYMBOL(war_flags)+0x0C(%edx),%ebx # war_flags[].Truce
 		shl    %cl,%eax
 		test   %ebx,%eax
 		jne    jump_4984a
@@ -21593,7 +21514,7 @@ GLOBAL_FUNC(ASM_find_peep_in_area)	/* 0x04C374 */
 		and    $0x1f,%cl
 		mov    $0x1,%edx
 		shl    %cl,%edx
-		test   %edx,war_flags__Truce(%ebx)
+		test   %edx,EXPORT_SYMBOL(war_flags)+0x0C(%ebx) # war_flags[].Truce
 		jne    jump_4c408
 		mov    %ebp,%eax
 		mov    0x20(%esi),%ebx
@@ -22163,10 +22084,10 @@ func_4ca80:
 		add    %edx,%eax
 		mov    $0x1,%edx
 		shl    %cl,%edx
-		mov    war_flags__Truce(,%eax,8),%ebx
+		mov    EXPORT_SYMBOL(war_flags)+0x0C(,%eax,8),%ebx # war_flags[].Truce
 		not    %edx
 		and    %edx,%ebx
-		mov    %ebx,war_flags__Truce(,%eax,8)
+		mov    %ebx,EXPORT_SYMBOL(war_flags)+0x0C(,%eax,8) # war_flags[].Truce
 		movw   $0x0,0xa(%ebp)
 		add    $0x8,%esp
 		pop    %ebp
@@ -22275,7 +22196,7 @@ func_4cb21:
 		xor    %eax,%eax
 		mov    0x50(%ebp),%al
 		shl    $0x4,%eax
-		incw   data_19f1a2(%eax)
+		incw   EXPORT_SYMBOL(group_actions)+0x0A(%eax) # group_actions[].Alive
 	jump_4cb6d:
 		xor    %eax,%eax
 		mov    0x16(%ebp),%ax
@@ -24968,11 +24889,11 @@ GLOBAL_FUNC(ASM_person_dieing)	/* 0x04E894 */
 		mov    0x50(%edx),%al
 		shl    $0x4,%eax
 		movw   $0xd,0xa(%edx)
-		decw   data_19f1a2(%eax)
+		decw   EXPORT_SYMBOL(group_actions)+0x0A(%eax) # group_actions[].Alive
 		xor    %eax,%eax
 		mov    0x50(%edx),%al
 		shl    $0x4,%eax
-		incw   data_19f1a0(%eax)
+		incw   EXPORT_SYMBOL(group_actions)+0x08(%eax) # group_actions[].Dead
 		testb  $0x8,0xe(%edx)
 		je     jump_4e917
 		mov    %edx,%eax
@@ -28486,7 +28407,7 @@ GLOBAL_FUNC(ASM_person_kill_target2)	/* 0x050E78 */
 		and    $0x1f,%al
 		and    $0xff,%eax
 		shl    $0x4,%eax
-		mov    data_19f1a4(%eax),%eax
+		mov    EXPORT_SYMBOL(group_actions)+0x0C(%eax),%eax # group_actions[].Persuaded
 		sar    $0x10,%eax
 		cmp    $0x5,%eax
 		jle    jump_510f0
@@ -28691,7 +28612,7 @@ GLOBAL_FUNC(ASM_person_kill_target2)	/* 0x050E78 */
 		and    $0x1f,%al
 		and    $0xff,%eax
 		shl    $0x4,%eax
-		orb    $0x40,data_19f1a7(%eax)
+		orb    $0x40,EXPORT_SYMBOL(group_actions)+0x0F(%eax) # group_actions[].Storming + 1
 		andb   $0xef,0x80(%esi)
 	jump_5132f:
 		testb  $0x20,0xd(%esi)
@@ -28760,7 +28681,7 @@ GLOBAL_FUNC(ASM_person_kill_target2)	/* 0x050E78 */
 		and    $0x1f,%al
 		and    $0xff,%eax
 		shl    $0x4,%eax
-		incw   data_19f1a6(%eax)
+		incw   EXPORT_SYMBOL(group_actions)+0x0E(%eax) # group_actions[].Storming
 		mov    0xc(%esi),%bh
 		or     $0x4,%bh
 		mov    %esi,%eax
@@ -28823,7 +28744,7 @@ GLOBAL_FUNC(ASM_person_kill_target2)	/* 0x050E78 */
 		and    $0x1f,%al
 		and    $0xff,%eax
 		shl    $0x4,%eax
-		decw   data_19f1a6(%eax)
+		decw   EXPORT_SYMBOL(group_actions)+0x0E(%eax) # group_actions[].Storming
 	jump_514c4:
 		andb   $0xbf,0x44(%esi)
 		xor    %eax,%eax
@@ -33538,7 +33459,7 @@ GLOBAL_FUNC(ASM_process_protect_person)	/* 0x054B54 */
 		mov    %al,%cl
 		mov    $0x1,%eax
 		and    $0x7f,%cl
-		mov    war_flags__Truce(%edx),%ebx
+		mov    EXPORT_SYMBOL(war_flags)+0x0C(%edx),%ebx # war_flags[].Truce
 		shl    %cl,%eax
 		test   %ebx,%eax
 		jne    jump_5528c
@@ -34807,7 +34728,7 @@ func_55c91:
 		sar    $0x10,%eax
 		shl    $0x4,%eax
 		mov    0x10(%esi),%dx
-		cmp    data_19f1a0(%eax),%dx
+		cmp    EXPORT_SYMBOL(group_actions)+0x08(%eax),%dx # group_actions[].Dead
 		jg     jump_55be1
 		mov    $0x1,%al
 		mov    %edi,things
@@ -36625,799 +36546,6 @@ create_temp_light:	/* 0x0571E4 */
 
 
 /*----------------------------------------------------------------*/
-GLOBAL_FUNC (ASM_process_things)	/* 0x572F8 */
-/*----------------------------------------------------------------*/
-		push   %ebx
-		push   %ecx
-		push   %edx
-		push   %esi
-		push   %edi
-		push   %ebp
-		sub    $0x68,%esp
-		mov    $0x1000,%ebp
-		xor    %ebx,%ebx
-		xor    %edi,%edi
-		jmp    jump_5733e
-	jump_5730c:
-		inc    %eax
-	jump_5730d:
-		xor    %edx,%edx
-		xor    %esi,%esi
-		mov    EXPORT_SYMBOL(playable_agents),%dl
-		mov    %ax,%si
-		cmp    %edx,%esi
-		jl     jump_5730c
-		imul   $0xa8,EXPORT_SYMBOL(players)+0x088(%edi),%eax # players[0].DirectControl[0]
-		mov    things,%edx
-		or     %ebp,0xc(%edx,%eax,1)
-	jump_57332:
-		inc    %ebx
-		add    $0x1aa,%edi
-		cmp    $0x8,%ebx
-		jge    jump_5736d
-	jump_5733e:
-		mov    $0x1,%eax
-		xor    %edx,%edx
-		mov    %bl,%cl
-		mov    EXPORT_SYMBOL(ingame)+0x995,%dl # ingame.InNetGame_UNSURE
-		shl    %cl,%eax
-		test   %eax,%edx
-		je     jump_57332
-		imul   $0xa8,EXPORT_SYMBOL(players)+0x088(%edi),%eax # players[0].DirectControl[0]
-		mov    things,%edx
-		test   %ebp,0xc(%edx,%eax,1)
-		jne    jump_57332
-		xor    %eax,%eax
-		jmp    jump_5730d
-	jump_5736d:
-		cmpb   $0x0,EXPORT_SYMBOL(lbKeyOn)+49
-		je     jump_57380
-		xor    %dl,%dl
-		mov    %dl,EXPORT_SYMBOL(lbKeyOn)+49
-		xor    %eax,%eax
-	jump_57380:
-		cmpb   $0x0,in_network_game
-		je     jump_57412
-		xor    %eax,%eax
-		mov    EXPORT_SYMBOL(ingame)+0x993,%ax # ingame.fld_unkCB7
-		cmp    $0x96,%eax
-		jle    jump_573ac
-		call   ac_rand
-		and    $0x1f,%eax
-		add    $0x2,%eax
-		call   ac_process_things_mines_explode
-	jump_573ac:
-		testb  $0x10,EXPORT_SYMBOL(net_game_play_flags)
-		je     jump_573e2
-		testb  $0xf,EXPORT_SYMBOL(gameturn)
-		jne    jump_573e2
-		xor    %eax,%eax
-		mov    EXPORT_SYMBOL(ingame)+0x993,%ax # ingame.fld_unkCB7
-		cmp    $0x64,%eax
-		jle    jump_573d4
-		xor    %eax,%eax
-		mov    $0x1,%edx
-		jmp    jump_573d8
-	jump_573d4:
-		xor    %eax,%eax
-		xor    %edx,%edx
-	jump_573d8:
-		mov    EXPORT_SYMBOL(login_control)+0x02,%al # login_control.TechLevel
-		call   ac_process_things_unkn_sub2
-	jump_573e2:
-		xor    %eax,%eax
-		mov    EXPORT_SYMBOL(things_used),%ax
-		cmp    $0x384,%eax
-		jle    jump_573f8
-		mov    $0x10,%eax
-		jmp    jump_5740d
-	jump_573f8:
-		cmp    $0x2bc,%eax
-		jg     jump_57408
-		testb  $0xf,EXPORT_SYMBOL(gameturn)
-		jne    jump_57412
-	jump_57408:
-		mov    $0x1,%eax
-	jump_5740d:
-		call   ac_process_things_bang
-	jump_57412:
-		testb  $0x1f,EXPORT_SYMBOL(gameturn)
-		jne    jump_57436
-		xor    %eax,%eax
-	jump_5741d:
-		mov    data_19f1a7(%eax),%dl
-		add    $0x10,%eax
-		and    $0xbf,%dl
-		mov    %dl,data_19f197(%eax)
-		cmp    $0x210,%eax
-		jne    jump_5741d
-	jump_57436:
-		mov    EXPORT_SYMBOL(frame),%ecx
-		xor    %eax,%eax
-		jmp    jump_57458
-	jump_57440:
-		xor    %ebx,%ebx
-		mov    EXPORT_SYMBOL(shield_frm)(,%edx,2),%bx
-		mov    0x6(%ecx,%ebx,8),%bx
-		inc    %eax
-		mov    %bx,EXPORT_SYMBOL(shield_frm)(,%edx,2)
-	jump_57458:
-		xor    %edx,%edx
-		mov    %ax,%dx
-		cmp    $0x4,%edx
-		jl     jump_57440
-		testb  $0x80,EXPORT_SYMBOL(ingame)+0x930 # ingame.Flags+1
-		je     jump_5751a
-		xor    %edx,%edx
-		mov    EXPORT_SYMBOL(local_player_no),%dl
-		lea    0x0(,%edx,8),%eax
-		add    %edx,%eax
-		shl    $0x3,%eax
-		sub    %edx,%eax
-		xor    %ebx,%ebx
-		add    %eax,%eax
-		mov    mouser,%bl
-		mov    %eax,%edx
-		shl    $0x2,%eax
-		shl    $0x2,%ebx
-		sub    %edx,%eax
-		add    %eax,%ebx
-		mov    EXPORT_SYMBOL(players)+0x088(%ebx),%edx # players[0].DirectControl[0]
-		lea    0x0(,%edx,4),%eax
-		add    %edx,%eax
-		shl    $0x2,%eax
-		mov    things,%ecx
-		add    %edx,%eax
-		subw   $0x3,0x96(%ecx,%eax,8)
-		mov    EXPORT_SYMBOL(players)+0x088(%ebx),%edx # players[0].DirectControl[0]
-		lea    0x0(,%edx,4),%eax
-		add    %edx,%eax
-		shl    $0x2,%eax
-		add    %edx,%eax
-		mov    0x94(%ecx,%eax,8),%eax
-		sar    $0x10,%eax
-		test   %eax,%eax
-		jg     jump_5751a
-		xor    %eax,%eax
-		mov    EXPORT_SYMBOL(ingame)+0x987,%al # ingame.PalType
-		push   %eax
-		mov    palette_fname_fmt,%esi
-		push   %esi
-		lea    0x8(%esp),%eax
-		push   %eax
-		call   ac_sprintf
-		lea    0xc(%esp),%eax
-		mov    EXPORT_SYMBOL(ingame)+0x930,%bl # ingame.Flags+1
-		add    $0xc,%esp
-		and    $0x7f,%bl
-		mov    EXPORT_SYMBOL(display_palette),%edx
-		mov    %bl,EXPORT_SYMBOL(ingame)+0x930 # ingame.Flags+1
-		call   ac_LbFileLoadAt
-	jump_5751a:
-		mov    EXPORT_SYMBOL(gameturn),%eax
-		call   ASM_merged_noop_unkn1
-		xor    %edi,%edi
-		call   ac_build_same_type_headers
-		mov    %edi,EXPORT_SYMBOL(ingame)+0x927 # ingame.fld_unkC4B
-		call   ac_animate_textures
-		call   ac_unkn_update_lights
-		xor    %eax,%eax
-		mov    EXPORT_SYMBOL(next_unkn_full_light),%ax
-		cmp    $0x1,%eax
-		jle    jump_57596
-		mov    $0x1,%esi
-		cmp    %si,%ax
-		jbe    jump_5758d
-	jump_57552:
-		xor    %eax,%eax
-		mov    %si,%ax
-		imul   $0xa,%eax,%eax
-		xor    %ecx,%ecx
-		mov    EXPORT_SYMBOL(unkn_full_lights)(%eax),%cx
-		mov    data_19f9c0(%eax),%ebx
-		mov    data_19f9be(%eax),%edx
-		sar    $0x10,%ebx
-		mov    EXPORT_SYMBOL(unkn_full_lights)(%eax),%eax
-		sar    $0x10,%edx
-		sar    $0x10,%eax
-		inc    %esi
-		call   ac_quick_light_unkn_func_04
-		cmp    EXPORT_SYMBOL(next_unkn_full_light),%si
-		jb     jump_57552
-	jump_5758d:
-		movw   $0x1,EXPORT_SYMBOL(next_unkn_full_light)
-	jump_57596:
-		mov    EXPORT_SYMBOL(execute_commands),%bh
-		xor    %edi,%edi
-		xor    %edx,%edx
-		mov    EXPORT_SYMBOL(things_used_head),%di
-		mov    EXPORT_SYMBOL(things_used),%dx
-		test   %bh,%bh
-		je     jump_57872
-		testb  $0x80,EXPORT_SYMBOL(ingame)+0x92F # ingame.Flags+0
-		je     jump_57872
-		call   ac_monitor_all_samples
-		cmpb   $0x0,in_network_game
-		jne    jump_575f0
-		cmpb   $0x0,EXPORT_SYMBOL(pktrec_mode)
-		jne    jump_575f0
-		testb  $0x4,EXPORT_SYMBOL(ingame)+0x92F # ingame.Flags+0
-		je     jump_575f0
-		testb  $0xf,EXPORT_SYMBOL(gameturn)
-		jne    jump_57872
-	jump_575f0:
-		mov    $0x3,%ebp
-		mov    $0x2,%ecx
-	jump_575fa:
-		test   %edi,%edi
-		jle    jump_57828
-		dec    %edx
-		cmp    $0xffffffff,%edx
-		je     jump_57828
-		mov    EXPORT_SYMBOL(ingame)+0x927,%eax # ingame.fld_unkC4B
-		add    %edi,%eax
-		imul   $0xa8,%edi,%esi
-		mov    %eax,EXPORT_SYMBOL(ingame)+0x927 # ingame.fld_unkC4B
-		mov    things,%eax
-		add    %eax,%esi
-		xor    %ebx,%ebx
-		xor    %eax,%eax
-		mov    0x9(%esi),%bl
-		mov    0xa(%esi),%ax
-		add    %ebx,%eax
-		add    0x18(%esi),%eax
-		add    0x1c(%esi),%eax
-		add    %eax,EXPORT_SYMBOL(ingame)+0x927 # ingame.fld_unkC4B
-		mov    0x4(%esi),%ebx
-		mov    0x47(%esi),%al
-		sar    $0x10,%ebx
-		test   $0x2,%al
-		je     jump_5765c
-		add    EXPORT_SYMBOL(gameturn),%edi
-		test   $0x3,%di
-		jne    jump_57821
-	jump_5765c:
-		andb   $0xfd,0x47(%esi)
-		test   %ecx,0x44(%esi)
-		je     jump_57775
-		test   %ebp,EXPORT_SYMBOL(gameturn)
-		jne    jump_57821
-		decb   0x56(%esi)
-		mov    0x53(%esi),%eax
-		sar    $0x18,%eax
-		test   %eax,%eax
-		jge    jump_57821
-		testb  $0x10,0xf(%esi)
-		jne    jump_57697
-		xor    %eax,%eax
-		mov    0x16(%esi),%ax
-		call   ac_add_node_thing
-	jump_57697:
-		andb   $0xfd,0x44(%esi)
-		mov    %ebx,%edi
-		jmp    jump_575fa
-	jump_576a2:
-		mov    %esi,%eax
-		call   ac_process_vehicle
-		mov    %ebx,%edi
-		jmp    jump_575fa
-	jump_576b0:
-		xor    %eax,%eax
-		mov    0xa(%esi),%ax
-		cmp    $0xd,%eax
-		jne    jump_57821
-		mov    %esi,%eax
-		call   ac_process_unkn35_crashing
-		mov    %ebx,%edi
-		jmp    jump_575fa
-	jump_576cd:
-		mov    %esi,%eax
-		call   ac_process_shield
-		mov    %esi,%eax
-		call   ac_process_person
-		testb  $0x8,0xd(%esi)
-		je     jump_576ec
-		orb    $0x4,0x45(%esi)
-		mov    %ebx,%edi
-		jmp    jump_575fa
-	jump_576ec:
-		andb   $0xfb,0x45(%esi)
-		mov    %ebx,%edi
-		jmp    jump_575fa
-	jump_576f7:
-		mov    %esi,%eax
-		call   ac_process_rocket
-		mov    %ebx,%edi
-		jmp    jump_575fa
-	jump_57705:
-		mov    %esi,%eax
-		call   ac_process_grenade
-		mov    %ebx,%edi
-		jmp    jump_575fa
-	jump_57713:
-		mov    %esi,%eax
-		call   ac_process_building
-		mov    %ebx,%edi
-		jmp    jump_575fa
-	jump_57721:
-		mov    %esi,%eax
-		call   ac_process_laser
-		mov    %ebx,%edi
-		jmp    jump_575fa
-	jump_5772f:
-		mov    %esi,%eax
-		call   ac_process_laser_guided
-		mov    %ebx,%edi
-		jmp    jump_575fa
-	jump_5773d:
-		mov    %esi,%eax
-		call   ac_process_laser_elec
-		mov    %ebx,%edi
-		jmp    jump_575fa
-	jump_5774b:
-		mov    %esi,%eax
-		call   ac_process_razor_wire
-		mov    %ebx,%edi
-		jmp    jump_575fa
-	jump_57759:
-		mov    %esi,%eax
-		call   ac_process_mine
-		mov    %ebx,%edi
-		jmp    jump_575fa
-	jump_57767:
-		mov    %esi,%eax
-		call   ac_process_air_strike
-		mov    %ebx,%edi
-		jmp    jump_575fa
-	jump_57775:
-		mov    0x9(%esi),%al
-		mov    %al,%ah
-		cmp    $0x10,%al
-		jb     jump_577d5
-		jbe    jump_57705
-		cmp    $0x21,%al
-		jb     jump_577ad
-		jbe    jump_57821
-		cmp    $0x23,%al
-		jb     jump_57821
-		jbe    jump_576b0
-		cmp    $0x26,%al
-		jb     jump_57821
-		jbe    jump_57721
-		mov    %ebx,%edi
-		jmp    jump_575fa
-	jump_577ad:
-		cmp    $0x1c,%al
-		jb     jump_577c6
-		jbe    jump_5774b
-		cmp    $0x1d,%al
-		jbe    jump_57721
-		cmp    $0x1f,%al
-		je     jump_57767
-		mov    %ebx,%edi
-		jmp    jump_575fa
-	jump_577c6:
-		cmp    $0x13,%al
-		je     jump_5773d
-		mov    %ebx,%edi
-		jmp    jump_575fa
-	jump_577d5:
-		cmp    $0x6,%al
-		jb     jump_5780f
-		jbe    jump_576f7
-		cmp    $0xb,%al
-		jb     jump_57800
-		jbe    jump_57721
-		cmp    $0xc,%al
-		jbe    jump_5772f
-		cmp    $0xf,%al
-		je     jump_57759
-		mov    %ebx,%edi
-		jmp    jump_575fa
-	jump_57800:
-		cmp    $0x9,%al
-		je     jump_57713
-		mov    %ebx,%edi
-		jmp    jump_575fa
-	jump_5780f:
-		cmp    $0x2,%al
-		jb     jump_57821
-		jbe    jump_576a2
-		cmp    $0x4,%al
-		jbe    jump_576cd
-	jump_57821:
-		mov    %ebx,%edi
-		jmp    jump_575fa
-	jump_57828:
-		mov    EXPORT_SYMBOL(sthings_empty_head),%edi
-		movzwl EXPORT_SYMBOL(sthings_used),%ebp
-		mov    EXPORT_SYMBOL(execute_commands),%bh
-		sar    $0x10,%edi
-		test   %bh,%bh
-		je     jump_57858
-	jump_57846:
-		test   %edi,%edi
-		je     jump_57858
-		dec    %ebp
-		cmp    $0xffffffff,%ebp
-		jne    jump_57bfa
-	jump_57858:
-		cmpb   $0x0,EXPORT_SYMBOL(execute_commands)
-		je     jump_57868
-		xor    %eax,%eax
-		call   ac_people_intel
-	jump_57868:
-		mov    $0x1,%eax
-		call   ac_navi_onscreen_debug
-	jump_57872:
-		add    $0x68,%esp
-		pop    %ebp
-		pop    %edi
-		pop    %esi
-		pop    %edx
-		pop    %ecx
-		pop    %ebx
-		ret
-	jump_5787c:
-		decw   0x28(%esi)
-		mov    0x26(%esi),%eax
-		sar    $0x10,%eax
-		mov    %esi,%edi
-		test   %eax,%eax
-		jge    jump_5789c
-		mov    0x14(%esi),%eax
-		sar    $0x10,%eax
-		call   ac_remove_sthing
-		jmp    jump_57d27
-	jump_5789c:
-		xor    %ebx,%ebx
-		mov    0x2e(%esi),%dx
-		mov    0x2c(%esi),%bx
-		test   %dx,%dx
-		je     jump_578c3
-		xor    %ecx,%ecx
-		mov    %dx,%cx
-		xor    %edx,%edx
-		call   ac_LbRandomAnyShort
-		mov    %ax,%dx
-		mov    %edx,%eax
-		sar    $0x1f,%edx
-		idiv   %ecx
-		add    %edx,%ebx
-	jump_578c3:
-		push   $0x0
-		movswl %bx,%ecx
-		mov    0x1c(%edi),%edx
-		mov    0x18(%edi),%eax
-		sar    $0x8,%edx
-		mov    0x20(%edi),%ebx
-		sar    $0x8,%eax
-		sar    $0x8,%ebx
-		call   ac_apply_full_light
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_578e8:
-		cmp    $0x1,%edx
-		jne    jump_5793b
-		cmpl   $0x0,EXPORT_SYMBOL(dont_bother_with_explode_faces)
-		je     jump_57d27
-		mov    0x14(%esi),%eax
-		mov    $0x2e,%edx
-		sar    $0x10,%eax
-		call   ac_stop_sample_using_heap
-		push   $0x3
-		push   $0x0
-		mov    $0x40,%ecx
-		mov    $0x7f,%ebx
-		push   $0x64
-		mov    $0x2f,%edx
-		mov    %esi,%eax
-		call   ac_play_dist_ssample
-		movw   $0x2,0xa(%esi)
-		movw   $0x64,0x28(%esi)
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_5793b:
-		decw   0x28(%esi)
-		mov    0x26(%esi),%eax
-		sar    $0x10,%eax
-		test   %eax,%eax
-		jge    jump_57d27
-		mov    0x14(%esi),%eax
-		sar    $0x10,%eax
-		call   ac_remove_sthing
-		xor    %eax,%eax
-		mov    0xa(%esi),%ax
-		cmp    $0x2,%eax
-		jne    jump_57d27
-		xor    %ecx,%ecx
-		mov    %cx,EXPORT_SYMBOL(ingame)+0x98B # ingame.SoundThing
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57979:
-		xor    %eax,%eax
-		mov    %dx,%ax
-		cmp    $0x24,%eax
-		jne    jump_579f6
-		mov    $0x2,%eax
-		push   %eax
-		xor    %eax,%eax
-		mov    $0x40,%ecx
-		push   %eax
-		mov    $0x64,%eax
-		mov    $0x7f,%ebx
-		push   %eax
-		mov    $0x1d,%edx
-		mov    %esi,%eax
-		call   ac_play_dist_ssample
-		mov    %esi,%edx
-		mov    0x28(%esi),%si
-		dec    %esi
-		mov    %si,0x28(%edx)
-		mov    0x26(%edx),%eax
-		sar    $0x10,%eax
-		test   %eax,%eax
-		jne    jump_57d27
-		mov    EXPORT_SYMBOL(nstart_ani),%ebx
-		mov    0x26(%edx),%ax
-		mov    (%ebx,%eax,2),%ax
-		movw   $0xd,0xa(%edx)
-		mov    0x14(%edx),%ebx
-		mov    %ax,0x24(%edx)
-		mov    $0x1d,%eax
-		sar    $0x10,%ebx
-		mov    %eax,%edx
-		mov    %ebx,%eax
-		call   ac_stop_sample_using_heap
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_579f6:
-		xor    %eax,%eax
-		mov    %dx,%ax
-		cmp    $0xc,%eax
-		jne    jump_57d27
-		decw   0x28(%esi)
-		mov    0x26(%esi),%eax
-		sar    $0x10,%eax
-		mov    %esi,%edx
-		test   %eax,%eax
-		jne    jump_57d27
-		mov    EXPORT_SYMBOL(nstart_ani),%ebx
-		mov    0x26(%esi),%ax
-		mov    (%ebx,%eax,2),%ax
-		mov    %ax,0x24(%esi)
-		mov    0x14(%esi),%eax
-		mov    $0x1d,%edx
-		sar    $0x10,%eax
-		movw   $0xd,0xa(%esi)
-		call   ac_stop_sample_using_heap
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57a49:
-		movswl %di,%edx
-		mov    %esi,%eax
-		call   ac_process_scale_effect
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57a5c:
-		movswl %di,%edx
-		mov    %esi,%eax
-		call   ac_process_nuclear_bomb
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57a6f:
-		mov    %esi,%eax
-		call   ac_process_spark
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57a7f:
-		mov    %esi,%eax
-		call   ac_process_soul
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57a8f:
-		mov    %esi,%eax
-		call   ac_process_intelligent_door
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57a9f:
-		mov    %esi,%eax
-		call   ac_process_smoke_generator
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57aaf:
-		cmpb   $0x0,in_network_game
-		je     jump_57d27
-		xor    %eax,%eax
-		mov    0x2c(%esi),%ax
-		cmp    $0x1f,%eax
-		je     jump_57d27
-		incw   0x30(%esi)
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57ad8:
-		mov    %esi,%eax
-		call   ac_process_electric_strand
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57ae8:
-		xor    %eax,%eax
-		mov    0x32(%esi),%ax
-		imul   $0xa8,%eax,%eax
-		mov    things,%ebx
-		add    %ebx,%eax
-		mov    0x18(%eax),%ebx
-		mov    %ebx,0x18(%esi)
-		mov    0x1c(%eax),%ebx
-		mov    %ebx,0x1c(%esi)
-		mov    0x20(%eax),%ebx
-		mov    %ebx,0x20(%esi)
-		mov    %esi,%edx
-		mov    0xa(%eax),%ax
-		and    $0xffff,%eax
-		cmp    $0xd,%eax
-		jne    jump_57d27
-		mov    0x14(%esi),%eax
-		sar    $0x10,%eax
-		movb   $0x19,0x9(%esi)
-		call   ac_add_node_sthing
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57b3a:
-		mov    %esi,%eax
-		call   ac_process_time_pod
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57b4a:
-		mov    %esi,%eax
-		call   ac_process_stasis_pod
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57b5a:
-		mov    %esi,%eax
-		call   ac_process_canister
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57b6a:
-		cmpw   $0x0,0x2e(%esi)
-		jne    jump_57b90
-		cmpw   $0x0,0x2c(%esi)
-		jne    jump_57b90
-		movswl %di,%eax
-		call   ac_remove_sthing
-		mov    %esi,%eax
-		call   ac_delete_snode
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57b90:
-		mov    %esi,%eax
-		call   ac_process_bang
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57ba0:
-		xor    %eax,%eax
-		mov    0x2c(%esi),%ax
-		test   %eax,%eax
-		jne    jump_57bea
-		mov    $0x10,%edx
-		mov    %edi,%eax
-		call   ac_ReleaseLoopedSample
-		push   $0x3
-		push   $0x0
-		mov    $0x40,%ecx
-		mov    $0x7f,%ebx
-		push   $0x64
-		mov    $0x17,%edx
-		mov    %esi,%eax
-		call   ac_play_dist_ssample
-		movswl %di,%eax
-		call   ac_remove_sthing
-		mov    %esi,%eax
-		call   ac_delete_snode
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57bea:
-		mov    %esi,%eax
-		call   ac_FIRE_process_flame
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57bfa:
-		imul   $0x3c,%edi,%esi
-		mov    EXPORT_SYMBOL(sthings),%eax
-		add    %eax,%esi
-		mov    0x4(%esi),%eax
-		sar    $0x10,%eax
-		xor    %edx,%edx
-		mov    %eax,0x64(%esp)
-		xor    %eax,%eax
-		mov    0xa(%esi),%dx
-		mov    0x9(%esi),%al
-		mov    0x18(%esi),%ebx
-		add    %edx,%eax
-		mov    0x1c(%esi),%ecx
-		add    %ebx,%eax
-		mov    EXPORT_SYMBOL(ingame)+0x927,%ebx # ingame.fld_unkC4B
-		add    %ecx,%eax
-		add    %eax,%ebx
-		mov    0x9(%esi),%al
-		mov    %al,%ah
-		mov    %ebx,EXPORT_SYMBOL(ingame)+0x927 # ingame.fld_unkC4B
-		cmp    $0x1a,%al
-		jb     jump_57cbe
-		jbe    jump_57ae8
-		cmp    $0x25,%al
-		jb     jump_57c84
-		jbe    jump_57a7f
-		cmp    $0x34,%al
-		jb     jump_57c73
-		jbe    jump_57ba0
-		cmp    $0x35,%al
-		jbe    jump_578e8
-		cmp    $0x36,%al
-		je     jump_5787c
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57c73:
-		cmp    $0x32,%al
-		je     jump_57b6a
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57c84:
-		cmp    $0x1e,%al
-		jb     jump_57cad
-		jbe    jump_57b3a
-		cmp    $0x20,%al
-		jb     jump_57d27
-		jbe    jump_57b5a
-		cmp    $0x24,%al
-		je     jump_57b4a
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57cad:
-		cmp    $0x1b,%al
-		je     jump_57ad8
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57cbe:
-		cmp    $0x14,%al
-		jb     jump_57d08
-		jbe    jump_57a8f
-		cmp    $0x16,%al
-		jb     jump_57a49
-		jbe    jump_57a5c
-		cmp    $0x18,%al
-		jb     jump_57d27
-		jbe    jump_57a9f
-		xor    %eax,%eax
-		mov    0x8(%esi),%al
-		cmp    $0xd,%eax
-		je     jump_57cf8
-		xor    %eax,%eax
-		mov    0x8(%esi),%al
-		cmp    $0xc,%eax
-		jne    jump_57aaf
-	jump_57cf8:
-		mov    %esi,%eax
-		call   ac_process_mine
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57d08:
-		cmp    $0xa,%al
-		jb     jump_57d1f
-		jbe    jump_57d27
-		cmp    $0x11,%al
-		je     jump_57a6f
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-	jump_57d1f:
-		cmp    $0x5,%al
-		je     jump_57979
-	jump_57d27:
-		mov    0x64(%esp),%edi
-		jmp    jump_57846
-
-
-/*----------------------------------------------------------------*/
 set_player_peeps_to_run:	/* 0x057D30 */
 /*----------------------------------------------------------------*/
 		push   %ebx
@@ -39074,7 +38202,7 @@ GLOBAL_FUNC(ASM_can_i_enter_vehicle)	/* 0x058FF0 */
 		mov    %al,%cl
 		shl    $0x3,%esi
 		shl    %cl,%ebx
-		test   %ebx,war_flags__Truce(%esi)
+		test   %ebx,EXPORT_SYMBOL(war_flags)+0x0C(%esi) # war_flags[].Truce
 		jne    jump_59080
 		mov    %dl,%cl
 		xor    %edx,%edx
@@ -39083,7 +38211,7 @@ GLOBAL_FUNC(ASM_can_i_enter_vehicle)	/* 0x058FF0 */
 		mov    $0x1,%ebx
 		add    %edx,%eax
 		shl    %cl,%ebx
-		test   %ebx,war_flags__Truce(,%eax,8)
+		test   %ebx,EXPORT_SYMBOL(war_flags)+0x0C(,%eax,8) # war_flags[].Truce
 		jne    jump_59080
 		xor    %al,%al
 		pop    %esi
@@ -42919,7 +42047,7 @@ GLOBAL_FUNC(ASM_check_for_radius_hit_person)	/* 0x05BBE0 */
 		mov    $0x1,%edi
 		shl    %cl,%edi
 		mov    0xc(%esp),%ecx
-		mov    war_flags__Truce(%ecx),%ecx
+		mov    EXPORT_SYMBOL(war_flags)+0x0C(%ecx),%ecx # war_flags[].Truce
 		test   %edi,%ecx
 		jne    jump_5bd17
 		xor    %ecx,%ecx
@@ -58683,7 +57811,7 @@ search_for_danger:	/* 0x06B9E8 */
 		mov    EXPORT_SYMBOL(level_def)+0x00,%cl # level_def.PlayableGroups
 		shl    $0x3,%ebx
 		mov    $0x1,%eax
-		mov    war_flags__Truce(%ebx),%esi
+		mov    EXPORT_SYMBOL(war_flags)+0x0C(%ebx),%esi # war_flags[].Truce
 		shl    %cl,%eax
 		test   %esi,%eax
 		jne    jump_6bb6b
@@ -58836,7 +57964,7 @@ get_target_priority:	/* 0x06BBC0 */
 		mov    %ch,%cl
 		shl    $0x3,%esi
 		mov    $0x1,%eax
-		mov    war_flags__Truce(%esi),%edi
+		mov    EXPORT_SYMBOL(war_flags)+0x0C(%esi),%edi # war_flags[].Truce
 		shl    %cl,%eax
 		test   %edi,%eax
 		jne    jump_6bce3
@@ -58879,7 +58007,7 @@ get_target_priority:	/* 0x06BBC0 */
 		pop    %ebx
 		ret
 	jump_6bc6b:
-		test   %esi,data_19eca0(%eax)
+		test   %esi,EXPORT_SYMBOL(war_flags)+0x08(%eax) # war_flags[].KillIfArmed
 		je     jump_6bc8c
 		testl  $0x1fbfffff,0xa4(%edx)
 		je     jump_6bc8c
@@ -58899,7 +58027,7 @@ get_target_priority:	/* 0x06BBC0 */
 		and    $0xff,%ecx
 		shl    %cl,%esi
 		mov    %esi,%ecx
-		test   %ecx,data_19ec9c(,%eax,8)
+		test   %ecx,EXPORT_SYMBOL(war_flags)+0x04(,%eax,8) # war_flags[].KillIfWeaponOut
 		je     jump_6bcd0
 		xor    %eax,%eax
 		mov    0x99(%edx),%al
@@ -59320,7 +58448,7 @@ GLOBAL_FUNC(ASM_find_and_alert_guardian)	/* 0x06C0BC */
 		imul   $0x28,%edx,%edx
 		add    %edx,%eax
 		xor    %dh,%dh
-		mov    data_19eca8(%eax),%dl
+		mov    EXPORT_SYMBOL(war_flags)+0x10(%eax),%dl # war_flags[].Guardians[]
 		mov    %edx,0x4(%esp)
 		mov    %dl,%al
 		and    $0xff,%eax
@@ -60452,8 +59580,8 @@ find_target_from_persuaded_peeps:	/* 0x06CE04 */
 		mov    EXPORT_SYMBOL(war_flags)(,%eax,8),%ecx
 		mov    EXPORT_SYMBOL(word_1531DA),%bx
 		mov    %ecx,0x8(%esp)
-		mov    data_19ec9c(,%eax,8),%ecx
-		mov    data_19eca0(,%eax,8),%eax
+		mov    EXPORT_SYMBOL(war_flags)+0x04(,%eax,8),%ecx # war_flags[].KillIfWeaponOut
+		mov    EXPORT_SYMBOL(war_flags)+0x08(,%eax,8),%eax # war_flags[].KillIfArmed
 		mov    %ecx,0x4(%esp)
 		mov    %eax,(%esp)
 		cmp    %di,%bx
@@ -60572,7 +59700,7 @@ find_target_from_group:	/* 0x06CF40 */
 		mov    %ah,0x10(%esp)
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		mov    war_flags__Truce(,%eax,8),%edx
+		mov    EXPORT_SYMBOL(war_flags)+0x0C(,%eax,8),%edx # war_flags[].Truce
 		mov    EXPORT_SYMBOL(war_flags)(,%eax,8),%ebx
 		not    %edx
 		and    %edx,%ebx
@@ -60583,14 +59711,14 @@ find_target_from_group:	/* 0x06CF40 */
 		mov    %al,%cl
 		lea    0x0(,%ecx,4),%eax
 		add    %ecx,%eax
-		and    %edx,data_19ec9c(,%eax,8)
+		and    %edx,EXPORT_SYMBOL(war_flags)+0x04(,%eax,8) # war_flags[].KillIfWeaponOut
 		mov    0x51(%edi),%al
 		xor    %ecx,%ecx
 		and    $0x1f,%al
 		mov    %al,%cl
 		lea    0x0(,%ecx,4),%eax
 		add    %ecx,%eax
-		and    %edx,data_19eca0(,%eax,8)
+		and    %edx,EXPORT_SYMBOL(war_flags)+0x08(,%eax,8) # war_flags[].KillIfArmed
 		mov    0x51(%edi),%al
 		xor    %edx,%edx
 		and    $0x1f,%al
@@ -60599,9 +59727,9 @@ find_target_from_group:	/* 0x06CF40 */
 		add    %edx,%eax
 		mov    EXPORT_SYMBOL(war_flags)(,%eax,8),%edx
 		mov    %edx,0x8(%esp)
-		mov    data_19ec9c(,%eax,8),%edx
+		mov    EXPORT_SYMBOL(war_flags)+0x04(,%eax,8),%edx # war_flags[].KillIfWeaponOut
 		mov    %edx,(%esp)
-		mov    data_19eca0(,%eax,8),%eax
+		mov    EXPORT_SYMBOL(war_flags)+0x08(,%eax,8),%eax # war_flags[].KillIfArmed
 		mov    0x51(%edi),%dl
 		mov    %eax,0xc(%esp)
 		test   $0x80,%dl
@@ -60921,7 +60049,7 @@ GLOBAL_FUNC(ASM_person_becomes_persuaded)	/* 0x06D284 */
 		mov    0x50(%eax),%al
 		and    $0xff,%eax
 		shl    $0x4,%eax
-		incw   data_19f1a4(%eax)
+		incw   EXPORT_SYMBOL(group_actions)+0x0C(%eax) # group_actions[].Persuaded
 	jump_6d399:
 		pop    %edi
 		pop    %esi
@@ -61019,10 +60147,10 @@ GLOBAL_FUNC(ASM_stop_being_persuaded)	/* 0x06D3D8 */
 		and    $0x1f,%al
 		and    $0xff,%eax
 		shl    $0x4,%eax
-		mov    data_19f1a4(%eax),%di
+		mov    EXPORT_SYMBOL(group_actions)+0x0C(%eax),%di # group_actions[].Persuaded
 		dec    %edi
 		mov    in_network_game,%dl
-		mov    %di,data_19f1a4(%eax)
+		mov    %di,EXPORT_SYMBOL(group_actions)+0x0C(%eax) # group_actions[].Persuaded
 		test   %dl,%dl
 		jne    jump_6d248
 		xor    %edx,%edx
@@ -63782,615 +62910,6 @@ clear_mission_status:	/* 0x074C4C */
 		mov    %ah,EXPORT_SYMBOL(mission_status)+0x26(,%edx,8) # mission_status[].AgentsLost
 		mov    %bl,EXPORT_SYMBOL(mission_status)+0x27(,%edx,8) # mission_status[].AgentsGained
 	jump_74cd6:
-		pop    %edx
-		pop    %ecx
-		pop    %ebx
-		ret
-
-
-/*----------------------------------------------------------------*/
-GLOBAL_FUNC(ASM_init_level)	/* 0x074CDC */
-/*----------------------------------------------------------------*/
-		push   %ebx
-		push   %ecx
-		push   %edx
-		push   %esi
-		push   %edi
-		mov    $0x1,%eax
-		call   ac_people_intel
-		cmpb   $0x0,in_network_game
-		je     jump_74d1c
-		mov    $0x1,%dl
-		xor    %eax,%eax
-		mov    %dl,EXPORT_SYMBOL(ingame)+0x960 # ingame.DetailLevel
-		xor    %edx,%edx
-		xor    %bl,%bl
-	jump_74d02:
-		add    $0x80,%edx
-		mov    %bl,EXPORT_SYMBOL(player_message_timer)(%eax)
-		inc    %eax
-		mov    %bl,EXPORT_SYMBOL(player_message_text)-0x80(%edx)
-		cmp    $0x8,%eax
-		jge    jump_74d21
-		jmp    jump_74d02
-	jump_74d1c:
-		call   ac_init_mission_states
-	jump_74d21:
-		xor    %esi,%esi
-		jmp    jump_74d9b
-	jump_74d25:
-		xor    %ecx,%ecx
-		mov    %si,%cx
-		imul   $0x1aa,%ecx,%ecx
-		xor    %edi,%edi
-		mov    %di,data_1a647a(%ecx,%edx,2)
-		mov    %di,EXPORT_SYMBOL(players)+0x0E8(%ecx,%edx,2) # players[].UserVY[]
-		mov    %di,data_1a6482(%ecx,%edx,2)
-		xor    %al,%al
-		mov    %di,EXPORT_SYMBOL(players)+0x0F0(%ecx,%edx,2) # players[].SpecialItems[]
-		mov    %al,EXPORT_SYMBOL(players)+0x0B4(%ecx,%edx,1) # players[].PanelItem[]
-		xor    %ah,%ah
-		inc    %ebx
-		mov    %ah,EXPORT_SYMBOL(players)+0x0B0(%ecx,%edx,1) # players[].PanelState[]
-	jump_74d65:
-		xor    %edx,%edx
-		mov    %bx,%dx
-		cmp    $0x4,%edx
-		jl     jump_74d25
-		xor    %eax,%eax
-		mov    %si,%ax
-		imul   $0x1aa,%eax,%eax
-		xor    %edi,%edi
-		xor    %ebx,%edx
-		mov    %di,EXPORT_SYMBOL(players)+0x104(%eax) # players[].TargetType
-		mov    %dx,EXPORT_SYMBOL(players)+0x0F8(%eax) # players[].GotoFace
-		mov    %di,EXPORT_SYMBOL(players)+0x100(%eax) # players[].Target
-		inc    %esi
-		mov    %di,EXPORT_SYMBOL(players)+0x102(%eax)
-	jump_74d9b:
-		xor    %eax,%eax
-		mov    %si,%ax
-		cmp    $0x8,%eax
-		jge    jump_74da9
-		xor    %ebx,%ebx
-		jmp    jump_74d65
-	jump_74da9:
-		call   ac_set_user_selected_brightness
-		mov    EXPORT_SYMBOL(ingame)+0x930,%dh # ingame.Flags+1
-		and    $0x7f,%dh
-		mov    in_network_game,%bl
-		mov    %dh,EXPORT_SYMBOL(ingame)+0x930 # ingame.Flags+1
-		test   %bl,%bl
-		jne    jump_74dce
-		movb   $0x1,EXPORT_SYMBOL(ingame)+0x995 # ingame.InNetGame_UNSURE
-	jump_74dce:
-		mov    EXPORT_SYMBOL(nstart_ani),%eax
-		mov    0x7b0(%eax),%ax
-		mov    %ax,EXPORT_SYMBOL(shield_frm)
-		xor    %eax,%eax
-		mov    $0x1,%edx
-		mov    EXPORT_SYMBOL(shield_frm),%ax
-		mov    %dx,EXPORT_SYMBOL(word_1531DA)
-		lea    0x0(,%eax,8),%edx
-		mov    EXPORT_SYMBOL(frame),%eax
-		mov    0x6(%edx,%eax,1),%dx
-		and    $0xffff,%edx
-		mov    0x6(%eax,%edx,8),%dx
-		mov    %dx,EXPORT_SYMBOL(shield_frm)+2
-		xor    %edx,%edx
-		mov    EXPORT_SYMBOL(shield_frm)+2,%dx
-		mov    0x6(%eax,%edx,8),%dx
-		and    $0xffff,%edx
-		mov    0x6(%eax,%edx,8),%dx
-		mov    %dx,EXPORT_SYMBOL(shield_frm)+4
-		xor    %edx,%edx
-		mov    EXPORT_SYMBOL(shield_frm)+4,%dx
-		mov    0x6(%eax,%edx,8),%dx
-		and    $0xffff,%edx
-		mov    $0x32,%esi
-		xor    %ebx,%ebx
-		mov    0x6(%eax,%edx,8),%ax
-		xor    %ecx,%ecx
-		mov    %ax,EXPORT_SYMBOL(shield_frm)+6
-		mov    %bx,EXPORT_SYMBOL(ingame)+0x993 # ingame.fld_unkCB7
-		mov    %bx,EXPORT_SYMBOL(ingame)+0x935 # ingame.data_180c59
-		mov    %bx,EXPORT_SYMBOL(ingame)+0x988 # ingame.FlameCount
-		mov    %bx,EXPORT_SYMBOL(ingame)+0x98B # ingame.SoundThing
-		mov    %bx,EXPORT_SYMBOL(ingame)+0x991 # ingame.fld_unkCB5
-		call   clear_mission_status
-		call   ac_init_object_explode_faces
-		call   ac_StopAllSamples
-		mov    %bx,EXPORT_SYMBOL(ingame)+0x975 # ingame.TrackThing
-		call   ac_func_74934
-		mov    EXPORT_SYMBOL(engn_xc),%ax
-		mov    $0x78,%ebx
-		mov    %ax,EXPORT_SYMBOL(ingame)+0x971 # ingame.TrackX
-		mov    EXPORT_SYMBOL(engn_zc),%ax
-		mov    %cx,EXPORT_SYMBOL(ingame)+0x982 # ingame.fld_unkCA6
-		mov    %ax,EXPORT_SYMBOL(ingame)+0x973 # ingame.TrackZ
-		mov    EXPORT_SYMBOL(next_floor_texture),%ax
-		mov    %bx,EXPORT_SYMBOL(ingame)+0x961 # ingame.UserZoom
-		mov    %ax,EXPORT_SYMBOL(word_1AABD0)
-		call   ac_init_crater_textures
-		call   ASM_bang_init
-		call   ac_FIRE_init
-		call   ac_create_train_for_each_track
-	jump_74ee8:
-		dec    %esi
-		cmp    $0xffffffff,%esi
-		je     jump_74f3d
-		xor    %eax,%eax
-		xor    %edx,%edx
-		mov    EXPORT_SYMBOL(things_used_head),%ax
-		mov    EXPORT_SYMBOL(things_used),%dx
-		test   %eax,%eax
-		jle    jump_74ee8
-	jump_74f03:
-		dec    %edx
-		cmp    $0xffffffff,%edx
-		je     jump_74ee8
-		imul   $0xa8,%eax,%ebx
-		mov    things,%eax
-		add    %ebx,%eax
-		xor    %ecx,%ecx
-		mov    0x4(%eax),%ebx
-		mov    0x9(%eax),%cl
-		sar    $0x10,%ebx
-		cmp    $0x2,%ecx
-		jne    jump_74f35
-		xor    %ecx,%ecx
-		mov    0x8(%eax),%cl
-		cmp    $0x1d,%ecx
-		jne    jump_74f35
-		call   ac_process_vehicle
-	jump_74f35:
-		mov    %ebx,%eax
-		test   %ebx,%ebx
-		jg     jump_74f03
-		jmp    jump_74ee8
-	jump_74f3d:
-		mov    EXPORT_SYMBOL(next_floor_texture),%ax
-		xor    %edx,%edx
-		inc    %eax
-		mov    %dx,EXPORT_SYMBOL(link__MapColListEmptyHead)
-		mov    %dx,EXPORT_SYMBOL(link__MapColVectEmptyHead)
-		mov    %ax,EXPORT_SYMBOL(tnext_floor_texture)
-		xor    %eax,%eax
-		jmp    jump_74f90
-	jump_74f5e:
-		xor    %ebx,%ebx
-		mov    EXPORT_SYMBOL(next_vects_list),%bx
-		add    %ebx,%edx
-		imul   $0x6,%edx,%edx
-		mov    EXPORT_SYMBOL(game_col_vects_list),%ebx
-		add    %edx,%ebx
-		mov    EXPORT_SYMBOL(link__MapColListEmptyHead),%dx
-		mov    %dx,0x2(%ebx)
-		mov    EXPORT_SYMBOL(next_vects_list),%dx
-		add    %eax,%edx
-		mov    %dx,EXPORT_SYMBOL(link__MapColListEmptyHead)
-		inc    %eax
-	jump_74f90:
-		xor    %edx,%edx
-		mov    %ax,%dx
-		cmp    $0x3e8,%edx
-		jl     jump_74f5e
-		xor    %eax,%edx
-		jmp    jump_74fd0
-	jump_74fa1:
-		xor    %ebx,%ebx
-		mov    EXPORT_SYMBOL(next_col_vect),%bx
-		add    %ebx,%eax
-		imul   $0xe,%eax,%eax
-		mov    EXPORT_SYMBOL(game_col_vects),%ebx
-		add    %eax,%ebx
-		mov    EXPORT_SYMBOL(link__MapColVectEmptyHead),%ax
-		mov    %ax,0xc(%ebx)
-		mov    EXPORT_SYMBOL(next_col_vect),%ax
-		add    %edx,%eax
-		mov    %ax,EXPORT_SYMBOL(link__MapColVectEmptyHead)
-		inc    %edx
-	jump_74fd0:
-		xor    %eax,%eax
-		mov    %dx,%ax
-		cmp    $0x258,%eax
-		jl     jump_74fa1
-		call   ac_dos_clock
-		mov    %eax,EXPORT_SYMBOL(ingame)+0x96D # ingame.fld_unkC91
-		xor    %eax,%eax
-		mov    current_map,%ax
-		cmp    $0xb,%eax
-		je     jump_74ff8
-		cmp    $0x41,%eax
-		jne    jump_75011
-	jump_74ff8:
-		push   $0x2
-		push   $0xffffffff
-		mov    $0x40,%ecx
-		mov    $0x4e,%edx
-		push   $0x64
-		xor    %eax,%eax
-		mov    %ecx,%ebx
-		jmp    jump_750a9
-	jump_75011:
-		testb  $0x3,EXPORT_SYMBOL(things_used)
-		jne    jump_75066
-		cmp    $0x1e,%eax
-		je     jump_75066
-		xor    %eax,%eax
-		mov    in_network_game,%al
-		test   %eax,%eax
-		jne    jump_75066
-		mov    $0x1,%edi
-		mov    EXPORT_SYMBOL(vec_tmap),%edx
-		mov    EXPORT_SYMBOL(tex00dat_fname),%eax
-		mov    %di,EXPORT_SYMBOL(gamep_scene_effect_type)
-		call   ac_LbFileLoadAt
-		push   $0x2
-		mov    $0x40,%ecx
-		push   $0xffffffff
-		mov    %ecx,%ebx
-		push   $0x64
-		mov    $0x4d,%edx
-		xor    %eax,%eax
-		call   ac_play_sample_using_heap
-		call   ac_scene_post_effect_rain_init
-		jmp    jump_750ae
-	jump_75066:
-		cmpw   $0x0,EXPORT_SYMBOL(gamep_scene_effect_type)
-		je     jump_7507c
-		mov    $0x4d,%edx
-		xor    %eax,%eax
-		call   ac_stop_sample_using_heap
-	jump_7507c:
-		mov    EXPORT_SYMBOL(vec_tmap),%edx
-		mov    EXPORT_SYMBOL(tex00dat_fname),%eax
-		call   ac_LbFileLoadAt
-		push   $0x2
-		mov    $0x40,%ecx
-		xor    %esi,%esi
-		push   $0xffffffff
-		mov    $0x8,%edx
-		mov    %ecx,%ebx
-		push   $0x64
-		xor    %eax,%eax
-		mov    %si,EXPORT_SYMBOL(gamep_scene_effect_type)
-	jump_750a9:
-		call   ac_play_sample_using_heap
-	jump_750ae:
-		xor    %edx,%edx
-		mov    %edx,EXPORT_SYMBOL(gamep_unknval_10)
-		mov    %edx,EXPORT_SYMBOL(gamep_unknval_12)
-		mov    %edx,EXPORT_SYMBOL(nav_stats__ThisTurn)
-		mov    %edx,EXPORT_SYMBOL(gamep_unknval_16)
-		mov    $0x1,%dh
-		xor    %eax,%eax
-		mov    %dh,EXPORT_SYMBOL(ingame)+0x98D # ingame.byte_180CB1
-		mov    %dh,EXPORT_SYMBOL(ingame)+0x98E # ingame.byte_180CB2
-		jmp    jump_750e5
-	jump_750da:
-		xor    %ebx,%ebx
-		inc    %eax
-		mov    %bx,EXPORT_SYMBOL(word_1774E8)(,%edx,4)
-	jump_750e5:
-		xor    %edx,%edx
-		mov    %ax,%dx
-		cmp    $0x96,%edx
-		jl     jump_750da
-		mov    $0x1,%eax
-		cmp    EXPORT_SYMBOL(next_mission),%ax
-		jae    jump_75123
-		mov    EXPORT_SYMBOL(next_mission),%cx
-		xor    %bl,%bl
-	jump_75109:
-		xor    %edx,%edx
-		mov    %ax,%dx
-		imul   $0x4c,%edx,%edx
-		mov    %bl,EXPORT_SYMBOL(mission_list)+0x1D(%edx) # mission_list[].BankTest
-		inc    %eax
-		mov    %bl,EXPORT_SYMBOL(mission_list)+0x38(%edx) # mission_list[].BankTestFail
-		cmp    %cx,%ax
-		jb     jump_75109
-	jump_75123:
-		xor    %edx,%edx
-		xor    %ebx,%ebx
-		jmp    jump_75155
-	jump_75129:
-		shl    $0x4,%eax
-		mov    %bx,data_19f1a2(%eax)
-		mov    %bx,data_19f1a0(%eax)
-		mov    %ebx,data_19f19c(%eax)
-		mov    %ebx,EXPORT_SYMBOL(group_actions)(%eax)
-		mov    %bx,data_19f1a4(%eax)
-		inc    %edx
-		mov    %bx,data_19f1a6(%eax)
-	jump_75155:
-		xor    %eax,%eax
-		mov    %dx,%ax
-		cmp    $0x20,%eax
-		jl     jump_75129
-		call   ac_init_my_paths
-		mov    EXPORT_SYMBOL(things_used_head),%ax
-		mov    $0x1000000,%esi
-		movswl %ax,%ebx
-		test   %ebx,%ebx
-		jg     jump_75472
-	jump_7517a:
-		mov    EXPORT_SYMBOL(things_used_head),%ax
-		mov    EXPORT_SYMBOL(things_used),%bx
-	jump_75187:
-		cwtl
-		test   %eax,%eax
-		jle    jump_754b4
-		dec    %ebx
-		cmp    $0xffffffff,%bx
-		je     jump_754b4
-		imul   $0xa8,%eax,%eax
-		mov    things,%edx
-		add    %eax,%edx
-		xor    %eax,%eax
-		mov    0x9(%edx),%al
-		cmp    $0x9,%eax
-		jne    jump_751c4
-		xor    %eax,%eax
-		mov    0x8(%edx),%al
-		cmp    $0x15,%eax
-		jne    jump_751c4
-		mov    %edx,%eax
-		call   ac_VNAV_process_bezier
-	jump_751c4:
-		mov    0x6(%edx),%ax
-		jmp    jump_75187
-	jump_751ca:
-		xor    %eax,%eax
-		mov    0x52(%ebx),%ax
-		mov    EXPORT_SYMBOL(game_commands),%edx
-		shl    $0x5,%eax
-		mov    0xa(%edx,%eax,1),%al
-		and    $0xff,%eax
-		cmp    $0x88,%eax
-		jne    jump_7520b
-		mov    $0x1,%edx
-		mov    %ebx,%eax
-		call   ac_set_person_stats_type
-		xor    %edx,%edx
-		mov    0x52(%ebx),%dx
-		mov    EXPORT_SYMBOL(game_commands),%eax
-		shl    $0x5,%edx
-		mov    (%edx,%eax,1),%ax
-		mov    %ax,0x52(%ebx)
-	jump_7520b:
-		xor    %eax,%eax
-		mov    0x52(%ebx),%ax
-		mov    %eax,%edx
-		mov    EXPORT_SYMBOL(game_commands),%eax
-		shl    $0x5,%edx
-		mov    0xa(%edx,%eax,1),%dl
-		and    $0xff,%edx
-		cmp    $0x90,%edx
-		jne    jump_75253
-		mov    EXPORT_SYMBOL(peep_type_stats)+24,%dx
-		mov    %dx,0xa0(%ebx)
-		mov    %dx,0xa2(%ebx)
-		xor    %edx,%edx
-		mov    0x52(%ebx),%dx
-		shl    $0x5,%edx
-		mov    (%edx,%eax,1),%ax
-		mov    %ax,0x52(%ebx)
-	jump_75253:
-		test   %esi,0x44(%ebx)
-		jne    jump_7526d
-		testb  $0x2,0xc(%ebx)
-		jne    jump_7526d
-		xor    %eax,%eax
-		mov    0x50(%ebx),%al
-		shl    $0x4,%eax
-		incw   data_19f1a2(%eax)
-	jump_7526d:
-		movb   $0x0,0x99(%ebx)
-		movw   $0x0,0x4c(%ebx)
-		movw   $0x0,0x8e(%ebx)
-		mov    0x50(%ebx),%al
-		movw   $0x0,0x62(%ebx)
-		mov    %al,0x51(%ebx)
-		mov    0xa6(%ebx),%al
-		movl   $0x0,0x40(%ebx)
-		or     $0x40,%al
-		mov    %al,0xa6(%ebx)
-		mov    0xc(%ebx),%ah
-		movw   $0x0,0x4a(%ebx)
-		test   $0x2,%ah
-		je     jump_752ba
-		movw   $0xd,0xa(%ebx)
-		jmp    jump_752c0
-	jump_752ba:
-		movw   $0x0,0xa(%ebx)
-	jump_752c0:
-		testb  $0x20,0xd(%ebx)
-		je     jump_752ce
-		movw   $0x0,0x54(%ebx)
-		jmp    jump_752df
-	jump_752ce:
-		mov    0xc(%ebx),%dh
-		mov    0x52(%ebx),%ax
-		or     $0x40,%dh
-		mov    %ax,0x54(%ebx)
-		mov    %dh,0xc(%ebx)
-	jump_752df:
-		test   %esi,0x44(%ebx)
-		je     jump_752ed
-		mov    %ebx,%eax
-		call   ac_delete_node
-		jmp    jump_752f1
-	jump_752ed:
-		andb   $0xdf,0x47(%ebx)
-	jump_752f1:
-		testb  $0x2,0xc(%ebx)
-		jne    jump_754a4
-		cmpb   $0x0,0x99(%ebx)
-		je     jump_753a2
-		xor    %eax,%eax
-		mov    0x8(%ebx),%al
-		imul   $0x2c,%eax,%edx
-		xor    %eax,%eax
-		mov    0x6c(%ebx),%al
-		add    %eax,%eax
-		add    %edx,%eax
-		xor    %edx,%edx
-		mov    EXPORT_SYMBOL(people_frames)(%eax),%dx
-		xor    %eax,%eax
-		mov    0x57(%ebx),%al
-		add    %edx,%eax
-		lea    0x0(,%eax,2),%edx
-		mov    EXPORT_SYMBOL(nstart_ani),%eax
-		mov    0x24(%ebx),%cx
-		mov    (%edx,%eax,1),%dx
-		sub    %edx,%ecx
-		mov    %cx,0x24(%ebx)
-		xor    %ecx,%ecx
-		mov    0x8(%ebx),%cl
-		imul   $0x2c,%ecx,%ecx
-		movb   $0x1,0x6c(%ebx)
-		xor    %edx,%edx
-		mov    0x6c(%ebx),%dl
-		add    %edx,%edx
-		add    %ecx,%edx
-		xor    %ecx,%ecx
-		mov    EXPORT_SYMBOL(people_frames)(%edx),%cx
-		xor    %edx,%edx
-		mov    0x57(%ebx),%dl
-		add    %ecx,%edx
-		mov    0x24(%ebx),%di
-		add    (%eax,%edx,2),%di
-		xor    %eax,%eax
-		mov    0x8(%ebx),%al
-		imul   $0x2c,%eax,%eax
-		xor    %edx,%edx
-		mov    0x6c(%ebx),%dl
-		mov    %di,0x24(%ebx)
-		mov    EXPORT_SYMBOL(people_frames)(%eax,%edx,2),%ax
-		dec    %eax
-		mov    %ax,0x26(%ebx)
-		mov    0x6(%ebx),%ax
-		movswl %ax,%ebx
-		test   %ebx,%ebx
-		jg     jump_75472
-		jmp    jump_7517a
-	jump_753a2:
-		xor    %eax,%eax
-		mov    0x8(%ebx),%al
-		imul   $0x2c,%eax,%edx
-		xor    %eax,%eax
-		mov    0x6c(%ebx),%al
-		add    %eax,%eax
-		add    %edx,%eax
-		xor    %edx,%edx
-		mov    EXPORT_SYMBOL(people_frames)(%eax),%dx
-		xor    %eax,%eax
-		mov    0x57(%ebx),%al
-		add    %edx,%eax
-		lea    0x0(,%eax,2),%edx
-		mov    EXPORT_SYMBOL(nstart_ani),%eax
-		mov    0x24(%ebx),%cx
-		sub    (%edx,%eax,1),%cx
-		xor    %edx,%edx
-		mov    0x8(%ebx),%dl
-		mov    %cx,0x24(%ebx)
-		imul   $0x2c,%edx,%ecx
-		movb   $0x0,0x6c(%ebx)
-		xor    %edx,%edx
-		mov    0x6c(%ebx),%dl
-		add    %edx,%edx
-		add    %ecx,%edx
-		xor    %ecx,%ecx
-		mov    EXPORT_SYMBOL(people_frames)(%edx),%cx
-		xor    %edx,%edx
-		mov    0x57(%ebx),%dl
-		add    %ecx,%edx
-		mov    0x24(%ebx),%di
-		add    (%eax,%edx,2),%di
-		xor    %eax,%eax
-		mov    0x8(%ebx),%al
-		imul   $0x2c,%eax,%edx
-		xor    %eax,%eax
-		mov    0x6c(%ebx),%al
-		mov    %di,0x24(%ebx)
-		mov    EXPORT_SYMBOL(people_frames)(%edx,%eax,2),%ax
-		dec    %eax
-		mov    %ax,0x26(%ebx)
-		mov    0x6(%ebx),%ax
-		movswl %ax,%ebx
-		test   %ebx,%ebx
-		jg     jump_75472
-		jmp    jump_7517a
-	jump_75436:
-		mov    0xd(%ebx),%cl
-		xor    %eax,%eax
-		and    $0xf7,%cl
-		mov    0x8(%ebx),%al
-		mov    %cl,0xd(%ebx)
-		cmp    $0x20,%eax
-		jne    jump_75456
-		mov    0x50(%ebx),%al
-		movl   $0x0,0x40(%ebx)
-		mov    %al,0x51(%ebx)
-	jump_75456:
-		test   %esi,0x44(%ebx)
-		je     jump_754a4
-		mov    %ebx,%eax
-		call   ac_delete_node
-		mov    0x6(%ebx),%ax
-		movswl %ax,%ebx
-		test   %ebx,%ebx
-		jg     jump_75472
-		jmp    jump_7517a
-	jump_75472:
-		imul   $0xa8,%ebx,%ebx
-		mov    things,%eax
-		add    %eax,%ebx
-		mov    0x9(%ebx),%al
-		cmp    $0x3,%al
-		jb     jump_754a0
-		jbe    jump_751ca
-		cmp    $0x9,%al
-		je     jump_75436
-		mov    0x6(%ebx),%ax
-		movswl %ax,%ebx
-		test   %ebx,%ebx
-		jg     jump_75472
-		jmp    jump_7517a
-	jump_754a0:
-		cmp    $0x2,%al
-		je     jump_75456
-	jump_754a4:
-		mov    0x6(%ebx),%ax
-		movswl %ax,%ebx
-		test   %ebx,%ebx
-		jg     jump_75472
-		jmp    jump_7517a
-	jump_754b4:
-		call   ac_VNAV_init_new_traffic_system
-		xor    %eax,%eax
-		mov    data_15501a,%edx
-		mov    current_map,%ax
-		sar    $0x10,%edx
-		cmp    %eax,%edx
-		je     jump_754d3
-		call   ac_map_lights_update
-	jump_754d3:
-		call   ac_init_scanner
-		mov    current_map,%ax
-		mov    %ax,EXPORT_SYMBOL(last_map_for_lights_func_11)
-		call   ac_find_the_tall_buildings
-		xor    %eax,%eax
-		mov    EXPORT_SYMBOL(ingame)+0x007,%al # ingame.CDTrack
-		xor    %edx,%edx
-		call   ac_PlayCDTrack
-		xor    %eax,%eax
-		mov    EXPORT_SYMBOL(ingame)+0x008,%al # ingame.DangerTrack
-		call   ac_StartMusic
-		pop    %edi
-		pop    %esi
 		pop    %edx
 		pop    %ecx
 		pop    %ebx
@@ -95684,7 +94203,7 @@ GLOBAL_FUNC(ASM_conditional_command_state_true)	/* 0x0A6C54 */
 		sar    $0x10,%eax
 		shl    $0x4,%eax
 		mov    0x10(%esi),%dx
-		cmp    data_19f1a0(%eax),%dx
+		cmp    EXPORT_SYMBOL(group_actions)+0x08(%eax),%dx # group_actions[].Dead
 		jg     jump_a73cb
 		mov    $0x1,%al
 		jmp    jump_a73d8
@@ -95701,7 +94220,7 @@ GLOBAL_FUNC(ASM_conditional_command_state_true)	/* 0x0A6C54 */
 		mov    (%esi),%eax
 		sar    $0x10,%eax
 		shl    $0x4,%eax
-		mov    data_19f1a0(%eax),%eax
+		mov    EXPORT_SYMBOL(group_actions)+0x08(%eax),%eax # group_actions[].Dead
 		sar    $0x10,%eax
 		test   %eax,%eax
 		jne    jump_a73cb
@@ -96035,8 +94554,8 @@ GLOBAL_FUNC(ASM_conditional_command_state_true)	/* 0x0A6C54 */
 		mov    (%esi),%eax
 		sar    $0x10,%eax
 		shl    $0x4,%eax
-		mov    data_19f1a4(%eax),%dx
-		cmp    data_19f1a2(%eax),%dx
+		mov    EXPORT_SYMBOL(group_actions)+0x0C(%eax),%dx # group_actions[].Persuaded
+		cmp    EXPORT_SYMBOL(group_actions)+0x0A(%eax),%dx # group_actions[].Alive
 		jne    jump_a73cb
 		cmpb   $0x0,0xc(%esp)
 		sete   %al
@@ -96180,7 +94699,7 @@ GLOBAL_FUNC(ASM_conditional_command_state_true)	/* 0x0A6C54 */
 		sar    $0x10,%eax
 		shl    $0x4,%eax
 		mov    0x10(%esi),%di
-		cmp    data_19f1a4(%eax),%di
+		cmp    EXPORT_SYMBOL(group_actions)+0x0C(%eax),%di # group_actions[].Persuaded
 		jg     jump_a73cb
 		cmpb   $0x0,0xc(%esp)
 		sete   %al
@@ -103897,7 +102416,7 @@ GLOBAL_FUNC(ASM_SCANNER_unkn_func_205)	/* 0x0B0908 */
 		xor    %ebx,%ebx
 		mov    EXPORT_SYMBOL(level_def)+0x00(%ecx),%bl # level_def.PlayableGroups
 		shl    $0x4,%ebx
-		mov    data_19f1a0(%ebx),%ebx
+		mov    EXPORT_SYMBOL(group_actions)+0x08(%ebx),%ebx # group_actions[].Dead
 		sar    $0x10,%ebx
 		mov    %esp,%eax
 		test   %ebx,%ebx
@@ -124388,7 +122907,7 @@ GLOBAL_FUNC(ASM_process_rocket)	/* 0x0C9100 */
 		and    $0x7f,%cl
 		shl    $0x3,%edx
 		mov    $0x1,%eax
-		mov    war_flags__Truce(%edx),%ebx
+		mov    EXPORT_SYMBOL(war_flags)+0x0C(%edx),%ebx # war_flags[].Truce
 		shl    %cl,%eax
 		test   %ebx,%eax
 		je     jump_c9194
@@ -130111,22 +128630,6 @@ GLOBAL (dword_152E38)	/* 0x152E38 */
 		.ascii  "\xff\xff\xff\xff\xff\xff\xff\xff"
 		.ascii  "\xff\xff\xff\xff"
 
-GLOBAL (tex00dat_fname)	/* 0x153278 */
-		.long   aDataTex00_dat
-
-palette_fname_fmt:	/* 0x1532D8 */
-		.long   aQdataPalD_dat
-
-maps_dir:	/* 0x1532E8 */
-		.long   aMaps
-
-GLOBAL (savegame_mortal_fname)	/* 0x153308 */
-		.long   aQdataSavegam_4
-paQdataSavegam_5:	/* 0x15330C */
-		.long   aQdataSavegam_5
-paQdataSavegam_6:	/* 0x153310 */
-		.long   aQdataSavegam_6
-
 GLOBAL (master_glare)	/* 0x153774 */
 		.byte	0x0
 		.ascii  "\x01\x01\x02\x03\x01\x04\x02\x06"
@@ -130361,9 +128864,6 @@ ascE:	/* 0x15BF1D */
 ascB:	/* 0x15BF1F */
 		.ascii  "\x42\x00"
 
-aSMap03d_bB:	/* 0x15BF24 */
-		.string "%s/map%03d.b&b"
-
 aS_idx:	/* 0x15C085 */
 		.string "%s.idx"
 aS_wad:	/* 0x15C08C */
@@ -130388,30 +128888,6 @@ aHostConnection:	/* 0x15C3DD */
 aPlayerSIsOutOf:	/* 0x15C3F3 */
 		.string " Player >%s< is out of sync"
 		.align	4
-
-aDataTex02d_dat:	/* 0x15C47C */
-		.string "data/tex%02d.dat"
-aDataTex02d_d_0:	/* 0x15C48D */
-		.string "data/tex%02d.dat"
-aDataTex02d_d_1:	/* 0x15C49E */
-		.string "data/tex%02d.dat"
-		.align	4
-
-aDataTex00_dat:	/* 0x15C4FE */
-		.string "data/tex00.dat"
-
-aQdataPalD_dat:	/* 0x15C6A1 */
-		.string "qdata/pal%d.dat"
-
-aMaps:	/* 0x15C6E5 */
-		.string "maps"
-
-aQdataSavegam_4:	/* 0x15C74B */
-		.string "qdata/savegame/synwarsm.sav"
-aQdataSavegam_5:	/* 0x15C767 */
-		.string "qdata/savegame/synwars%d.sav"
-aQdataSavegam_6:	/* 0x15C784 */
-		.string "qdata/savegame/swars%03d.sav"
 
 aD_0:	/* 0x15D30C */
 		.ascii  "\x25\x64\x00"
@@ -130563,11 +129039,6 @@ GLOBAL (unkn_player_groups)	/* 0x17713C */
 		.fill   0x14
 		.fill   0x334
 
-GLOBAL (word_1774E8)	/* 0x1774E8 no purpose - remove pending */
-		.fill   0x258
-GLOBAL (dword_177790)	/* 0x177790 no purpose - remove pending */
-		.long	0x0
-
 GLOBAL (my_paths)	/* 0x1777CC */
 		.fill   0x76ad
 		.fill   0x13
@@ -130617,31 +129088,12 @@ GLOBAL (link__MapColVectEmptyHead)	/* 0x19EC8E */
 		.fill   0x8
 
 GLOBAL (war_flags)	/* 0x19EC98 */
-		.long	0x0
-data_19ec9c:
-		.long	0x0
-data_19eca0:
-		.long	0x0
-war_flags__Truce:	/* 0x19ECA4 */
-		.long	0x0
-data_19eca8:
-		.fill   0x4ef
-data_19f197:
-		.byte	0x0
+		.fill   0x10
+		.fill   0x4f0
 GLOBAL (group_actions)	/* 0x19F198 */
-		.long	0x0
-data_19f19c:
-		.long	0x0
-data_19f1a0:
-		.short  0x0
-data_19f1a2:
-		.short  0x0
-data_19f1a4:
-		.short  0x0
-data_19f1a6:
-		.byte	0x0
-data_19f1a7:
-		.fill   0x289
+		.fill   0x8
+		.fill   0x6
+		.fill   0x28A
 		.align  4
 
 GLOBAL (unkn_full_lights)	/* 0x19F9BC */

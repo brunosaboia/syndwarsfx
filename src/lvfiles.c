@@ -1683,10 +1683,6 @@ TbResult load_map_mad(ushort mapno)
 
 void load_map_bnb(ushort mapno)
 {
-#if 0
-    asm volatile ("call ASM_load_map_bnb\n"
-        : : "a" (mapno));
-#endif
     char locstr[DISKPATH_SIZE];
     PathInfo *pinfo;
     TbFileHandle fh;

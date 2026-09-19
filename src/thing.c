@@ -1128,11 +1128,6 @@ void process_sthing(struct SimpleThing *p_sthing, ThingIdx thing)
 
 void process_things(void)
 {
-#if 0
-    asm volatile ("call ASM_process_things\n"
-        :  :  : "eax" );
-    return;
-#endif
     int i;
     ushort plyr;
 

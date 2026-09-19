@@ -2104,18 +2104,6 @@ void create_train_for_each_track(void)
     }
 }
 
-/* no function - delete pending
-void clear_word_1774E8(void)
-{
-    short i;
-
-    for (i = 0; i < 150; i++)
-    {
-        word_1774E8[2 * i + 0] = 0;
-    }
-}
-*/
-
 void init_my_paths(void)
 {
     asm volatile ("call ASM_init_my_paths\n"
@@ -2300,11 +2288,6 @@ void start_ingame_ambient_sound(void)
 
 void init_level(void)
 {
-#if 0
-    asm volatile ("call ASM_init_level\n"
-        :  :  : "eax" );
-    return;
-#endif
     short plyr_no;
 
     people_intel(1);
@@ -2374,7 +2357,6 @@ void init_level(void)
     gamep_unknval_16 = 0;
     ingame.fld_unkCB1 = 1;
     ingame.fld_unkCB2 = 1;
-    // clear_word_1774E8(); // no function - delete pending
     missions_clear_bank_tests();
     thing_groups_clear_all_actions();
     init_my_paths();
