@@ -19932,7 +19932,7 @@ GLOBAL_FUNC(ASM_person_move)	/* 0x04AC18 */
 		jne    jump_4b21f
 		cmpl   $0x0,0x34(%esp)
 		je     jump_4b21f
-		mov    data_1aa38c,%edx
+		mov    EXPORT_SYMBOL(word_1AA38C),%edx
 		sar    $0x10,%edx
 		imul   $0x6,%edx,%edx
 		mov    EXPORT_SYMBOL(game_col_vects_list),%ebx
@@ -20005,7 +20005,7 @@ GLOBAL_FUNC(ASM_person_move)	/* 0x04AC18 */
 		jne    jump_4b303
 		cmpl   $0x0,0x34(%esp)
 		je     jump_4b303
-		mov    data_1aa38c,%edx
+		mov    EXPORT_SYMBOL(word_1AA38C),%edx
 		sar    $0x10,%edx
 		imul   $0x6,%edx,%edx
 		mov    EXPORT_SYMBOL(game_col_vects_list),%ebx
@@ -20084,7 +20084,7 @@ GLOBAL_FUNC(ASM_person_move)	/* 0x04AC18 */
 		jne    jump_4b3f7
 		cmpl   $0x0,0x34(%esp)
 		je     jump_4b3f7
-		mov    data_1aa38c,%edx
+		mov    EXPORT_SYMBOL(word_1AA38C),%edx
 		sar    $0x10,%edx
 		imul   $0x6,%edx,%edx
 		mov    EXPORT_SYMBOL(game_col_vects_list),%ebx
@@ -20150,7 +20150,7 @@ GLOBAL_FUNC(ASM_person_move)	/* 0x04AC18 */
 		jne    jump_4b4d2
 		cmpl   $0x0,0x34(%esp)
 		je     jump_4b4d2
-		mov    data_1aa38c,%edx
+		mov    EXPORT_SYMBOL(word_1AA38C),%edx
 		sar    $0x10,%edx
 		imul   $0x6,%edx,%edx
 		mov    EXPORT_SYMBOL(game_col_vects_list),%ebx
@@ -20205,7 +20205,7 @@ GLOBAL_FUNC(ASM_person_move)	/* 0x04AC18 */
 	jump_4b522:
 		cmpw   $0x0,0x40(%esp)
 		je     jump_4b5ae
-		mov    data_1aa38c,%edx
+		mov    EXPORT_SYMBOL(word_1AA38C),%edx
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		sub    %edx,%eax
@@ -46349,8 +46349,8 @@ tank_los:	/* 0x05F8B4 */
 		add    %edx,%eax
 		add    0x8(%esp),%eax
 	jump_5f950:
-		mov    %ebp,data_1aa3a4
-		mov    %ecx,data_1aa3a8
+		mov    %ebp,EXPORT_SYMBOL(dword_1AA3A4)
+		mov    %ecx,EXPORT_SYMBOL(dword_1AA3A8)
 		cmp    $0x100,%eax
 		jge    jump_5f96a
 		xor    %eax,%eax
@@ -46390,12 +46390,12 @@ tank_los:	/* 0x05F8B4 */
 		mov    %ecx,%eax
 		sub    %ebx,%eax
 		mov    0x2c(%esp),%edi
-		mov    %eax,data_1aa3a4
+		mov    %eax,EXPORT_SYMBOL(dword_1AA3A4)
 		mov    %esi,%eax
 		add    %ebx,%ecx
 		sub    %edi,%eax
 		add    %edi,%esi
-		mov    %eax,data_1aa3a8
+		mov    %eax,EXPORT_SYMBOL(dword_1AA3A8)
 	jump_5f9db:
 		mov    0x34(%esp),%eax
 		dec    %eax
@@ -46908,9 +46908,9 @@ func_5fe50:
 		add    %eax,%esi
 	jump_5fec3:
 		mov    0xc(%esp),%eax
-		mov    %eax,data_1aa3ac
+		mov    %eax,EXPORT_SYMBOL(dword_1AA3AC)
 		mov    0x8(%esp),%eax
-		mov    %eax,data_1aa3b0
+		mov    %eax,EXPORT_SYMBOL(dword_1AA3B0)
 		cmp    $0x100,%esi
 		jge    jump_5fee4
 		xor    %ebx,%ebx
@@ -46947,12 +46947,12 @@ func_5fe50:
 	jump_5ff25:
 		mov    %eax,%ebx
 		sub    %edi,%ebx
-		mov    %ebx,data_1aa3ac
+		mov    %ebx,EXPORT_SYMBOL(dword_1AA3AC)
 		mov    %edx,%ebx
 		add    %edi,%eax
 		sub    %ebp,%ebx
 		add    %ebp,%edx
-		mov    %ebx,data_1aa3b0
+		mov    %ebx,EXPORT_SYMBOL(dword_1AA3B0)
 	jump_5ff3d:
 		dec    %esi
 		cmp    $0xffffffff,%esi
@@ -113186,8 +113186,8 @@ ariadne_initialise_route:
 		ret
 	jump_c0ba9:
 		mov    $0x2,%eax
-		mov    data_1aa3ac,%ebp
-		mov    data_1aa3b0,%edi
+		mov    EXPORT_SYMBOL(dword_1AA3AC),%ebp
+		mov    EXPORT_SYMBOL(dword_1AA3B0),%edi
 		call   ac_triangulation_select
 		push   $0xfffffffe
 		mov    EXPORT_SYMBOL(nav_stats__ThisTurn),%ecx
@@ -113340,8 +113340,8 @@ build_tank_path:	/* 0x0C0C58 */
 		ret
 	jump_c0d7b:
 		mov    $0x2,%eax
-		mov    data_1aa3a4,%ebp
-		mov    data_1aa3a8,%edi
+		mov    EXPORT_SYMBOL(dword_1AA3A4),%ebp
+		mov    EXPORT_SYMBOL(dword_1AA3A8),%edi
 		call   ac_triangulation_select
 		push   $0xfffffffe
 		mov    EXPORT_SYMBOL(nav_stats__ThisTurn),%ecx
@@ -129120,16 +129120,9 @@ GLOBAL (cmdln_param_bcg)
 
 GLOBAL (bangdetail)	/* 0x1A72BC */
 		.fill   0x54
+		.align	4
 
-GLOBAL (data_1aa330)	/* 0x1aa330 */
-		.short  0x0
-GLOBAL (data_1aa332)	/* 0x1aa332 */
-		.short  0x0
-data_1aa334:
-		.long	0x0
-data_1aa338:
-		.fill   0x54
-data_1aa38c:
+GLOBAL (word_1AA38C)	/* 0x1AA38C */
 		.short  0x0
 GLOBAL (word_1AA38E)	/* 0x1AA38E */
 		.short  0x0
@@ -129138,14 +129131,15 @@ GLOBAL (word_1AA390)	/* 0x1AA390 */
 GLOBAL (word_1AA392)	/* 0x1AA392 */
 		.short  0x0
 GLOBAL (word_1AA394)	/* 0x1AA394 */
-		.fill   0x10
-data_1aa3a4:
+		.short  0x0
+		.fill   0x0E
+GLOBAL (dword_1AA3A4)	/* 0x1AA3A4 */
 		.long	0x0
-data_1aa3a8:
+GLOBAL (dword_1AA3A8)	/* 0x1AA3A8 */
 		.long	0x0
-data_1aa3ac:
+GLOBAL (dword_1AA3AC)	/* 0x1AA3AC */
 		.long	0x0
-data_1aa3b0:
+GLOBAL (dword_1AA3B0)	/* 0x1AA3B0 */
 		.long	0x0
 data_1aa3b4:
 		.long	0x0
