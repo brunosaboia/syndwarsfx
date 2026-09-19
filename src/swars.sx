@@ -82,7 +82,6 @@
 .global EXPORT_SYMBOL(engn_cam_yaw_vel);	/* 0x176D54 */
 .global EXPORT_SYMBOL(engn_cam_yaw);		/* 0x176D58 */
 .global EXPORT_SYMBOL(byte_176D49);			/* 0x176D49 */
-.global EXPORT_SYMBOL(save_mortal_salt);	/* 0x176E3C */
 .global EXPORT_SYMBOL(packet_rec_fh);
 .global EXPORT_SYMBOL(smack_malloc_used_tot);	/* 0x177108 */
 .global EXPORT_SYMBOL(engn_yc);
@@ -130522,6 +130521,8 @@ GLOBAL (unkn1_spr)		/* 0x176CDC */
 GLOBAL (dword_176D6C)	/* 0x176d6c */
 		.long	0x0
 
+GLOBAL (save_mortal_salt)	/* 0x176E3C */
+		.long	0x0
 save_hashtbl_01:	/* 0x176E40 */
 		.fill   0xdc
 data_176f1c:
