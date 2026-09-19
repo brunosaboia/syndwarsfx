@@ -100327,7 +100327,7 @@ GLOBAL_FUNC (ASM_SCANNER_init)	/* 0x0ABA1C */
 
 
 /*----------------------------------------------------------------*/
-SCANNER_scanconvert:	/* 0x0ABBBC */
+GLOBAL_FUNC(ASM_SCANNER_scanconvert)	/* 0x0ABBBC */
 /*----------------------------------------------------------------*/
 		push   %esi
 		push   %edi
@@ -100723,7 +100723,7 @@ GLOBAL_FUNC(ASM_SCANNER_fill_in_road)	/* 0x0AC090 */
 		sar    $0x7,%edi
 		mov    %esi,%ecx
 		mov    %edi,%ebx
-		call   SCANNER_scanconvert
+		call   ac_SCANNER_scanconvert
 		mov    0x18(%esp),%eax
 		push   %eax
 		mov    0x14(%esp),%eax
@@ -100736,7 +100736,7 @@ GLOBAL_FUNC(ASM_SCANNER_fill_in_road)	/* 0x0AC090 */
 		push   %eax
 		mov    %esi,%edx
 		mov    %edi,%eax
-		call   SCANNER_scanconvert
+		call   ac_SCANNER_scanconvert
 		add    $0x20,%esp
 		pop    %ebp
 		pop    %edi
@@ -100852,7 +100852,7 @@ GLOBAL_FUNC(ASM_SCANNER_fill_in_object)	/* 0x0AC1B8 */
 		mov    0xc(%esp),%eax
 		sar    $0x7,%edx
 		sar    $0x7,%eax
-		call   SCANNER_scanconvert
+		call   ac_SCANNER_scanconvert
 		incl   0x5c(%esp)
 	jump_ac2ee:
 		xor    %eax,%eax
@@ -100966,7 +100966,7 @@ GLOBAL_FUNC(ASM_SCANNER_fill_in_object)	/* 0x0AC1B8 */
 		mov    0xc(%esp),%eax
 		sar    $0x7,%edx
 		sar    $0x7,%eax
-		call   SCANNER_scanconvert
+		call   ac_SCANNER_scanconvert
 		mov    0x48(%esp),%eax
 		mov    0x40(%esp),%ecx
 		mov    0x30(%esp),%ebx
@@ -100982,7 +100982,7 @@ GLOBAL_FUNC(ASM_SCANNER_fill_in_object)	/* 0x0AC1B8 */
 		mov    0x48(%esp),%eax
 		sar    $0x7,%edx
 		sar    $0x7,%eax
-		call   SCANNER_scanconvert
+		call   ac_SCANNER_scanconvert
 		incl   0x58(%esp)
 	jump_ac480:
 		xor    %edx,%edx

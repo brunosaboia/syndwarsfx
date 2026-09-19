@@ -45,6 +45,7 @@
 #include "lvobjctv.h"
 #include "scandraw.h"
 #include "swlog.h"
+#include "enginsngobjs.h"
 /******************************************************************************/
 #pragma pack(1)
 
@@ -249,10 +250,84 @@ void SCANNER_process_turn(void)
     SCANNER_process_bbpoints();
 }
 
-void SCANNER_fill_in_object(int object_idx, int colour)
+/** Fills in a triangle/quad shape on the scanner map, using the map-projected
+ *  coordinates of the given 3 or 6 points.
+ */
+void SCANNER_scanconvert(int x0, int y0, int x1, int y1, int x2, int y2, int colour)
 {
-    asm volatile ("call ASM_SCANNER_fill_in_object\n"
-        : : "a" (object_idx), "d" (colour) : );
+    // Pushed through a register holding them: a "g" operand may be placed
+    // relative to the stack pointer, which each push moves.
+    int stkargs[3];
+
+    stkargs[0] = (int)(intptr_t)x2;
+    stkargs[1] = (int)(intptr_t)y2;
+    stkargs[2] = (int)(intptr_t)colour;
+
+    asm volatile (
+      "push 8(%4)\n"
+      "push 4(%4)\n"
+      "push 0(%4)\n"
+      "call ASM_SCANNER_scanconvert\n"
+        : : "a" (x0), "d" (y0), "b" (x1), "c" (y1), "S" (stkargs)
+        : "cc", "memory");
+}
+
+void SCANNER_fill_triangle(int z1, int x1, int z2, int x2, int z3, int x3, TbPixel colour)
+{
+    SCANNER_scanconvert(z1 >> 7, x1 >> 7, z2 >> 7, x2 >> 7, z3 >> 7, x3 >> 7, colour);
+}
+
+/** A quad face is filled in as two triangles: {0,1,2} and {1,2,3}.
+ */
+void SCANNER_fill_quad(int z1, int x1, int z2, int x2, int z3, int x3, int z4, int x4, TbPixel colour)
+{
+    SCANNER_scanconvert(z1 >> 7, x1 >> 7, z2 >> 7, x2 >> 7, z3 >> 7, x3 >> 7, colour);
+    SCANNER_scanconvert(z2 >> 7, x2 >> 7, z3 >> 7, x3 >> 7, z4 >> 7, x4 >> 7, colour);
+}
+
+void SCANNER_fill_in_object(int object_idx, TbPixel colour)
+{
+    struct SingleObject *p_obj;
+    int i;
+
+    p_obj = &game_objects[object_idx];
+
+    for (i = p_obj->StartFace; i < p_obj->StartFace + p_obj->NumbFaces; i++)
+    {
+        struct SingleObjectFace3 *p_face;
+        int map_x[3], map_z[3];
+        int k;
+
+        p_face = &game_object_faces3[i];
+
+        for (k = 0; k < 3; k++)
+        {
+            struct SinglePoint *p_pt;
+            p_pt = &game_object_points[p_face->PointNo[k]];
+            map_x[k] = p_pt->X + p_obj->MapX;
+            //map_y[k] = (p_pt->Y + p_obj->OffsetY) >> 3; // unused
+            map_z[k] = p_pt->Z + p_obj->MapZ;
+        }
+        SCANNER_fill_triangle(map_z[0], map_x[0], map_z[1], map_x[1], map_z[2], map_x[2], colour);
+    }
+
+    for (i = p_obj->StartFace4; i < p_obj->StartFace4 + p_obj->NumbFaces4; i++)
+    {
+        struct SingleObjectFace4 *p_face4;
+        int map_x[4], map_z[4];
+        int k;
+
+        p_face4 = &game_object_faces4[i];
+
+        for (k = 0; k < 4; k++)
+        {
+            struct SinglePoint *p_pt;
+            p_pt = &game_object_points[p_face4->PointNo[k]];
+            map_x[k] = p_pt->X + p_obj->MapX;
+            map_z[k] = p_pt->Z + p_obj->MapZ;
+        }
+        SCANNER_fill_quad(map_z[0], map_x[0], map_z[1], map_x[1], map_z[2], map_x[2], map_z[3], map_x[3], colour);
+    }
 }
 
 void SCANNER_fill_in_road(int thing_idx)
