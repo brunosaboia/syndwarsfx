@@ -62,6 +62,7 @@
 .global EXPORT_SYMBOL(mod_defs);	/* 0x15441C */
 .global EXPORT_SYMBOL(static_radii);	/* 0x154216 */
 .global EXPORT_SYMBOL(peep_type_stats);	/* 0x154890 */
+.global EXPORT_SYMBOL(byte_155170);			/* 0x155170 */
 .global EXPORT_SYMBOL(mem_game);	/* 0x1539c4 */
 .global EXPORT_SYMBOL(people_frames);	/* 0x153D5C */
 .global EXPORT_SYMBOL(follow_dist);	/* 0x153398 */
@@ -81,8 +82,21 @@
 .global EXPORT_SYMBOL(engn_cam_yaw_vel);	/* 0x176D54 */
 .global EXPORT_SYMBOL(engn_cam_yaw);		/* 0x176D58 */
 .global EXPORT_SYMBOL(byte_176D49);			/* 0x176D49 */
+.global EXPORT_SYMBOL(save_mortal_salt);	/* 0x176E3C */
+.global EXPORT_SYMBOL(packet_rec_fh);
+.global EXPORT_SYMBOL(smack_malloc_used_tot);	/* 0x177108 */
 .global EXPORT_SYMBOL(engn_yc);
 .global EXPORT_SYMBOL(navi2_unkn_counter);	/* 0x177740 */
+.global EXPORT_SYMBOL(scratch_malloc_mem);	/* 0x177748 */
+.global EXPORT_SYMBOL(unkn_mech_stct7);		/* 0x17774C */
+.global EXPORT_SYMBOL(unkn_mech_var10);		/* 0x177788 */
+.global EXPORT_SYMBOL(unkn_mech_var11);		/* 0x17778C */
+.global EXPORT_SYMBOL(map_bnb);				/* 0x177794 */
+.global EXPORT_SYMBOL(gamep_unknval_10);	/* 0x177798 */
+.global EXPORT_SYMBOL(gamep_unknval_12);	/* 0x1777A0 */
+.global EXPORT_SYMBOL(nav_stats__ThisTurn);	/* 0x1777A4 */
+.global EXPORT_SYMBOL(gamep_unknval_14);
+.global EXPORT_SYMBOL(gamep_unknval_16);	/* 0x1777B0 */
 .global EXPORT_SYMBOL(shield_frm);			/* 0x1777B8 */
 .global EXPORT_SYMBOL(gamep_scene_effect_type);	/* 0x1777C8 */
 .global EXPORT_SYMBOL(word_17FA58);			/* 0x17FA58 */
@@ -5857,13 +5871,13 @@ GLOBAL_FUNC(ASM_save_crypto_make_hashtable)	/* 0x032E2C */
 		mov    %ah,data_1770f5
 		mov    %ah,EXPORT_SYMBOL(save_crypto_tables_state)
 		mov    $0x1,%eax
-		mov    %edx,save_hashtbl_verify_code
+		mov    %edx,EXPORT_SYMBOL(save_hashtbl_verify_code)
 		call   ac_save_crypto_transform1
 		mov    $0x1,%eax
 		call   ac_save_crypto_transform2
 		mov    $0x1,%eax
 		call   ac_save_crypto_transform3
-		mov    save_hashtbl_verify_code,%edx
+		mov    EXPORT_SYMBOL(save_hashtbl_verify_code),%edx
 		pop    %edx
 		pop    %ebx
 		ret
@@ -5986,7 +6000,7 @@ GLOBAL_FUNC(ASM_PacketRecord_Write)	/* 0x035210 */
 		mov    %eax,%edx
 		cmpb   $0x0,in_network_game
 		jne    jump_3527c
-		cmpl   $0xffffffff,packet_rec_fh
+		cmpl   $0xffffffff,EXPORT_SYMBOL(packet_rec_fh)
 		je     jump_3527c
 		mov    (%edx),%ax
 		mov    %ax,(%esp)
@@ -6008,7 +6022,7 @@ GLOBAL_FUNC(ASM_PacketRecord_Write)	/* 0x035210 */
 		mov    $0xc,%ebx
 	jump_35270:
 		mov    %esp,%edx
-		mov    packet_rec_fh,%eax
+		mov    EXPORT_SYMBOL(packet_rec_fh),%eax
 		call   ac_LbFileWrite
 	jump_3527c:
 		add    $0xc,%esp
@@ -6025,7 +6039,7 @@ GLOBAL_FUNC(ASM_PacketRecord_Read)	/* 0x035284 */
 		push   %edx
 		sub    $0xc,%esp
 		mov    %eax,%ecx
-		mov    packet_rec_fh,%edx
+		mov    EXPORT_SYMBOL(packet_rec_fh),%edx
 		cmp    $0xffffffff,%edx
 		je     jump_352f7
 		mov    $0x4,%ebx
@@ -6041,7 +6055,7 @@ GLOBAL_FUNC(ASM_PacketRecord_Read)	/* 0x035284 */
 		je     jump_352d1
 		mov    $0x8,%ebx
 		lea    0x4(%esp),%edx
-		mov    packet_rec_fh,%eax
+		mov    EXPORT_SYMBOL(packet_rec_fh),%eax
 		call   ac_LbFileRead
 	jump_352d1:
 		mov    (%esp),%eax
@@ -6074,11 +6088,11 @@ GLOBAL_FUNC (ASM_opti_smack_malloc)
 		push   %ebx
 		push   %ecx
 		push   %edx
-		mov    scratch_malloc_mem,%edx
-		mov    smack_malloc_used_tot,%ebx
+		mov    EXPORT_SYMBOL(scratch_malloc_mem),%edx
+		mov    EXPORT_SYMBOL(smack_malloc_used_tot),%ebx
 		add    %ebx,%edx
 		lea    (%ebx,%eax,1),%ecx
-		mov    %ecx,smack_malloc_used_tot
+		mov    %ecx,EXPORT_SYMBOL(smack_malloc_used_tot)
 		mov    %edx,%eax
 		pop    %edx
 		pop    %ecx
@@ -6091,7 +6105,7 @@ GLOBAL_FUNC (ASM_smack_malloc_free_all)
 /*----------------------------------------------------------------*/
 		push   %edx
 		xor    %edx,%edx
-		mov    %edx,smack_malloc_used_tot
+		mov    %edx,EXPORT_SYMBOL(smack_malloc_used_tot)
 		pop    %edx
 		ret
 
@@ -12412,7 +12426,7 @@ quick_light_unkn_func_08:	/* 0x044D74 */
 		pop    %esi
 		ret    $0x8
 	jump_44ef3:
-		incl   data_176d6c
+		incl   EXPORT_SYMBOL(dword_176D6C)
 	jump_44ef9:
 		add    $0x8,%esp
 		pop    %edi
@@ -63262,13 +63276,6 @@ GLOBAL_FUNC(ASM_sub_73C64)	/* 0x73C64 */
 
 
 /*----------------------------------------------------------------*/
-ASM_engine_reset:	/* 0x074398 */
-/*----------------------------------------------------------------*/
-		mov    engine_mem_alloc_ptr,%eax
-		jmp    ac_LbMemoryFree
-
-
-/*----------------------------------------------------------------*/
 GLOBAL_FUNC (ASM_init_level_3d)	/* 0x07445C */
 /*----------------------------------------------------------------*/
 		push   %ebx
@@ -64049,10 +64056,10 @@ GLOBAL_FUNC(ASM_init_level)	/* 0x074CDC */
 		call   ac_play_sample_using_heap
 	jump_750ae:
 		xor    %edx,%edx
-		mov    %edx,gamep_unknval_10
-		mov    %edx,gamep_unknval_12
-		mov    %edx,nav_stats__ThisTurn
-		mov    %edx,gamep_unknval_16
+		mov    %edx,EXPORT_SYMBOL(gamep_unknval_10)
+		mov    %edx,EXPORT_SYMBOL(gamep_unknval_12)
+		mov    %edx,EXPORT_SYMBOL(nav_stats__ThisTurn)
+		mov    %edx,EXPORT_SYMBOL(gamep_unknval_16)
 		mov    $0x1,%dh
 		xor    %eax,%eax
 		mov    %dh,EXPORT_SYMBOL(ingame)+0x98D # ingame.byte_180CB1
@@ -113574,13 +113581,13 @@ GLOBAL_FUNC(ASM_build_navigate_path_to_person)	/* 0x0BFD00 */
 		jne    jump_bfef9
 		movl   $0x1,g_fat_data__PathLength
 		mov    0x18(%ecx),%eax
-		mov    gamep_unknval_14,%edx
+		mov    EXPORT_SYMBOL(gamep_unknval_14),%edx
 		mov    %eax,g_fat_data__WayPoints__x8
 		mov    0x20(%ecx),%eax
 		inc    %edx
 		mov    %eax,g_fat_data__WayPoints__y8
 		mov    %esi,%eax
-		mov    %edx,gamep_unknval_14
+		mov    %edx,EXPORT_SYMBOL(gamep_unknval_14)
 		jmp    jump_c0283
 	jump_bfef9:
 		cmpw   $0x0,0x6e(%esi)
@@ -113748,11 +113755,11 @@ GLOBAL_FUNC(ASM_build_navigate_path_to_person)	/* 0x0BFD00 */
 		mov    %eax,0xc(%esp)
 	jump_c00e5:
 		mov    (%esp),%eax
-		mov    nav_stats__ThisTurn,%ebp
+		mov    EXPORT_SYMBOL(nav_stats__ThisTurn),%ebp
 		mov    0x8(%esp),%edx
 		inc    %ebp
 		sub    %edx,%eax
-		mov    %ebp,nav_stats__ThisTurn
+		mov    %ebp,EXPORT_SYMBOL(nav_stats__ThisTurn)
 		cltd
 		xor    %edx,%eax
 		sub    %edx,%eax
@@ -114013,14 +114020,14 @@ GLOBAL_FUNC(ASM_build_navigate_path_to_face)	/* 0x0C0298 */
 		mov    (%esp),%eax
 		mov    0x4(%esp),%edx
 		push   $0xfffffffe
-		mov    nav_stats__ThisTurn,%ebx
+		mov    EXPORT_SYMBOL(nav_stats__ThisTurn),%ebx
 		shl    $0x8,%eax
 		shl    $0x8,%edx
 		inc    %ebx
 		mov    %eax,0x4(%esp)
 		mov    %edx,0x8(%esp)
 		push   %edx
-		mov    %ebx,nav_stats__ThisTurn
+		mov    %ebx,EXPORT_SYMBOL(nav_stats__ThisTurn)
 		mov    $g_nav_data,%ebx
 		push   %eax
 		mov    0x18(%esp),%eax
@@ -114198,12 +114205,12 @@ GLOBAL_FUNC(ASM_build_navigate_path_to_face_xz)	/* 0x0C04C8 */
 		push   $0xfffffffe
 		mov    0x8(%esp),%edx
 		shl    $0x8,%edi
-		mov    nav_stats__ThisTurn,%ebx
+		mov    EXPORT_SYMBOL(nav_stats__ThisTurn),%ebx
 		push   %edi
 		shl    $0x8,%ebp
 		inc    %ebx
 		push   %ebp
-		mov    %ebx,nav_stats__ThisTurn
+		mov    %ebx,EXPORT_SYMBOL(nav_stats__ThisTurn)
 		mov    $g_nav_data,%ebx
 		push   %edx
 		movswl %ax,%edx
@@ -114352,7 +114359,7 @@ GLOBAL_FUNC(ASM_build_navigate_path)	/* 0x0C06D0 */
 		cmp    0xe(%edi),%dl
 		jne    jump_c0818
 		mov    $0x1,%edi
-		mov    gamep_unknval_14,%ebp
+		mov    EXPORT_SYMBOL(gamep_unknval_14),%ebp
 		shl    $0x8,%ebx
 		shl    $0x8,%ecx
 		mov    %esi,%eax
@@ -114360,7 +114367,7 @@ GLOBAL_FUNC(ASM_build_navigate_path)	/* 0x0C06D0 */
 		mov    %ebx,g_fat_data__WayPoints__x8
 		add    %edi,%ebp
 		mov    %ecx,g_fat_data__WayPoints__y8
-		mov    %ebp,gamep_unknval_14
+		mov    %ebp,EXPORT_SYMBOL(gamep_unknval_14)
 		call   use_nav_data
 		jmp    jump_c0a88
 	jump_c0818:
@@ -114412,7 +114419,7 @@ GLOBAL_FUNC(ASM_build_navigate_path)	/* 0x0C06D0 */
 		mov    0x4(%esp),%edi
 		push   $0xfffffffe
 		mov    0x1e(%esp),%ebp
-		mov    nav_stats__ThisTurn,%edx
+		mov    EXPORT_SYMBOL(nav_stats__ThisTurn),%edx
 		shl    $0x8,%ebx
 		shl    $0x8,%edi
 		sar    $0x10,%ebp
@@ -114424,7 +114431,7 @@ GLOBAL_FUNC(ASM_build_navigate_path)	/* 0x0C06D0 */
 		sar    $0x10,%edi
 		push   %ebp
 		shl    $0x8,%edi
-		mov    %edx,nav_stats__ThisTurn
+		mov    %edx,EXPORT_SYMBOL(nav_stats__ThisTurn)
 		push   %edi
 		mov    0x10(%esp),%eax
 		mov    $0xffffffff,%edx
@@ -114464,10 +114471,10 @@ GLOBAL_FUNC(ASM_build_navigate_path)	/* 0x0C06D0 */
 		mov    %dx,0x10(%esp)
 		mov    0x20(%esp),%edx
 		mov    %dx,0x14(%esp)
-		mov    nav_stats__ThisTurn,%edx
+		mov    EXPORT_SYMBOL(nav_stats__ThisTurn),%edx
 		inc    %edx
 		mov    %bx,0x18(%esp)
-		mov    %edx,nav_stats__ThisTurn
+		mov    %edx,EXPORT_SYMBOL(nav_stats__ThisTurn)
 	jump_c0977:
 		xor    %edx,%edx
 		mov    %ax,%dx
@@ -114605,11 +114612,11 @@ ariadne_initialise_route:
 		sar    $0x8,%edx
 		mov    %ebp,%eax
 		mov    %edx,(%esp)
-		mov    gamep_unknval_14,%edx
+		mov    EXPORT_SYMBOL(gamep_unknval_14),%edx
 		sar    $0x8,%eax
 		inc    %edx
 		shl    $0x7,%eax
-		mov    %edx,gamep_unknval_14
+		mov    %edx,EXPORT_SYMBOL(gamep_unknval_14)
 		mov    (%esp),%edx
 		add    %eax,%edx
 		lea    0x0(,%edx,8),%eax
@@ -114657,11 +114664,11 @@ ariadne_initialise_route:
 		mov    data_1aa3b0,%edi
 		call   ac_triangulation_select
 		push   $0xfffffffe
-		mov    nav_stats__ThisTurn,%ecx
+		mov    EXPORT_SYMBOL(nav_stats__ThisTurn),%ecx
 		mov    0x18(%esi),%eax
 		inc    %ecx
 		push   %ebx
-		mov    %ecx,nav_stats__ThisTurn
+		mov    %ecx,EXPORT_SYMBOL(nav_stats__ThisTurn)
 		mov    0x20(%esi),%ebx
 		mov    %edx,%ecx
 		mov    %eax,%edx
@@ -114755,11 +114762,11 @@ build_tank_path:	/* 0x0C0C58 */
 		sar    $0x8,%edx
 		mov    %ebp,%eax
 		mov    %edx,(%esp)
-		mov    gamep_unknval_14,%edx
+		mov    EXPORT_SYMBOL(gamep_unknval_14),%edx
 		sar    $0x8,%eax
 		inc    %edx
 		shl    $0x7,%eax
-		mov    %edx,gamep_unknval_14
+		mov    %edx,EXPORT_SYMBOL(gamep_unknval_14)
 		mov    (%esp),%edx
 		add    %eax,%edx
 		lea    0x0(,%edx,8),%eax
@@ -114811,11 +114818,11 @@ build_tank_path:	/* 0x0C0C58 */
 		mov    data_1aa3a8,%edi
 		call   ac_triangulation_select
 		push   $0xfffffffe
-		mov    nav_stats__ThisTurn,%ecx
+		mov    EXPORT_SYMBOL(nav_stats__ThisTurn),%ecx
 		mov    0x18(%esi),%eax
 		inc    %ecx
 		push   %ebx
-		mov    %ecx,nav_stats__ThisTurn
+		mov    %ecx,EXPORT_SYMBOL(nav_stats__ThisTurn)
 		mov    0x20(%esi),%ebx
 		mov    %edx,%ecx
 		mov    %eax,%edx
@@ -130255,27 +130262,6 @@ GLOBAL (tag_current)	/* 0x1550F0 */
 		.byte	0xff
 		.align	4
 
-GLOBAL (selected_net_session)
-		.byte	0xff
-GLOBAL (selected_net_user)
-		.byte	0xff
-		.ascii  "\xff\x00"
-GLOBAL (byte_155170)	/* 0x155170 */
-		.ascii  "\x32\xae\x57\xf4"
-GLOBAL (byte_155174)	/* 0x155174 */
-		.byte	0xa6
-GLOBAL (byte_155175)	/* 0x155175 */
-		.ascii  "\xa7\xa8\xa9\xaa\xab\xac\xad\xae"
-		.ascii  "\x00\x00\x00"
-GLOBAL (byte_155180)	/* 0x155180 */
-		.byte	0x6d
-GLOBAL (byte_155181)	/* 0x155181 */
-		.ascii  "\x6f\x41\x69\xa2\xec\xfd\xfe\x57"
-GLOBAL (byte_155189)
-		.byte	0xf7
-GLOBAL (word_15518A)	/* 0x15518A */
-		.ascii  "\xff\xff"
-
 GLOBAL (save_slot)	/* 0x1551D8 */
 		.ascii  "\xff\xff"
 		.align  4
@@ -130518,6 +130504,7 @@ GLOBAL (dword_176CBC)	/* 0x176CBC */
 		.long	0x0
 GLOBAL (dword_176CC0)	/* 0x176CC0 */
 		.long	0x0
+		.align  4
 
 GLOBAL (dword_176CC8)	/* 0x176CC8 */
 		.long	0x0
@@ -130532,16 +130519,9 @@ GLOBAL (unkn1_pos_y)	/* 0x176CD8 */
 GLOBAL (unkn1_spr)		/* 0x176CDC */
 		.long	0x0
 
-data_176d6c:
+GLOBAL (dword_176D6C)	/* 0x176d6c */
 		.long	0x0
 
-GLOBAL (thing_on_face)	/* 0x176D90 */
-		.fill   0xa8
-GLOBAL (word_176E38)
-		.short  0x0
-		.short  0x0
-GLOBAL (save_mortal_salt)	/* 0x176E3C */
-		.long	0x0
 save_hashtbl_01:	/* 0x176E40 */
 		.fill   0xdc
 data_176f1c:
@@ -130564,15 +130544,7 @@ data_1770f9:
 		.byte	0x0
 data_1770fa:
 		.short  0x0
-save_hashtbl_verify_code:	/* 0x1770FC */
-		.ascii  "\x00\x00\x00"
-data_1770ff:
-		.byte	0x0
-GLOBAL (language_3str)	/* 0x177100 */
-		.fill   0x4
-GLOBAL (packet_rec_fh)
-		.long	0x0
-GLOBAL (smack_malloc_used_tot)	/* 0x177108 */
+GLOBAL (save_hashtbl_verify_code)	/* 0x1770FC */
 		.long	0x0
 
 /* static ulong last_sel_agent_turn[8] */
@@ -130601,44 +130573,10 @@ data_177148:
 data_177150:
 		.fill   0x334
 
-GLOBAL (word_1774E8)	/* 0x1774E8 no function - remove pending */
+GLOBAL (word_1774E8)	/* 0x1774E8 no purpose - remove pending */
 		.fill   0x258
-
-GLOBAL (engine_mem_alloc_ptr)	/* 0x177744 */
+GLOBAL (dword_177790)	/* 0x177790 no purpose - remove pending */
 		.long	0x0
-GLOBAL (scratch_malloc_mem)	/* 0x177748 */
-		.long	0x0
-GLOBAL (unkn_mech_stct7)	/* 0x17774C */
-		.long	0x0
-GLOBAL (dword_177750)	/* 0x177750 */
-		.long	0x0
-GLOBAL (cd_drive)	/* 0x177754 */
-		.fill   0x34
-GLOBAL (unkn_mech_var10)	/* 0x177788 */
-		.long	0x0
-GLOBAL (unkn_mech_var11)	/* 0x17778C */
-		.long	0x0
-GLOBAL (dword_177790)	/* 0x177790 */
-		.long	0x0
-GLOBAL (map_bnb)	/* 0x177794 */
-		.byte	0x0
-		.byte	0x0
-		.byte	0x0
-		.byte	0x0
-GLOBAL (gamep_unknval_10)	/* 0x177798 */
-		.long	0x0
-GLOBAL (gamep_unknval_11)
-		.long	0x0
-GLOBAL (gamep_unknval_12)	/* 0x1777A0 */
-		.long	0x0
-GLOBAL (nav_stats__ThisTurn)	/* 0x1777A4 */
-		.long	0x0
-GLOBAL (gamep_unknval_14)
-		.long	0x0
-GLOBAL (gamep_unknval_15)
-		.long	0x0
-GLOBAL (gamep_unknval_16)	/* 0x1777B0 */
-		.fill   0x8
 
 GLOBAL (my_paths)	/* 0x1777CC */
 		.byte	0x0

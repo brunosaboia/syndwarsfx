@@ -155,9 +155,6 @@ extern long unkn01_pos_y;
 extern ushort current_map;
 extern short current_level;
 
-extern void *engine_mem_alloc_ptr;
-extern u32 engine_mem_alloc_size;
-
 extern ubyte *scratch_buf1;
 
 extern ushort game_level_unique_id;
@@ -167,7 +164,6 @@ extern ubyte game_level_unkn2[40];
 extern ushort word_1531E0;
 
 extern ubyte *spare_map_buffer;
-extern ushort word_176E38;
 
 extern ubyte net_service_started;
 
@@ -198,8 +194,6 @@ extern ubyte scientists_lost;
 extern ulong new_mods_researched;
 extern ulong new_weapons_researched;
 
-extern sbyte selected_net_session;
-extern sbyte selected_net_user;
 extern ubyte net_player_teams[8];
 extern long dword_153194;
 

@@ -118,8 +118,7 @@ ushort next_bezier_pt = 1;
 
 ushort unkn3de_len = 0;
 
-extern uint dword_177790;
-extern struct BillboardNBreakout map_bnb;
+struct BillboardNBreakout map_bnb;
 
 void debug_level(const char *text, int player)
 {
@@ -1097,7 +1096,6 @@ void load_level_pc(short level, short missi, ubyte reload)
         int i;
 
         word_1C8446 = 1;
-        word_176E38 = 0;
 
         fmtver = load_level_pc_handle(lev_fh);
 
@@ -1704,13 +1702,11 @@ void load_map_bnb(ushort mapno)
         map_bnb.field_1 = 0;
         map_bnb.field_2 = 0;
         map_bnb.field_3 = 0;
-        dword_177790 = 0;
     }
     else
     {
         LbFileRead(fh, &map_bnb, 4);
         LbFileClose(fh);
-        dword_177790 = 2;
     }
     Amin = map_bnb.field_0;
     if (map_bnb.field_0 >= map_bnb.field_2)

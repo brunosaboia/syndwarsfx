@@ -51,6 +51,7 @@ extern ubyte save_crypto_data_state[3];
 char save_slot_names[SAVE_SLOTS_VISIBLE_COUNT][25] = {0};
 char save_active_desc[25];
 s32 save_slot_base = 0;
+u32 save_mortal_salt = 0;
 
 /******************************************************************************/
 

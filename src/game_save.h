@@ -27,8 +27,6 @@ extern "C" {
 /******************************************************************************/
 #define SAVE_SLOTS_VISIBLE_COUNT 8
 
-extern ulong save_mortal_salt;
-
 extern ubyte *save_game_buffer;
 extern char save_active_desc[25];
 extern char login_name[16];

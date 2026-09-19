@@ -32,6 +32,9 @@ extern "C" {
 /******************************************************************************/
 extern const uint starting_cash_amounts[];
 
+extern sbyte selected_net_session;
+extern sbyte selected_net_user;
+
 void init_net_screen_boxes(void);
 void net_sessionlist_clear(void);
 void net_unkn2_names_clear(void);

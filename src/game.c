@@ -253,17 +253,15 @@ u32 active_flags_general_unkn01 = 0;
 
 extern long dword_1DDECC;
 
-u32 engine_mem_alloc_size = 5900000;
-
 extern struct GamePanel unknstrct7_arr2[];
 
-extern long gamep_unknval_10;
-extern long gamep_unknval_11;
-extern long gamep_unknval_12;
-extern long nav_stats__ThisTurn;
-extern long gamep_unknval_14;
-extern long gamep_unknval_15;
-extern long gamep_unknval_16;
+s32 gamep_unknval_10 = 0;
+s32 gamep_unknval_11 = 0;
+s32 gamep_unknval_12 = 0;
+u32 nav_stats__ThisTurn = 0;
+s32 gamep_unknval_14 = 0;
+s32 gamep_unknval_15 = 0;
+s32 gamep_unknval_16 = 0;
 
 extern long dword_155010;
 extern long dword_155014;

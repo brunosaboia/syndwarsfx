@@ -64,6 +64,9 @@ const int serial_speeds[] = {
   9600, 14400, 19200, 28800, 38400, 57600, 76800, 115200,
 };
 
+const TbPixel byte_155170[] = {
+    50, 174, 87, 244,
+};
 struct ScreenButton net_INITIATE_button = {0};
 struct ScreenButton net_groups_LOGON_button = {0};
 struct ScreenButton unkn8_EJECT_button = {0};
@@ -83,11 +86,6 @@ struct ScreenButton net_protocol_option_button = {0};
 
 char net_proto_param_text[8] = "0000";
 
-extern ubyte byte_155174; // = 166;
-extern ubyte byte_155175[];
-extern ubyte byte_155180; // = 109;
-extern ubyte byte_155181[];
-
 int unkn_rate = 19200;
 char net_baudrate_text[8] = "19200";
 
@@ -96,12 +94,14 @@ extern ubyte byte_1C4805;
 extern ubyte byte_1C4806;
 extern ubyte byte_1C4994;
 extern ubyte net_autostart_done;
-extern ubyte byte_155170[4];
 extern char net_unkn1_text[25];
 extern char byte_1811E2[16];
 TbClockMSec sessionlist_last_update[MONITORED_SESSIONS_COUNT] = {0};
 extern ubyte byte_1C6D48;
 extern struct TbNetworkSessionList unkstruct04_arr[MONITORED_SESSIONS_COUNT];
+
+sbyte selected_net_session = -1;
+sbyte selected_net_user = -1;
 
 ushort grpaint_last_pt_x[8];
 ushort grpaint_last_pt_y[8];

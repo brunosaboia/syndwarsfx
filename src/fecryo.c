@@ -68,10 +68,6 @@ ubyte current_frame = 0;
 
 short word_15511E = -1;
 
-extern ubyte byte_155174; // = 166;
-extern ubyte byte_155175[];
-extern ubyte byte_155180; // = 109;
-extern ubyte byte_155181[];
 extern ubyte cheat_research_cybmods;
 extern ubyte byte_1C4978;
 extern ubyte byte_1C4979;

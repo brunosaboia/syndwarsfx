@@ -104,6 +104,15 @@ extern ubyte research_curr_wep_daily_done;
 extern ubyte research_curr_mod_daily_done;
 extern ubyte byte_1C497D;
 
+ubyte byte_155174 = 166;
+ubyte byte_155175[] = {
+  167, 168, 169, 170, 171, 172, 173, 174,
+};
+ubyte byte_155180 = 109;
+ubyte byte_155181[] = {
+  111, 65, 105, 162, 236, 253, 254, 87,
+};
+
 ubyte game_projector_speed = 0;
 ubyte enter_game = false;
 ubyte game_system_screen = SySc_NONE;
