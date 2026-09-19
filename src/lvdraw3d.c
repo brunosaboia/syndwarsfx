@@ -74,7 +74,7 @@ s32 dword_176CBC = 0;
 short word_19CC64;
 short word_19CC66;
 TbBool nuclear_overexposure = false;
-
+ubyte byte_1C8444 = 0;
 
 /** Height of the wobbly surface at the given map spot on the given animation
  * turn.

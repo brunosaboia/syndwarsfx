@@ -9696,17 +9696,17 @@ GLOBAL_FUNC(ASM_point_unkn_func_03)	/* 0x042864 */
 		push   %esi
 		xor    %ebx,%ebx
 		mov    (%eax),%ecx
-		mov    unkn2_pos_x,%bx
+		mov    EXPORT_SYMBOL(unkn2_pos_x),%bx
 		sar    $0x10,%ecx
 		imul   %ebx,%ecx
 		xor    %edx,%edx
 		mov    0x2(%eax),%ebx
-		mov    unkn2_pos_y,%dx
+		mov    EXPORT_SYMBOL(unkn2_pos_y),%dx
 		sar    $0x10,%ebx
 		imul   %edx,%ebx
 		xor    %esi,%esi
 		mov    0x4(%eax),%edx
-		mov    unkn2_pos_z,%si
+		mov    EXPORT_SYMBOL(unkn2_pos_z),%si
 		sar    $0x10,%edx
 		imul   %esi,%edx
 		sar    $0x6,%ecx
@@ -47736,7 +47736,7 @@ GLOBAL_FUNC(ASM_create_train_carriage)	/* 0x61628 */
 		movb   $0x1d,0x8(%eax,%ebp,1)
 		shl    $0x5,%ebx
 		mov    %ebx,0x1c(%eax,%ebp,1)
-		mov    %di,data_1c83e2
+		mov    %di,EXPORT_SYMBOL(word_1C83E2)
 		mov    0x52(%eax,%ebp,1),%ax
 		and    $0xffff,%eax
 		call   func_4225c
@@ -47770,7 +47770,7 @@ GLOBAL_FUNC(ASM_create_train_carriage)	/* 0x61628 */
 		add    $EXPORT_SYMBOL(local_mats),%eax
 		mov    %bx,EXPORT_SYMBOL(next_local_mat)
 		call   ac_matrix_identity_fill
-		mov    %di,data_1c83e8
+		mov    %di,EXPORT_SYMBOL(word_1C83E8)
 	jump_617e7:
 		mov    %edi,%eax
 		add    $0x10,%esp
@@ -62493,9 +62493,9 @@ GLOBAL_FUNC (ASM_init_level_3d)	/* 0x07445C */
 		cmp    $0xa,%edi
 		jl     jump_7454c
 		mov    $0x40,%edx
-		mov    %dx,unkn2_pos_x
-		mov    %dx,unkn2_pos_y
-		mov    %dx,unkn2_pos_z
+		mov    %dx,EXPORT_SYMBOL(unkn2_pos_x)
+		mov    %dx,EXPORT_SYMBOL(unkn2_pos_y)
+		mov    %dx,EXPORT_SYMBOL(unkn2_pos_z)
 	jump_745aa:
 		pop    %ebp
 		pop    %edi
@@ -106984,13 +106984,13 @@ init_unkn1thing:	/* 0x0BBFC0 */
 		mov    %ax,0x4e(%edx)
 		mov    0x18(%esp),%eax
 		inc    %ecx
-		mov    %ax,unkn2_pos_x
+		mov    %ax,EXPORT_SYMBOL(unkn2_pos_x)
 		mov    0x1c(%esp),%eax
 		xor    %dl,%dl
-		mov    %ax,unkn2_pos_y
+		mov    %ax,EXPORT_SYMBOL(unkn2_pos_y)
 		mov    0x20(%esp),%eax
 		mov    %cx,EXPORT_SYMBOL(game_level_unique_id)
-		mov    %ax,unkn2_pos_z
+		mov    %ax,EXPORT_SYMBOL(unkn2_pos_z)
 		mov    %ebp,%eax
 		xor    %ecx,%ecx
 		sar    $0x8,%eax
@@ -129720,26 +129720,13 @@ GLOBAL (dword_1C6DE8)	/* 0x1c6de8 */
 		.long	0x0
 		.align  4
 
-data_1c83e2:
+GLOBAL (word_1C83E2)	/* 0x1C83E2 */
 		.short  0x0
-GLOBAL (byte_1C83E4)	/* 0x1C83E4 */
-		.long	0x0
-data_1c83e8:
-		.fill   0x1e
-GLOBAL (unkn2_pos_x)	/* 0x1C8406 */
+
+GLOBAL (word_1C83E8)	/* 0x1C83E8 */
 		.short  0x0
-GLOBAL (unkn2_pos_y)	/* 0x1C8408 */
-		.short  0x0
-GLOBAL (unkn2_pos_z)	/* 0x1C840A */
-		.short  0x0
-		.fill   0x1c
-GLOBAL (data_1c8428)	/* 0x1c8428 */
-		.long	0x0
-		.fill   0x18
-GLOBAL (byte_1C8444)	/* 0x1C8444 */
-		.byte	0x0
-		.byte	0x0
-GLOBAL (word_1C8446)
+
+GLOBAL (word_1C8446)	/* 0x1C8446 */
 		.short  0x0
 GLOBAL (current_map)	/* 0x1C8448 */
 		.short  0x0

@@ -244,7 +244,7 @@ ulong stored_level3d_inuse;
 
 TbPixel linear_vec_pal[PALETTE_8b_COLORS];
 
-extern int data_1c8428;
+int data_1c8428;
 const char *primvehobj_fname = "qdata/primveh.obj";
 
 extern s32 dword_152E38[5]; // = {-1, -1, -1, -1, -1,};

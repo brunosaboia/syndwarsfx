@@ -55,7 +55,7 @@ const ushort pers_anims_wth_shadows[] = {
   1, 33, 113, 241, 273, 161, 193, 721, 753, 321, 401, 433, 33,
 };
 
-extern ubyte byte_1C83E4;
+ubyte byte_1C83E4 = 0;
 
 /** Callback for setting height of shadow corners.
  */
