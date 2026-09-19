@@ -514,7 +514,7 @@ GLOBAL_FUNC(ASM_place_default_player)	/* 0x0101F0 */
 		imul   $0x1aa,%ecx,%ecx
 		add    %edi,%ecx
 		inc    %eax
-		movb   $0x0,data_1a63fa(%ecx,%edx,1)
+		movb   $0x0,EXPORT_SYMBOL(players)+0x11A(%ecx,%edx,1) # players[].WepDelays[]
 	jump_1053a:
 		xor    %edx,%edx
 		mov    %ax,%dx
@@ -1619,9 +1619,9 @@ GLOBAL_FUNC(ASM_draw_hud_lock_target)	/* 0x02017C */
 		add    %eax,%ebx
 		xor    %esi,%esi
 		mov    EXPORT_SYMBOL(players)+0x0E6(%ebx),%eax # players[].UserVY[]-2
-		mov    data_1a647a(%ebx),%si
+		mov    EXPORT_SYMBOL(players)+0x19A(%ebx),%si # players[].UserVX[]
 		sar    $0x10,%eax
-		mov    data_1a6482(%ebx),%bx
+		mov    EXPORT_SYMBOL(players)+0x1A2(%ebx),%bx
 		and    $0xffff,%ebx
 		jmp    jump_2027e
 	jump_20275:
@@ -9990,7 +9990,7 @@ GLOBAL_FUNC(ASM_apply_full_light)	/* 0x042BA0 */
 		mov    %di,%bx
 		cmp    %ebx,%edx
 		jge    jump_42be2
-		cmp    data_19f9c4(%eax),%si
+		cmp    EXPORT_SYMBOL(unkn_full_lights)+0x08(%eax),%si
 		je     jump_42cee
 		jmp    jump_42bc6
 	jump_42be2:
@@ -10047,13 +10047,13 @@ GLOBAL_FUNC(ASM_apply_full_light)	/* 0x042BA0 */
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
 		mov    0x8(%esp),%edx
-		mov    %dx,data_19f9be(,%eax,2)
+		mov    %dx,EXPORT_SYMBOL(unkn_full_lights)+0x02(,%eax,2)
 		mov    0x4(%esp),%edx
-		mov    %dx,data_19f9c0(,%eax,2)
+		mov    %dx,EXPORT_SYMBOL(unkn_full_lights)+0x04(,%eax,2)
 		mov    (%esp),%edx
-		mov    %dx,data_19f9c2(,%eax,2)
+		mov    %dx,EXPORT_SYMBOL(unkn_full_lights)+0x06(,%eax,2)
 		mov    EXPORT_SYMBOL(next_full_light),%dx
-		mov    %si,data_19f9c4(,%eax,2)
+		mov    %si,EXPORT_SYMBOL(unkn_full_lights)+0x08(,%eax,2)
 		dec    %edx
 		inc    %edi
 		mov    %dx,EXPORT_SYMBOL(unkn_full_lights)(,%eax,2)
@@ -25450,7 +25450,7 @@ func_4ef7d:
 		mov    %eax,%edx
 		xor    %eax,%eax
 		mov    %ch,%al
-		mov    data_1a63f6(%edx,%eax,1),%al
+		mov    EXPORT_SYMBOL(players)+0x116(%edx,%eax,1),%al # players[].FourPacks[16]
 		and    $0xff,%eax
 		cmp    $0x4,%eax
 		je     jump_4efc3
@@ -25953,7 +25953,7 @@ func_4f499:
 		mov    %eax,%edi
 		shl    $0x2,%eax
 		sub    %edi,%eax
-		mov    data_1a63f6(%ebx,%eax,1),%al
+		mov    EXPORT_SYMBOL(players)+0x116(%ebx,%eax,1),%al # players[].FourPacks[16]
 		and    $0xff,%eax
 		cmp    $0x4,%eax
 		jne    jump_4f4cc
@@ -26268,10 +26268,10 @@ func_4f7a8:
 		shl    $0x2,%eax
 		sub    %edx,%eax
 		mov    $0x1,%ch
-		mov    data_1a63f6(%eax,%ebp,1),%cl
+		mov    EXPORT_SYMBOL(players)+0x116(%eax,%ebp,1),%cl # players[].FourPacks[16]
 		add    %bl,%cl
 		xor    %edx,%edx
-		mov    %cl,data_1a63f6(%eax,%ebp,1)
+		mov    %cl,EXPORT_SYMBOL(players)+0x116(%eax,%ebp,1) # players[].FourPacks[16]
 		lea    -0x1(%edi),%eax
 		mov    %cl,%dl
 		mov    %al,%cl
@@ -26876,7 +26876,7 @@ func_4fdc8:
 		mov    %eax,%edx
 		xor    %eax,%eax
 		mov    %bl,%al
-		mov    data_1a63f6(%edx,%eax,1),%al
+		mov    EXPORT_SYMBOL(players)+0x116(%edx,%eax,1),%al # players[].FourPacks[16]
 		and    $0xff,%eax
 		cmp    $0x4,%eax
 		je     jump_4fe0f
@@ -27129,7 +27129,7 @@ func_5004c:
 		mov    %eax,%edx
 		xor    %eax,%eax
 		mov    %bh,%al
-		mov    data_1a63f6(%edx,%eax,1),%al
+		mov    EXPORT_SYMBOL(players)+0x116(%edx,%eax,1),%al # players[].FourPacks[16]
 		and    $0xff,%eax
 		cmp    $0x4,%eax
 		je     jump_50093
@@ -29836,12 +29836,12 @@ GLOBAL_FUNC(ASM_player_weapon_time)	/* 0x052290 */
 		shl    $0x5,%ecx
 		add    %ecx,%ebx
 		add    %ebx,%eax
-		mov    data_1a63fa(%eax),%bl
+		mov    EXPORT_SYMBOL(players)+0x11A(%eax),%bl # players[].WepDelays[]
 		test   %bl,%bl
 		je     jump_522bb
 		mov    %bl,%bh
 		dec    %bh
-		mov    %bh,data_1a63fa(%eax)
+		mov    %bh,EXPORT_SYMBOL(players)+0x11A(%eax) # players[].WepDelays[]
 		jmp    jump_522bb
 	jump_522f3:
 		testb  $0x10,0xf(%ebp)
@@ -29899,7 +29899,7 @@ GLOBAL_FUNC(ASM_player_weapon_time)	/* 0x052290 */
 		add    %eax,%ebx
 		xor    %eax,%eax
 		mov    0x99(%ebp),%al
-		mov    data_1a63fa(%ebx,%eax,1),%al
+		mov    EXPORT_SYMBOL(players)+0x11A(%ebx,%eax,1),%al # players[].WepDelays[]
 		xor    %ah,%ah
 	jump_5237a:
 		pop    %ebp
@@ -29944,7 +29944,7 @@ GLOBAL_FUNC(ASM_set_player_weapon_turn)	/* 0x052384 */
 		add    %eax,%edx
 		xor    %eax,%eax
 		mov    0x99(%ebx),%al
-		mov    %cl,data_1a63fa(%edx,%eax,1)
+		mov    %cl,EXPORT_SYMBOL(players)+0x11A(%edx,%eax,1) # players[].WepDelays[]
 		xor    %eax,%eax
 		mov    %cx,0x58(%ebx)
 		pop    %ecx
@@ -30927,7 +30927,7 @@ func_52d3d:  /* case 3 */
 		xor    %ah,%ah
 		and    $0x3,%al
 		and    $0xffff,%eax
-		mov    data_1a647a(%edx,%eax,2),%ax
+		mov    EXPORT_SYMBOL(players)+0x19A(%edx,%eax,2),%ax # players[].UserVX[]
 		and    $0xffff,%eax
 		mov    %eax,0x2c(%esi)
 		xor    %eax,%eax
@@ -30965,7 +30965,7 @@ func_52d3d:  /* case 3 */
 		and    $0x3,%dl
 		sub    %ebx,%eax
 		and    $0xffff,%edx
-		mov    data_1a6482(%eax,%edx,2),%ax
+		mov    EXPORT_SYMBOL(players)+0x1A2(%eax,%edx,2),%ax
 		and    $0xffff,%eax
 		movw   $0xffff,0x66(%esi)
 		jmp    jump_5328a
@@ -31273,7 +31273,7 @@ func_52d3d:  /* case 3 */
 		add    %eax,%ebx
 		xor    %eax,%eax
 		mov    0x99(%esi),%al
-		mov    %dl,data_1a63fa(%ebx,%eax,1)
+		mov    %dl,EXPORT_SYMBOL(players)+0x11A(%ebx,%eax,1) # players[].WepDelays[]
 		mov    %dx,0x58(%esi)
 		jmp    jump_53495
 	jump_5348a:
@@ -31315,7 +31315,7 @@ func_52d3d:  /* case 3 */
 		add    %eax,%ebx
 		xor    %eax,%eax
 		mov    0x99(%esi),%al
-		mov    %dl,data_1a63fa(%ebx,%eax,1)
+		mov    %dl,EXPORT_SYMBOL(players)+0x11A(%ebx,%eax,1) # players[].WepDelays[]
 		mov    %dx,0x58(%esi)
 		jmp    jump_5351d
 	jump_5350f:
@@ -31350,7 +31350,7 @@ func_52d3d:  /* case 3 */
 		xor    %ah,%ah
 		and    $0x3,%al
 		and    $0xffff,%eax
-		mov    data_1a647a(%edx,%eax,2),%ax
+		mov    EXPORT_SYMBOL(players)+0x19A(%edx,%eax,2),%ax # players[].UserVX[]
 		and    $0xffff,%eax
 		mov    %eax,0x2c(%esi)
 		xor    %eax,%eax
@@ -31386,7 +31386,7 @@ func_52d3d:  /* case 3 */
 		xor    %ah,%ah
 		and    $0x3,%al
 		and    $0xffff,%eax
-		mov    data_1a6482(%edx,%eax,2),%ax
+		mov    EXPORT_SYMBOL(players)+0x1A2(%edx,%eax,2),%ax
 		and    $0xffff,%eax
 		movw   $0xffff,0x66(%esi)
 		mov    %eax,0x34(%esi)
@@ -31428,7 +31428,7 @@ func_52d3d:  /* case 3 */
 		add    %ebx,%eax
 		xor    %ebx,%ebx
 		mov    0x99(%esi),%bl
-		mov    %dl,data_1a63fa(%ebx,%eax,1)
+		mov    %dl,EXPORT_SYMBOL(players)+0x11A(%ebx,%eax,1) # players[].WepDelays[]
 		mov    %dx,0x58(%esi)
 	jump_53694:
 		mov    0xd(%esi),%bh
@@ -33700,7 +33700,7 @@ GLOBAL_FUNC(ASM_process_protect_person)	/* 0x054B54 */
 		add    %eax,%eax
 		add    %edx,%eax
 		mov    0x14(%esp),%edx
-		mov    %dx,data_1a647a(%eax)
+		mov    %dx,EXPORT_SYMBOL(players)+0x19A(%eax) # players[].UserVX[]
 		xor    %eax,%eax
 		mov    0x54(%esi),%ax
 		sar    $0x2,%eax
@@ -33738,7 +33738,7 @@ GLOBAL_FUNC(ASM_process_protect_person)	/* 0x054B54 */
 		add    %eax,%eax
 		add    %edx,%eax
 		mov    0x1c(%esp),%edx
-		mov    %dx,data_1a6482(%eax)
+		mov    %dx,EXPORT_SYMBOL(players)+0x1A2(%eax)
 	jump_551d9:
 		mov    0xd(%esi),%ah
 		or     $0x8,%ah
@@ -37749,7 +37749,7 @@ GLOBAL_FUNC(ASM_thing_shoot_at_point)	/* 0x058770 */
 		add    %edx,%edx
 		add    %edx,%eax
 		mov    0x18(%esp),%edx
-		mov    %dx,data_1a647a(%eax)
+		mov    %dx,EXPORT_SYMBOL(players)+0x19A(%eax) # players[].UserVX[]
 		xor    %eax,%eax
 		mov    0x54(%esi),%ax
 		sar    $0x2,%eax
@@ -37769,7 +37769,7 @@ GLOBAL_FUNC(ASM_thing_shoot_at_point)	/* 0x058770 */
 		add    %edx,%eax
 		mov    0x1c(%esp),%edx
 		xor    %ebx,%ebx
-		mov    %dx,data_1a6482(%eax)
+		mov    %dx,EXPORT_SYMBOL(players)+0x1A2(%eax)
 		mov    0x54(%esi),%bx
 		sar    $0x2,%ebx
 		lea    0x0(,%ebx,8),%eax
@@ -118804,9 +118804,9 @@ GLOBAL_FUNC(ASM_process_vehicle_weapon)	/* 0x0C620C */
 		add    %edx,%eax
 		xor    %ebx,%ebx
 		xor    %edi,%edi
-		mov    data_1a647a(%eax),%bx
+		mov    EXPORT_SYMBOL(players)+0x19A(%eax),%bx # players[].UserVX[]
 		mov    EXPORT_SYMBOL(players)+0x0E8(%eax),%dx # players[].UserVY[]
-		mov    data_1a6482(%eax),%di
+		mov    EXPORT_SYMBOL(players)+0x1A2(%eax),%di
 		test   %dx,%dx
 		je     jump_c62e8
 		mov    EXPORT_SYMBOL(players)+0x0E6(%eax),%edx # players[].UserVY[]-2
@@ -118932,11 +118932,11 @@ GLOBAL_FUNC(ASM_process_mech_weapon)	/* 0x0C63AC */
 		add    %eax,%eax
 		add    %edx,%eax
 		xor    %edx,%edx
-		mov    data_1a647a(%eax),%dx
+		mov    EXPORT_SYMBOL(players)+0x19A(%eax),%dx # players[].UserVX[]
 		xor    %ecx,%ecx
 		mov    %edx,(%esp)
 		mov    EXPORT_SYMBOL(players)+0x0E8(%eax),%dx # players[].UserVY[]
-		mov    data_1a6482(%eax),%cx
+		mov    EXPORT_SYMBOL(players)+0x1A2(%eax),%cx
 		test   %dx,%dx
 		je     jump_c6442
 		mov    EXPORT_SYMBOL(players)+0x0E6(%eax),%ebx # players[].UserVY[]-2
@@ -127491,7 +127491,7 @@ GLOBAL_FUNC(ASM_init_agents)	/* 0x0CF8A0 */
 		mov    EXPORT_SYMBOL(cryo_agents)+0x0E5(%eax),%bl # cryo_agents.FourPacks + 1
 		mov    %bl,EXPORT_SYMBOL(players)+0x109(%edx) # players[].FourPacks[3]
 		mov    EXPORT_SYMBOL(cryo_agents)+0x0E8(%eax),%bl # cryo_agents.FourPacks + 4
-		mov    %bl,data_1a63f5(%edx)
+		mov    %bl,EXPORT_SYMBOL(players)+0x115(%edx) # players[].FourPacks[15]
 		mov    EXPORT_SYMBOL(cryo_agents)+0x0E7(%eax),%bl # cryo_agents.FourPacks + 3
 		add    $0x5,%eax
 		mov    %bl,EXPORT_SYMBOL(players)+0x111(%edx) # players[].FourPacks[0xb]
@@ -129082,20 +129082,10 @@ GLOBAL (group_actions)	/* 0x19F198 */
 		.align  4
 
 GLOBAL (unkn_full_lights)	/* 0x19F9BC */
-		.short  0x0
-data_19f9be:
-		.short  0x0
-data_19f9c0:
-		.short  0x0
-data_19f9c2:
-		.short  0x0
-data_19f9c4:
+		.fill   0x8
 		.fill   0x1ec
 GLOBAL (local_mats)		/* 0x19FBB0 */
-		.fill   0x8
-data_19fbb8:
-		.fill   0x18
-data_19fbd0:
+		.fill   0x20
 		.fill   0xdf0
 
 /* struct Thing *things;
@@ -129109,23 +129099,7 @@ GLOBAL (sthings)	/* 0x1A09E0 */
 /* PlayerInfo players[8];
  */
 GLOBAL (players)	/* 0x1a62e0 players+0x000  */
-		.fill   0x115
-data_1a63f5:
-		.byte	0x0
-data_1a63f6:
-		.long	0x0
-data_1a63fa:
-		.byte	0x0
-data_1a63fb:
-		.fill   0x7d
-data_1a6478:
-		.short  0x0
-data_1a647a:
-		.fill   0x6
-data_1a6480:
-		.short  0x0
-data_1a6482:
-		.fill   0xbae
+		.fill   0xD50
 
 GLOBAL (packets)	/* 0x1A7030 */
 		.fill   0x180
