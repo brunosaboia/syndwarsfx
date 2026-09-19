@@ -102772,36 +102772,36 @@ GLOBAL_FUNC (ASM_bang_set_detail)
 		mov    $0xba,%edi
 		mov    $0xb,%ebp
 		mov    $0x78,%eax
-		mov    %edx,bangdetail__circle
-		mov    %ebx,data_1a72c0
-		mov    %ecx,data_1a72c4
-		mov    %esi,data_1a72c8
-		mov    %edi,data_1a72cc
-		mov    %ebp,data_1a72d0
-		mov    %eax,data_1a72d4
-		mov    %ebx,data_1a72e4
-		mov    %ebx,data_1a72f0
+		mov    %edx,EXPORT_SYMBOL(bangdetail)+0x00 # bangdetail.circle[0].dangle
+		mov    %ebx,EXPORT_SYMBOL(bangdetail)+0x04 # bangdetail.circle[0].babynumber
+		mov    %ecx,EXPORT_SYMBOL(bangdetail)+0x08
+		mov    %esi,EXPORT_SYMBOL(bangdetail)+0x0C
+		mov    %edi,EXPORT_SYMBOL(bangdetail)+0x10
+		mov    %ebp,EXPORT_SYMBOL(bangdetail)+0x14
+		mov    %eax,EXPORT_SYMBOL(bangdetail)+0x18
+		mov    %ebx,EXPORT_SYMBOL(bangdetail)+0x28
+		mov    %ebx,EXPORT_SYMBOL(bangdetail)+0x34
 		mov    $0x11,%edx
 		mov    $0x2,%ecx
 		mov    $0x100,%esi
 		mov    $0x4,%ebx
 		mov    $0x3,%eax
-		mov    %edx,data_1a72d8
-		mov    %ecx,data_1a72e0
-		mov    %esi,bangdetail__sphere
-		mov    %ecx,data_1a72ec
-		mov    %esi,data_1a72e8
-		mov    %ebx,data_1a72f8
-		mov    %ebx,data_1a7304
-		mov    %eax,bangdetailmask
+		mov    %edx,EXPORT_SYMBOL(bangdetail)+0x1C
+		mov    %ecx,EXPORT_SYMBOL(bangdetail)+0x24 # bangdetail.sphere[0].babyshift
+		mov    %esi,EXPORT_SYMBOL(bangdetail)+0x20 # bangdetail.sphere[0].dangley
+		mov    %ecx,EXPORT_SYMBOL(bangdetail)+0x30
+		mov    %esi,EXPORT_SYMBOL(bangdetail)+0x2C
+		mov    %ebx,EXPORT_SYMBOL(bangdetail)+0x3C
+		mov    %ebx,EXPORT_SYMBOL(bangdetail)+0x48
+		mov    %eax,EXPORT_SYMBOL(bangdetail)+0x50 # bangdetail.mask
 		mov    $0x5,%edx
 		mov    $0x80,%ecx
 		mov    $0x8,%esi
 		mov    $0xf,%ebx
-		mov    %edx,data_1a72fc
-		mov    %ecx,data_1a72f4
-		mov    %esi,data_1a7308
-		mov    %ecx,data_1a7300
+		mov    %edx,EXPORT_SYMBOL(bangdetail)+0x40
+		mov    %ecx,EXPORT_SYMBOL(bangdetail)+0x38
+		mov    %esi,EXPORT_SYMBOL(bangdetail)+0x4C
+		mov    %ecx,EXPORT_SYMBOL(bangdetail)+0x44
 		mov    %ebx,EXPORT_SYMBOL(minimum_explode_and)
 		mov    $0x457,%edx
 		mov    $0x2,%ecx
@@ -102822,13 +102822,13 @@ GLOBAL_FUNC (ASM_bang_set_detail)
 		mov    $0x78,%edx
 		mov    $0x11,%ebx
 		mov    $0x46,%ecx
-		mov    %esi,bangdetail__circle
-		mov    %edi,data_1a72c0
-		mov    %ebp,data_1a72c4
-		mov    %eax,data_1a72c8
-		mov    %edx,data_1a72cc
-		mov    %ebx,data_1a72d0
-		mov    %ecx,data_1a72d4
+		mov    %esi,EXPORT_SYMBOL(bangdetail)+0x00 # bangdetail.circle[0].dangle
+		mov    %edi,EXPORT_SYMBOL(bangdetail)+0x04 # bangdetail.circle[0].babynumber
+		mov    %ebp,EXPORT_SYMBOL(bangdetail)+0x08
+		mov    %eax,EXPORT_SYMBOL(bangdetail)+0x0C
+		mov    %edx,EXPORT_SYMBOL(bangdetail)+0x10
+		mov    %ebx,EXPORT_SYMBOL(bangdetail)+0x14
+		mov    %ecx,EXPORT_SYMBOL(bangdetail)+0x18
 		mov    $0x1d,%esi
 		mov    $0x3,%edi
 		mov    $0x2,%ebp
@@ -102836,25 +102836,25 @@ GLOBAL_FUNC (ASM_bang_set_detail)
 		mov    $0x5,%edx
 		mov    $0x4,%ebx
 		mov    $0x80,%ecx
-		mov    %esi,data_1a72d8
-		mov    %edi,data_1a72e4
-		mov    %ebp,data_1a72e0
-		mov    %eax,bangdetail__sphere
-		mov    %edx,data_1a72f0
-		mov    %ebx,data_1a72ec
-		mov    %ecx,data_1a72e8
-		mov    %ebx,data_1a72f8
-		mov    %ecx,data_1a72f4
-		mov    %edx,data_1a7304
+		mov    %esi,EXPORT_SYMBOL(bangdetail)+0x1C
+		mov    %edi,EXPORT_SYMBOL(bangdetail)+0x28
+		mov    %ebp,EXPORT_SYMBOL(bangdetail)+0x24 # bangdetail.sphere[0].babyshift
+		mov    %eax,EXPORT_SYMBOL(bangdetail)+0x20 # bangdetail.sphere[0].dangley
+		mov    %edx,EXPORT_SYMBOL(bangdetail)+0x34
+		mov    %ebx,EXPORT_SYMBOL(bangdetail)+0x30
+		mov    %ecx,EXPORT_SYMBOL(bangdetail)+0x2C
+		mov    %ebx,EXPORT_SYMBOL(bangdetail)+0x3C
+		mov    %ecx,EXPORT_SYMBOL(bangdetail)+0x38
+		mov    %edx,EXPORT_SYMBOL(bangdetail)+0x48
 		mov    $0x8,%esi
 		mov    $0xd,%eax
 		mov    $0x66,%ebx
 		mov    $0x1,%ecx
 		mov    $0x1f,%edi
-		mov    %esi,data_1a72fc
-		mov    %eax,data_1a7308
-		mov    %ebx,data_1a7300
-		mov    %ecx,bangdetailmask
+		mov    %esi,EXPORT_SYMBOL(bangdetail)+0x40
+		mov    %eax,EXPORT_SYMBOL(bangdetail)+0x4C
+		mov    %ebx,EXPORT_SYMBOL(bangdetail)+0x44
+		mov    %ecx,EXPORT_SYMBOL(bangdetail)+0x50 # bangdetail.mask
 		mov    %edi,EXPORT_SYMBOL(minimum_explode_and)
 		mov    $0x1bc,%esi
 		mov    %ecx,EXPORT_SYMBOL(minimum_explode_depth)
@@ -124268,9 +124268,9 @@ GLOBAL_FUNC(ASM_process_bang)	/* 0x0CA078 */
 /*----------------------------------------------------------------*/
 func_ca100:
 /*----------------------------------------------------------------*/
-		mov    bangdetail__circle,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x00,%eax # bangdetail.circle[0].dangle
 		mov    %eax,0x20(%esp)
-		mov    data_1a72c0,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x04,%eax # bangdetail.circle[0].babynumber
 		mov    %eax,0x2c(%esp)
 	jump_ca112:
 		xor    %edx,%edx
@@ -124285,9 +124285,9 @@ func_ca100:
 /*----------------------------------------------------------------*/
 func_ca12a:
 /*----------------------------------------------------------------*/
-		mov    data_1a72c4,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x08,%eax
 		mov    %eax,0x20(%esp)
-		mov    data_1a72c8,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x0C,%eax
 		mov    %eax,0x2c(%esp)
 		jmp    jump_ca112
 
@@ -124295,9 +124295,9 @@ func_ca12a:
 /*----------------------------------------------------------------*/
 func_ca13e:
 /*----------------------------------------------------------------*/
-		mov    data_1a72cc,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x10,%eax
 		mov    %eax,0x20(%esp)
-		mov    data_1a72d0,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x14,%eax
 		mov    %eax,0x2c(%esp)
 		jmp    jump_ca112
 
@@ -124305,9 +124305,9 @@ func_ca13e:
 /*----------------------------------------------------------------*/
 func_ca152:
 /*----------------------------------------------------------------*/
-		mov    data_1a72d4,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x18,%eax
 		mov    %eax,0x20(%esp)
-		mov    data_1a72d8,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x1C,%eax
 		mov    %eax,0x2c(%esp)
 		jmp    jump_ca112
 
@@ -124420,11 +124420,11 @@ func_ca166:
 /*----------------------------------------------------------------*/
 func_ca299:
 /*----------------------------------------------------------------*/
-		mov    data_1a72e4,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x28,%eax
 		mov    %eax,0x2c(%esp)
-		mov    data_1a72e0,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x24,%eax # bangdetail.sphere[0].babyshift
 		mov    %eax,0x30(%esp)
-		mov    bangdetail__sphere,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x20,%eax # bangdetail.sphere[0].dangley
 		mov    %eax,0x28(%esp)
 	jump_ca2b4:
 		xor    %edx,%edx
@@ -124461,11 +124461,11 @@ func_ca299:
 /*----------------------------------------------------------------*/
 func_ca31b:
 /*----------------------------------------------------------------*/
-		mov    data_1a72f0,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x34,%eax
 		mov    %eax,0x2c(%esp)
-		mov    data_1a72ec,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x30,%eax
 		mov    %eax,0x30(%esp)
-		mov    data_1a72e8,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x2C,%eax
 		mov    %eax,0x28(%esp)
 		jmp    jump_ca2b4
 
@@ -124473,11 +124473,11 @@ func_ca31b:
 /*----------------------------------------------------------------*/
 func_ca33b:
 /*----------------------------------------------------------------*/
-		mov    data_1a72fc,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x40,%eax
 		mov    %eax,0x2c(%esp)
-		mov    data_1a72f8,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x3C,%eax
 		mov    %eax,0x30(%esp)
-		mov    data_1a72f4,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x38,%eax
 		mov    %eax,0x28(%esp)
 		jmp    jump_ca2b4
 
@@ -124485,11 +124485,11 @@ func_ca33b:
 /*----------------------------------------------------------------*/
 func_ca35b:
 /*----------------------------------------------------------------*/
-		mov    data_1a7308,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x4C,%eax
 		mov    %eax,0x2c(%esp)
-		mov    data_1a7304,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x48,%eax
 		mov    %eax,0x30(%esp)
-		mov    data_1a7300,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x44,%eax
 		mov    %eax,0x28(%esp)
 		jmp    jump_ca2b4
 
@@ -124622,11 +124622,11 @@ func_ca37b:
 /*----------------------------------------------------------------*/
 func_ca500:
 /*----------------------------------------------------------------*/
-		mov    data_1a72e4,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x28,%eax
 		mov    %eax,0x2c(%esp)
-		mov    data_1a72e0,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x24,%eax # bangdetail.sphere[0].babyshift
 		mov    %eax,0x30(%esp)
-		mov    bangdetail__sphere,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x20,%eax # bangdetail.sphere[0].dangley
 		mov    %eax,0x28(%esp)
 	jump_ca51b:
 		xor    %ebp,%ebp
@@ -124717,11 +124717,11 @@ func_ca500:
 /*----------------------------------------------------------------*/
 func_ca643:
 /*----------------------------------------------------------------*/
-		mov    data_1a72f0,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x34,%eax
 		mov    %eax,0x2c(%esp)
-		mov    data_1a72ec,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x30,%eax
 		mov    %eax,0x30(%esp)
-		mov    data_1a72e8,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x2C,%eax
 		mov    %eax,0x28(%esp)
 		jmp    jump_ca51b
 
@@ -124729,11 +124729,11 @@ func_ca643:
 /*----------------------------------------------------------------*/
 func_ca663:
 /*----------------------------------------------------------------*/
-		mov    data_1a72fc,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x40,%eax
 		mov    %eax,0x2c(%esp)
-		mov    data_1a72f8,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x3C,%eax
 		mov    %eax,0x30(%esp)
-		mov    data_1a72f4,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x38,%eax
 		mov    %eax,0x28(%esp)
 		jmp    jump_ca51b
 
@@ -124741,11 +124741,11 @@ func_ca663:
 /*----------------------------------------------------------------*/
 func_ca683:
 /*----------------------------------------------------------------*/
-		mov    data_1a7308,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x4C,%eax
 		mov    %eax,0x2c(%esp)
-		mov    data_1a7304,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x48,%eax
 		mov    %eax,0x30(%esp)
-		mov    data_1a7300,%eax
+		mov    EXPORT_SYMBOL(bangdetail)+0x44,%eax
 		mov    %eax,0x28(%esp)
 		jmp    jump_ca51b
 
@@ -125206,7 +125206,7 @@ func_ca88e:
 		cmp    $0x2,%eax
 		jne    jump_cabf3
 		mov    EXPORT_SYMBOL(gameturn),%eax
-		test   %eax,bangdetailmask
+		test   %eax,EXPORT_SYMBOL(bangdetail)+0x50 # bangdetail.mask
 		jne    jump_cac51
 		mov    $0x28,%ecx
 		jmp    jump_cac44
@@ -125235,7 +125235,7 @@ func_ca88e:
 		cmp    $0x3,%eax
 		jne    jump_cac51
 		mov    EXPORT_SYMBOL(gameturn),%eax
-		test   %eax,bangdetailmask
+		test   %eax,EXPORT_SYMBOL(bangdetail)+0x50 # bangdetail.mask
 		jne    jump_cac51
 		mov    $0x1e,%ecx
 	jump_cac44:
@@ -129118,49 +129118,8 @@ GLOBAL (cmdln_param_bcg)
 		.byte	0x0
 		.align  4
 
-bangdetail__circle:	/* 0x1A72BC */
-		.long	0x0
-data_1a72c0:
-		.long	0x0
-data_1a72c4:
-		.long	0x0
-data_1a72c8:
-		.long	0x0
-data_1a72cc:
-		.long	0x0
-data_1a72d0:
-		.long	0x0
-data_1a72d4:
-		.long	0x0
-data_1a72d8:
-		.long	0x0
-bangdetail__sphere:	/* 0x1A72DC */
-		.long	0x0
-data_1a72e0:
-		.long	0x0
-data_1a72e4:
-		.long	0x0
-data_1a72e8:
-		.long	0x0
-data_1a72ec:
-		.long	0x0
-data_1a72f0:
-		.long	0x0
-data_1a72f4:
-		.long	0x0
-data_1a72f8:
-		.long	0x0
-data_1a72fc:
-		.long	0x0
-data_1a7300:
-		.long	0x0
-data_1a7304:
-		.long	0x0
-data_1a7308:
-		.long	0x0
-bangdetailmask:	/* 0x1A730C */
-		.short  0x0
-		.short  0x0
+GLOBAL (bangdetail)	/* 0x1A72BC */
+		.fill   0x54
 
 GLOBAL (data_1aa330)	/* 0x1aa330 */
 		.short  0x0
