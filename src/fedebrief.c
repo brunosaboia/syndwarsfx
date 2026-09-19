@@ -53,8 +53,8 @@ struct ScreenBox debrief_people_box = {0};
 // Shared boxes
 extern struct ScreenTextBox world_city_info_box;
 
-extern ushort word_1C4846[8];
-extern ushort word_1C4856[8];
+ushort word_1C4846[8];
+ushort word_1C4856[8];
 
 void show_debrief_screen(void)
 {

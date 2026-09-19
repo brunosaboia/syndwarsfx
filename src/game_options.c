@@ -32,6 +32,8 @@
 /******************************************************************************/
 struct InGame ingame;
 
+ubyte net_game_play_flags = 0;
+
 short user_sel_brightness = 0;
 
 TbPixel deep_radar_surface_col = 0xd8;

@@ -42,7 +42,7 @@ struct ScreenButton storage_LOAD_button = {0};
 struct ScreenButton storage_SAVE_button = {0};
 struct ScreenButton storage_NEW_MORTAL_button = {0};
 struct ScreenTextBox storage_slots_box = {0};
-extern ubyte byte_1C4880[8];
+ubyte byte_1C4880[8];
 
 /******************************************************************************/
 

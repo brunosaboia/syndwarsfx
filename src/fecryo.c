@@ -68,9 +68,9 @@ ubyte current_frame = 0;
 
 short word_15511E = -1;
 
-extern ubyte cheat_research_cybmods;
-extern ubyte byte_1C4978;
-extern ubyte byte_1C4979;
+ubyte cheat_research_cybmods = 0;
+ubyte byte_1C4978 = 0;
+ubyte byte_1C4979 = 0;
 
 // Shared with equip screen
 extern char equip_cost_text[20];

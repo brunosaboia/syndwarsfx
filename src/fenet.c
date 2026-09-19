@@ -89,13 +89,13 @@ char net_proto_param_text[8] = "0000";
 int unkn_rate = 19200;
 char net_baudrate_text[8] = "19200";
 
-extern ubyte byte_1C47EA;
-extern ubyte byte_1C4805;
-extern ubyte byte_1C4806;
+ubyte byte_1C47EA = 0;
+ubyte byte_1C4805 = 0;
+ubyte byte_1C4806 = 0;
 extern ubyte byte_1C4994;
 extern ubyte net_autostart_done;
-extern char net_unkn1_text[25];
-extern char byte_1811E2[16];
+char net_unkn1_text[25];
+char byte_1811E2[16];
 TbClockMSec sessionlist_last_update[MONITORED_SESSIONS_COUNT] = {0};
 extern ubyte byte_1C6D48;
 extern struct TbNetworkSessionList unkstruct04_arr[MONITORED_SESSIONS_COUNT];

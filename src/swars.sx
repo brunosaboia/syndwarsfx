@@ -110,6 +110,7 @@
 .global EXPORT_SYMBOL(colour_sel_blue);		/* 0x18114a */
 .global EXPORT_SYMBOL(colour_sel_red);		/* 0x18114e */
 .global EXPORT_SYMBOL(colour_sel_purple);	/* 0x181152 */
+.global EXPORT_SYMBOL(net_game_play_flags);	/* 0x1811F2 */
 .global EXPORT_SYMBOL(ex_faces);			/* 0x18194C */
 
 .global EXPORT_SYMBOL(shrapnel_free);		/* 0x19714C */
@@ -216,6 +217,7 @@
 .global EXPORT_SYMBOL(tree_route);
 .global EXPORT_SYMBOL(route_bak);		/* 0x1BF9C8 */
 
+.global EXPORT_SYMBOL(byte_1C47EA);		/* 0x1C47EA */
 .global EXPORT_SYMBOL(map_from_mission);	/* 0x1C4B79 */
 .global EXPORT_SYMBOL(reload_background_flag);	/* 0x1C4B80 */
 .global EXPORT_SYMBOL(cryo_agents);		/* 0x1C4BA0 */
@@ -421,7 +423,7 @@ GLOBAL_FUNC(ASM_place_default_player)	/* 0x0101F0 */
 		mov    %cx,0x7e(%eax)
 		mov    0x20(%esp),%edx
 		mov    %eax,EXPORT_SYMBOL(players)+0x09C(%ebp) # players[0].MyAgent[0]
-		mov    level_def__PlayableGroups(%edx),%dl
+		mov    EXPORT_SYMBOL(level_def)+0x00(%edx),%dl # level_def.PlayableGroups
 		movl   $0x2000,0xc(%eax)
 		mov    %dl,0x50(%eax)
 		mov    %dl,0x51(%eax)
@@ -753,7 +755,7 @@ GLOBAL_FUNC(ASM_unkn_truce_groups)	/* 0x010CA0 */
 		lea    0x0(,%eax,8),%ecx
 		movzbl 0xa8(%esp,%eax,1),%esi
 		add    %esi,%ecx
-		mov    level_def__PlayableGroups(%ebx),%bl
+		mov    EXPORT_SYMBOL(level_def)+0x00(%ebx),%bl # level_def.PlayableGroups
 		mov    %bl,0x64(%esp,%ecx,1)
 		incb   0xa8(%esp,%eax,1)
 		jmp    jump_10d52
@@ -946,7 +948,7 @@ GLOBAL_FUNC(ASM_unkn1_handle_agent_groups)	/* 0x010F94 */
 		mov    (%esp),%eax
 		xor    %edx,%edx
 		mov    %ecx,%ebx
-		mov    level_def__PlayableGroups(%eax),%dl
+		mov    EXPORT_SYMBOL(level_def)+0x00(%eax),%dl # level_def.PlayableGroups
 		call   ac_fill_netgame_agent_pos
 		mov    (%esp),%ebx
 		inc    %ebx
@@ -979,7 +981,7 @@ GLOBAL_FUNC(ASM_unkn1_handle_agent_groups)	/* 0x010F94 */
 		mov    EXPORT_SYMBOL(group_factions)(%eax),%cl
 		xor    %eax,%eax
 		mov    (%esp),%dx
-		mov    level_def__PlayableGroups(%ebx),%al
+		mov    EXPORT_SYMBOL(level_def)+0x00(%ebx),%al # level_def.PlayableGroups
 		mov    $0x4,%ebx
 		call   ac_make_group_into_players
 		jmp    jump_10fcc
@@ -1004,7 +1006,7 @@ GLOBAL_FUNC(ASM_unkn1_handle_agent_groups)	/* 0x010F94 */
 		jne    jump_1102a
 		mov    (%esp),%eax
 		mov    EXPORT_SYMBOL(things_used_head),%bx
-		movzbw level_def__PlayableGroups(%eax),%si
+		movzbw EXPORT_SYMBOL(level_def)+0x00(%eax),%si # level_def.PlayableGroups
 		test   %bx,%bx
 		je     jump_1102a
 	jump_11066:
@@ -6134,12 +6136,12 @@ GLOBAL_FUNC(ASM_unkn_player_group_add)	/* 0x36270 */
 		add    %edx,%eax
 		xor    %esi,%esi
 		xor    %ecx,%ecx
-		mov    %bl,data_177150(%edx,%eax,4)
+		mov    %bl,EXPORT_SYMBOL(unkn_player_groups)+0x14(%edx,%eax,4) # unkn_player_groups.GroupActive
 		xor    %edx,%edx
 		jmp    jump_362bc
 	jump_362ac:
 		xor    %edi,%edi
-		mov    %di,data_177140(%ebx)
+		mov    %di,EXPORT_SYMBOL(unkn_player_groups)+0x04(%ebx) # unkn_player_groups.AgentOwners
 	jump_362b5:
 		add    $0x2,%esi
 		add    $0x4,%ecx
@@ -6159,13 +6161,13 @@ GLOBAL_FUNC(ASM_unkn_player_group_add)	/* 0x36270 */
 		mov    %bl,EXPORT_SYMBOL(unkn_player_groups)(%edx,%edi,1)
 		lea    (%edi,%esi,1),%ebx
 		mov    0x72(%eax),%di
-		mov    %di,data_177148(%ebx)
+		mov    %di,EXPORT_SYMBOL(unkn_player_groups)+0x0C(%ebx) # unkn_player_groups.AgentMoods
 		xor    %edi,%edi
 		mov    0xa(%eax),%di
 		cmp    $0x2b,%edi
 		jne    jump_362ac
 		mov    0x3c(%eax),%ax
-		mov    %ax,data_177140(%ebx)
+		mov    %ax,EXPORT_SYMBOL(unkn_player_groups)+0x04(%ebx) # unkn_player_groups.AgentOwners
 		jmp    jump_362b5
 	jump_36314:
 		add    $0x8,%esp
@@ -6197,7 +6199,7 @@ GLOBAL_FUNC(ASM_unkn_player_group_prot)	/* 0x3631C */
 		mov    %ah,0x4(%esp)
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		cmpb   $0x0,data_177150(%edx,%eax,4)
+		cmpb   $0x0,EXPORT_SYMBOL(unkn_player_groups)+0x14(%edx,%eax,4) # unkn_player_groups.GroupActive
 		je     jump_36432
 		xor    %edi,%edi
 		xor    %ebp,%ebp
@@ -6222,12 +6224,12 @@ GLOBAL_FUNC(ASM_unkn_player_group_prot)	/* 0x3631C */
 		lea    (%eax,%ebp,1),%ecx
 		mov    $0x2,%ebx
 		xor    %edx,%edx
-		mov    data_177148(%ecx),%ax
+		mov    EXPORT_SYMBOL(unkn_player_groups)+0x0C(%ecx),%ax # unkn_player_groups.AgentMoods
 		mov    0x8(%esp),%dl
 		mov    %ax,0x72(%esi)
 		mov    %esi,%eax
 		call   ac_call_unprotect
-		mov    data_177140(%ecx),%dx
+		mov    EXPORT_SYMBOL(unkn_player_groups)+0x04(%ecx),%dx # unkn_player_groups.AgentOwners
 		test   %dx,%dx
 		je     jump_363d7
 		xor    %eax,%eax
@@ -7873,7 +7875,7 @@ GLOBAL_FUNC(ASM_init_game_controls)	/* 0x03BAE4 */
 	jump_3baf5:
 		add    $0x15,%eax
 		xor    %dl,%dl
-		mov    %dl,unkn_player_groups_m1_GroupActive(%eax)
+		mov    %dl,EXPORT_SYMBOL(unkn_player_groups)-0x01(%eax) # unkn_player_groups[-1].GroupActive
 		cmp    $0xd2,%eax
 		jne    jump_3baf5
 		xor    %edx,%edx
@@ -8907,7 +8909,7 @@ GLOBAL_FUNC (ASM_net_unkn_check_1)	/* 0x03FF04 */
 		jmp    jump_3ff3c
 	jump_3ff6e:
 		xor    %eax,%eax
-		mov    nsvc__I__Type,%ax
+		mov    EXPORT_SYMBOL(nsvc)+0x06,%ax # nsvc.I.Type
 		cmp    $0x1,%eax
 		je     jump_400a8
 		xor    %ebx,%ebx
@@ -9056,7 +9058,7 @@ GLOBAL_FUNC (ASM_net_unkn_check_1)	/* 0x03FF04 */
 		call   ac_StopAllSamples
 	jump_401ee:
 		xor    %eax,%eax
-		mov    nsvc__I__Type,%ax
+		mov    EXPORT_SYMBOL(nsvc)+0x06,%ax # nsvc.I.Type
 		cmp    $0x1,%eax
 		je     jump_40209
 		mov    EXPORT_SYMBOL(ingame)+0x927,%edi # ingame.fld_unkC4B
@@ -9066,7 +9068,7 @@ GLOBAL_FUNC (ASM_net_unkn_check_1)	/* 0x03FF04 */
 		mov    EXPORT_SYMBOL(ingame)+0x927,%edi # ingame.fld_unkC4B
 	jump_4020f:
 		xor    %eax,%eax
-		mov    nsvc__I__Type,%ax
+		mov    EXPORT_SYMBOL(nsvc)+0x06,%ax # nsvc.I.Type
 		cmp    $0x1,%eax
 		jne    jump_4028a
 		xor    %esi,%esi
@@ -9142,7 +9144,7 @@ GLOBAL_FUNC (ASM_net_unkn_check_1)	/* 0x03FF04 */
 		call   ac_PacketRecord_Write
 	jump_402e2:
 		xor    %eax,%eax
-		mov    nsvc__I__Type,%ax
+		mov    EXPORT_SYMBOL(nsvc)+0x06,%ax # nsvc.I.Type
 		cmp    $0x1,%eax
 		jne    jump_40334
 		xor    %ebx,%ebx
@@ -16054,7 +16056,7 @@ GLOBAL_FUNC(ASM_set_person_dead)	/* 0x0480DC */
 		lea    0x0(,%ebx,4),%eax
 		add    %ebx,%eax
 	jump_48369:
-		incb   data_19984e(,%eax,8)
+		incb   EXPORT_SYMBOL(mission_status)+0x26(,%eax,8) # mission_status[].AgentsLost
 	jump_48370:
 		xor    %eax,%eax
 		mov    0xa(%esi),%ax
@@ -17160,7 +17162,7 @@ func_4904e:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		incw   data_199840(,%eax,8)
+		incw   EXPORT_SYMBOL(mission_status)+0x18(,%eax,8) # mission_status[].EnemiesKilled
 		jmp    jump_49171
 
 
@@ -17171,7 +17173,7 @@ func_4906d:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		incw   data_199838(,%eax,8)
+		incw   EXPORT_SYMBOL(mission_status)+0x10(,%eax,8) # mission_status[].CivsKilled
 		jmp    jump_49171
 
 
@@ -17182,7 +17184,7 @@ func_4908c:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		incw   data_19983c(,%eax,8)
+		incw   EXPORT_SYMBOL(mission_status)+0x14(,%eax,8) # mission_status[].SecurityKilled
 		jmp    jump_49171
 	jump_490ab:
 		mov    0x8(%esi),%al
@@ -17246,7 +17248,7 @@ func_4908c:
 		shl    $0x2,%eax
 		add    %edx,%eax
 		shl    $0x3,%eax
-		add    $mission_status,%eax
+		add    $EXPORT_SYMBOL(mission_status),%eax
 		lea    0x10(%eax),%edx
 		xor    %eax,%eax
 		mov    0x54(%esi),%ax
@@ -17805,7 +17807,7 @@ func_4974d:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		incw   data_199840(,%eax,8)
+		incw   EXPORT_SYMBOL(mission_status)+0x18(,%eax,8) # mission_status[].EnemiesKilled
 		mov    $0x1,%eax
 		add    $0x8,%esp
 		pop    %ebp
@@ -17823,7 +17825,7 @@ func_49775:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		incw   data_199838(,%eax,8)
+		incw   EXPORT_SYMBOL(mission_status)+0x10(,%eax,8) # mission_status[].CivsKilled
 		mov    $0x1,%eax
 		add    $0x8,%esp
 		pop    %ebp
@@ -17841,7 +17843,7 @@ func_4979d:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		incw   data_19983c(,%eax,8)
+		incw   EXPORT_SYMBOL(mission_status)+0x14(,%eax,8) # mission_status[].SecurityKilled
 		mov    $0x1,%eax
 		add    $0x8,%esp
 		pop    %ebp
@@ -17886,7 +17888,7 @@ func_4979d:
 		imul   $0x28,%ebx,%ebx
 		xor    %ecx,%ecx
 		mov    0x54(%edi),%cx
-		add    $mission_status,%ebx
+		add    $EXPORT_SYMBOL(mission_status),%ebx
 		sar    $0x2,%ecx
 		add    $0x10,%ebx
 		incw   (%ebx,%ecx,2)
@@ -34429,7 +34431,7 @@ find_nearest_player:	/* 0x0558B8 */
 		test   %esi,%ebx
 		je     jump_558e9
 		xor    %ecx,%ecx
-		mov    level_def__PlayableGroups(%eax),%cl
+		mov    EXPORT_SYMBOL(level_def)+0x00(%eax),%cl # level_def.PlayableGroups
 		mov    EXPORT_SYMBOL(same_type_head)+512(,%ecx,2),%cx
 		test   %cx,%cx
 		je     jump_558e9
@@ -40318,7 +40320,7 @@ GLOBAL_FUNC(ASM_person_leave_vehicle)	/* 0x05957C */
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
 		shl    $0x3,%eax
-		add    $mission_status,%eax
+		add    $EXPORT_SYMBOL(mission_status),%eax
 		lea    0x10(%eax),%edx
 		mov    0x2c(%esp),%ebx
 		xor    %eax,%eax
@@ -41612,7 +41614,7 @@ GLOBAL_FUNC(ASM_person_hit_by_car)	/* 0x05AA3C */
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		movzbl data_19984e(,%eax,8),%ebp
+		movzbl EXPORT_SYMBOL(mission_status)+0x26(,%eax,8),%ebp # mission_status[].AgentsLost
 	jump_5abd1:
 		mov    $0xa,%edx
 		mov    %esi,%eax
@@ -41647,10 +41649,10 @@ func_5ac26:
 		add    %edx,%eax
 		shl    $0x3,%eax
 		xor    %edx,%edx
-		mov    data_19984e(%eax),%dl
+		mov    EXPORT_SYMBOL(mission_status)+0x26(%eax),%dl # mission_status[].AgentsLost
 		cmp    %edx,%ebp
 		jne    jump_5ad4e
-		incw   data_199840(%eax)
+		incw   EXPORT_SYMBOL(mission_status)+0x18(%eax) # mission_status[].EnemiesKilled
 		jmp    jump_5ad4e
 
 
@@ -41661,7 +41663,7 @@ func_5ac57:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		incw   data_199838(,%eax,8)
+		incw   EXPORT_SYMBOL(mission_status)+0x10(,%eax,8) # mission_status[].CivsKilled
 		jmp    jump_5ad4e
 
 
@@ -41672,7 +41674,7 @@ func_5ac76:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		incw   data_19983c(,%eax,8)
+		incw   EXPORT_SYMBOL(mission_status)+0x14(,%eax,8) # mission_status[].SecurityKilled
 		jmp    jump_5ad4e
 	jump_5ac95:
 		mov    0x8(%esi),%al
@@ -41707,7 +41709,7 @@ func_5ac76:
 		xor    %edx,%edx
 		shl    $0x3,%eax
 		mov    0x54(%esi),%dx
-		add    $mission_status,%eax
+		add    $EXPORT_SYMBOL(mission_status),%eax
 		sar    $0x2,%edx
 		mov    0x10(%eax,%edx,2),%bx
 		add    $0x10,%eax
@@ -41786,7 +41788,7 @@ GLOBAL_FUNC(ASM_person_self_destruct)	/* 0x05AD58 */
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
 		shl    $0x3,%eax
-		add    $mission_status,%eax
+		add    $EXPORT_SYMBOL(mission_status),%eax
 		lea    0x10(%eax),%ebx
 		addw   $0x3,(%ebx,%edx,2)
 	jump_5addb:
@@ -50244,7 +50246,7 @@ func_62ff6:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		incw   data_199840(,%eax,8)
+		incw   EXPORT_SYMBOL(mission_status)+0x18(,%eax,8) # mission_status[].EnemiesKilled
 		jmp    jump_630ec
 
 
@@ -50255,7 +50257,7 @@ func_63015:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		incw   data_199838(,%eax,8)
+		incw   EXPORT_SYMBOL(mission_status)+0x10(,%eax,8) # mission_status[].CivsKilled
 		jmp    jump_630ec
 
 
@@ -50266,7 +50268,7 @@ func_63034:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		incw   data_19983c(,%eax,8)
+		incw   EXPORT_SYMBOL(mission_status)+0x14(,%eax,8) # mission_status[].SecurityKilled
 		jmp    jump_630ec
 	jump_63053:
 		mov    0x8(%esi),%al
@@ -50310,7 +50312,7 @@ func_63034:
 		mov    %eax,%edx
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    $mission_status,%edx
+		mov    $EXPORT_SYMBOL(mission_status),%edx
 		shl    $0x3,%eax
 		add    %eax,%edx
 		xor    %eax,%eax
@@ -58678,7 +58680,7 @@ search_for_danger:	/* 0x06B9E8 */
 		mov    %al,%bl
 		lea    0x0(,%ebx,4),%eax
 		add    %eax,%ebx
-		mov    level_def__PlayableGroups,%cl
+		mov    EXPORT_SYMBOL(level_def)+0x00,%cl # level_def.PlayableGroups
 		shl    $0x3,%ebx
 		mov    $0x1,%eax
 		mov    war_flags__Truce(%ebx),%esi
@@ -60671,7 +60673,7 @@ find_target_from_group:	/* 0x06CF40 */
 		testb  $0x8,0x44(%edi)
 		jne    jump_6d139
 		mov    $0x1,%eax
-		mov    level_def__PlayableGroups,%cl
+		mov    EXPORT_SYMBOL(level_def)+0x00,%cl # level_def.PlayableGroups
 		mov    0x8(%esp),%esi
 		shl    %cl,%eax
 		test   %esi,%eax
@@ -60697,7 +60699,7 @@ find_target_from_group:	/* 0x06CF40 */
 		jmp    jump_6d244
 	jump_6d117:
 		mov    $0x1,%eax
-		mov    level_def__PlayableGroups,%cl
+		mov    EXPORT_SYMBOL(level_def)+0x00,%cl # level_def.PlayableGroups
 		shl    %cl,%eax
 		not    %eax
 		mov    (%esp),%ebx
@@ -61050,7 +61052,7 @@ func_6d505:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		decb   data_19984f(,%eax,8)
+		decb   EXPORT_SYMBOL(mission_status)+0x27(,%eax,8) # mission_status[].AgentsGained
 
 
 /*----------------------------------------------------------------*/
@@ -61060,7 +61062,7 @@ func_6d51e:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		decw   data_199842(,%eax,8)
+		decw   EXPORT_SYMBOL(mission_status)+0x1A(,%eax,8) # mission_status[].EnemiesPersuaded
 		pop    %edi
 		pop    %esi
 		pop    %edx
@@ -61076,7 +61078,7 @@ func_6d53e:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		decw   data_19983a(,%eax,8)
+		decw   EXPORT_SYMBOL(mission_status)+0x12(,%eax,8) # mission_status[].CivsPersuaded
 		pop    %edi
 		pop    %esi
 		pop    %edx
@@ -61092,7 +61094,7 @@ func_6d55e:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		decw   data_19983e(,%eax,8)
+		decw   EXPORT_SYMBOL(mission_status)+0x16(,%eax,8) # mission_status[].SecurityPersuaded
 		pop    %edi
 		pop    %esi
 		pop    %edx
@@ -63750,7 +63752,7 @@ clear_mission_status:	/* 0x074C4C */
 		imul   $0x28,%edx,%edx
 		xor    %ecx,%ecx
 		inc    %eax
-		mov    %cx,data_199838(%edx)
+		mov    %cx,EXPORT_SYMBOL(mission_status)+0x10(%edx) # mission_status[].CivsKilled
 	jump_74c6d:
 		xor    %edx,%edx
 		mov    %ax,%dx
@@ -63768,17 +63770,17 @@ clear_mission_status:	/* 0x074C4C */
 		lea    0x0(,%eax,4),%edx
 		add    %eax,%edx
 		xor    %ebx,%ebx
-		mov    %bx,data_199838(,%edx,8)
-		mov    %bx,data_19983a(,%edx,8)
-		mov    %bx,data_19983c(,%edx,8)
-		mov    %bx,data_19983e(,%edx,8)
-		mov    %bx,data_199840(,%edx,8)
+		mov    %bx,EXPORT_SYMBOL(mission_status)+0x10(,%edx,8) # mission_status[].CivsKilled
+		mov    %bx,EXPORT_SYMBOL(mission_status)+0x12(,%edx,8) # mission_status[].CivsPersuaded
+		mov    %bx,EXPORT_SYMBOL(mission_status)+0x14(,%edx,8) # mission_status[].SecurityKilled
+		mov    %bx,EXPORT_SYMBOL(mission_status)+0x16(,%edx,8) # mission_status[].SecurityPersuaded
+		mov    %bx,EXPORT_SYMBOL(mission_status)+0x18(,%edx,8) # mission_status[].EnemiesKilled
 		xor    %eax,%eax
-		mov    %bx,data_199842(,%edx,8)
+		mov    %bx,EXPORT_SYMBOL(mission_status)+0x1A(,%edx,8) # mission_status[].EnemiesPersuaded
 		xor    %bh,%ah
 		xor    %bl,%bl
-		mov    %ah,data_19984e(,%edx,8)
-		mov    %bl,data_19984f(,%edx,8)
+		mov    %ah,EXPORT_SYMBOL(mission_status)+0x26(,%edx,8) # mission_status[].AgentsLost
+		mov    %bl,EXPORT_SYMBOL(mission_status)+0x27(,%edx,8) # mission_status[].AgentsGained
 	jump_74cd6:
 		pop    %edx
 		pop    %ecx
@@ -66564,7 +66566,7 @@ GLOBAL_FUNC(ASM_process_mech)	/* 0x076C2C */
 		mov    0x4a(%esi),%ebx
 		and    $0xff,%eax
 		sar    $0x10,%ebx
-		mov    data_1777cd(%edx,%eax,2),%ax
+		mov    EXPORT_SYMBOL(my_paths)+0x01(%edx,%eax,2),%ax # my_paths[].X
 		lea    0x0(,%ebx,4),%edx
 		mov    %ax,0x6a(%esi)
 		add    %ebx,%edx
@@ -66573,7 +66575,7 @@ GLOBAL_FUNC(ASM_process_mech)	/* 0x076C2C */
 		and    $0x3,%al
 		sub    %ebx,%edx
 		and    $0xff,%eax
-		mov    data_1777d5(%edx,%eax,2),%ax
+		mov    EXPORT_SYMBOL(my_paths)+0x09(%edx,%eax,2),%ax # my_paths[].Z
 		mov    %ax,0x6e(%esi)
 	jump_76e49:
 		mov    0x38(%esi),%ax
@@ -66962,7 +66964,7 @@ GLOBAL_FUNC(ASM_process_tank)	/* 0x077040 */
 		mov    0x4a(%esi),%ebx
 		and    $0xff,%edx
 		sar    $0x10,%ebx
-		mov    data_1777cd(%eax,%edx,2),%ax
+		mov    EXPORT_SYMBOL(my_paths)+0x01(%eax,%edx,2),%ax # my_paths[].X
 		lea    0x0(,%ebx,4),%edx
 		mov    %ax,0x6a(%esi)
 		add    %ebx,%edx
@@ -66971,7 +66973,7 @@ GLOBAL_FUNC(ASM_process_tank)	/* 0x077040 */
 		and    $0x3,%al
 		sub    %ebx,%edx
 		and    $0xff,%eax
-		mov    data_1777d5(%edx,%eax,2),%ax
+		mov    EXPORT_SYMBOL(my_paths)+0x09(%edx,%eax,2),%ax # my_paths[].Z
 		mov    %ax,0x6e(%esi)
 	jump_7729c:
 		mov    %esi,%eax
@@ -67892,7 +67894,7 @@ GLOBAL_FUNC(ASM_process_my_flying_vehicle)	/* 0x077B24 */
 		mov    0x3e(%ebx),%al
 		and    $0x3,%al
 		and    $0xff,%eax
-		mov    data_1777cd(%ecx,%eax,2),%ax
+		mov    EXPORT_SYMBOL(my_paths)+0x01(%ecx,%eax,2),%ax # my_paths[].X
 		mov    %ax,0x6a(%ebx)
 		mov    0x4a(%ebx),%eax
 		sar    $0x10,%eax
@@ -67903,7 +67905,7 @@ GLOBAL_FUNC(ASM_process_my_flying_vehicle)	/* 0x077B24 */
 		mov    0x3e(%ebx),%al
 		and    $0x3,%al
 		and    $0xff,%eax
-		mov    data_1777d5(%ecx,%eax,2),%ax
+		mov    EXPORT_SYMBOL(my_paths)+0x09(%ecx,%eax,2),%ax # my_paths[].Z
 		mov    %ax,0x6e(%ebx)
 	jump_77d50:
 		mov    0x60(%ebx),%eax
@@ -68439,7 +68441,7 @@ continue_flying_wander:	/* 0x078280 */
 		mov    0x3e(%esi),%al
 		and    $0x3,%al
 		and    $0xff,%eax
-		mov    data_1777cd(%edx,%eax,2),%ax
+		mov    EXPORT_SYMBOL(my_paths)+0x01(%edx,%eax,2),%ax # my_paths[].X
 		mov    0x4a(%esi),%edx
 		sar    $0x10,%edx
 		mov    %ax,0x6a(%esi)
@@ -68451,7 +68453,7 @@ continue_flying_wander:	/* 0x078280 */
 		mov    0x3e(%esi),%al
 		and    $0x3,%al
 		and    $0xff,%eax
-		mov    data_1777d5(%edx,%eax,2),%ax
+		mov    EXPORT_SYMBOL(my_paths)+0x09(%edx,%eax,2),%ax # my_paths[].Z
 		mov    %ax,0x6e(%esi)
 		mov    0x68(%esi),%edx
 		mov    0x18(%esi),%eax
@@ -68559,7 +68561,7 @@ GLOBAL_FUNC(ASM_start_goto_vehicle)	/* 0x07841C */
 		mov    0x3e(%ecx),%al
 		and    $0x3,%al
 		and    $0xff,%eax
-		mov    data_1777cd(%esi,%eax,2),%ax
+		mov    EXPORT_SYMBOL(my_paths)+0x01(%esi,%eax,2),%ax # my_paths[].X
 		mov    %ax,0x6a(%ecx)
 		mov    0x4a(%ecx),%eax
 		sar    $0x10,%eax
@@ -68570,7 +68572,7 @@ GLOBAL_FUNC(ASM_start_goto_vehicle)	/* 0x07841C */
 		mov    0x3e(%ecx),%al
 		and    $0x3,%al
 		and    $0xff,%eax
-		mov    data_1777d5(%esi,%eax,2),%ax
+		mov    EXPORT_SYMBOL(my_paths)+0x09(%esi,%eax,2),%ax # my_paths[].Z
 		movw   $0x39,0xa(%ecx)
 		movw   $0x0,0x60(%ecx)
 		mov    %ax,0x6e(%ecx)
@@ -68736,7 +68738,7 @@ GLOBAL_FUNC(ASM_start_goto_vehicle)	/* 0x07841C */
 		mov    0x3e(%ecx),%al
 		and    $0x3,%al
 		and    $0xff,%eax
-		mov    data_1777cd(%esi,%eax,2),%ax
+		mov    EXPORT_SYMBOL(my_paths)+0x01(%esi,%eax,2),%ax # my_paths[].X
 		mov    %ax,0x6a(%ecx)
 		mov    0x4a(%ecx),%eax
 		sar    $0x10,%eax
@@ -68747,7 +68749,7 @@ GLOBAL_FUNC(ASM_start_goto_vehicle)	/* 0x07841C */
 		mov    0x3e(%ecx),%al
 		and    $0x3,%al
 		and    $0xff,%eax
-		mov    data_1777d5(%esi,%eax,2),%ax
+		mov    EXPORT_SYMBOL(my_paths)+0x09(%esi,%eax,2),%ax # my_paths[].Z
 		movw   $0x32,0xa(%ecx)
 		mov    %ax,0x6e(%ecx)
 		mov    $0x1,%eax
@@ -95170,7 +95172,7 @@ GLOBAL_FUNC(ASM_mem_group_arrived_square2)	/* 0x0A6708 */
 		je     jump_a673b
 		mov    (%esp),%ebx
 		xor    %eax,%eax
-		mov    level_def__PlayableGroups(%ebx),%al
+		mov    EXPORT_SYMBOL(level_def)+0x00(%ebx),%al # level_def.PlayableGroups
 		mov    EXPORT_SYMBOL(same_type_head)+512(,%eax,2),%bx
 	jump_a6778:
 		movswl %bx,%eax
@@ -95311,7 +95313,7 @@ GLOBAL_FUNC(ASM_mem_group_arrived)	/* 0x0A6898 */
 		je     jump_a69c6
 		mov    (%esp),%edx
 		xor    %eax,%eax
-		mov    level_def__PlayableGroups(%edx),%al
+		mov    EXPORT_SYMBOL(level_def)+0x00(%edx),%al # level_def.PlayableGroups
 		xor    %esi,%esi
 		mov    EXPORT_SYMBOL(same_type_head)+512(,%eax,2),%si
 		test   %esi,%esi
@@ -96853,13 +96855,13 @@ GLOBAL_FUNC (ASM_test_missions)	/* 0x0A8FF8 */
 		cmp    EXPORT_SYMBOL(mission_open)(%edx),%di
 		jne    jump_a9175
 		xor    %eax,%eax
-		mov    mission_result,%al
+		mov    EXPORT_SYMBOL(mission_result),%al
 		cmp    $0x1,%eax
 		jne    jump_a9164
 		mov    $0x1,%esi
 	jump_a9164:
 		xor    %eax,%eax
-		mov    mission_result,%al
+		mov    EXPORT_SYMBOL(mission_result),%al
 		cmp    $0xffffffff,%eax
 		jne    jump_a9175
 		mov    $0xffffffff,%esi
@@ -103863,7 +103865,7 @@ GLOBAL_FUNC(ASM_SCANNER_unkn_func_205)	/* 0x0B0908 */
 		and    $0xffff,%eax
 		sar    $0x2,%eax
 		imul   $0x28,%eax,%eax
-		add    $mission_status,%eax
+		add    $EXPORT_SYMBOL(mission_status),%eax
 		lea    0x10(%eax),%ebx
 		xor    %edx,%edx
 		mov    %esi,%eax
@@ -103893,7 +103895,7 @@ GLOBAL_FUNC(ASM_SCANNER_unkn_func_205)	/* 0x0B0908 */
 	jump_b0aac:
 		mov    0x54(%esp),%ecx
 		xor    %ebx,%ebx
-		mov    level_def__PlayableGroups(%ecx),%bl
+		mov    EXPORT_SYMBOL(level_def)+0x00(%ecx),%bl # level_def.PlayableGroups
 		shl    $0x4,%ebx
 		mov    data_19f1a0(%ebx),%ebx
 		sar    $0x10,%ebx
@@ -112519,9 +112521,9 @@ GLOBAL_FUNC(ASM_init_my_paths)	/* 0x0BF1FC */
 		jl     jump_bf202
 		xor    %bh,%bh
 		xor    %eax,%edx
-		mov    %bh,data_17ee79
+		mov    %bh,EXPORT_SYMBOL(my_paths)+0x76AD # my_paths[1599].Flag
 		mov    $0x1,%ebx
-		mov    %dx,data_17ee8a
+		mov    %dx,EXPORT_SYMBOL(my_paths)+0x76BE # my_paths[1599].Next
 		mov    %bx,EXPORT_SYMBOL(head_my_path)
 		mov    %bx,EXPORT_SYMBOL(path_count)
 		pop    %edx
@@ -112697,9 +112699,9 @@ use_nav_data:	/* 0x0BF384 */
 		add    %edi,%ecx
 		sar    $0x8,%ebx
 		mov    0x38(%esp),%edi
-		mov    %bx,data_1777d5(%ecx)
+		mov    %bx,EXPORT_SYMBOL(my_paths)+0x09(%ecx) # my_paths[].Z
 		inc    %eax
-		mov    %di,data_1777cd(%ecx)
+		mov    %di,EXPORT_SYMBOL(my_paths)+0x01(%ecx) # my_paths[].X
 	jump_bf4a9:
 		xor    %ebx,%ebx
 		mov    g_fat_data__PathLength,%ecx
@@ -114919,9 +114921,9 @@ GLOBAL_FUNC(ASM_unkn_path_func_001)	/* 0x0C0ED4 */
 		xor    %ebx,%ebx
 		and    $0x3,%dl
 		mov    %dx,%bx
-		mov    data_1777cd(%esi,%ebx,2),%dx
+		mov    EXPORT_SYMBOL(my_paths)+0x01(%esi,%ebx,2),%dx # my_paths[].X
 		mov    %dx,(%esp)
-		mov    data_1777d5(%esi,%ebx,2),%dx
+		mov    EXPORT_SYMBOL(my_paths)+0x09(%esi,%ebx,2),%dx # my_paths[].Z
 		mov    %dx,0x8(%esp)
 		movswl %ax,%ebx
 		movswl %cx,%esi
@@ -121897,7 +121899,7 @@ func_c753e:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		incw   data_199840(,%eax,8)
+		incw   EXPORT_SYMBOL(mission_status)+0x18(,%eax,8) # mission_status[].EnemiesKilled
 		add    $0xc,%esp
 		pop    %edi
 		pop    %esi
@@ -121913,7 +121915,7 @@ func_c7560:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		incw   data_199838(,%eax,8)
+		incw   EXPORT_SYMBOL(mission_status)+0x10(,%eax,8) # mission_status[].CivsKilled
 		add    $0xc,%esp
 		pop    %edi
 		pop    %esi
@@ -121929,7 +121931,7 @@ func_c7582:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		incw   data_19983c(,%eax,8)
+		incw   EXPORT_SYMBOL(mission_status)+0x14(,%eax,8) # mission_status[].SecurityKilled
 		add    $0xc,%esp
 		pop    %edi
 		pop    %esi
@@ -121977,7 +121979,7 @@ func_c7582:
 		xor    %edx,%edx
 		shl    $0x3,%eax
 		mov    0x54(%ebx),%dx
-		add    $mission_status,%eax
+		add    $EXPORT_SYMBOL(mission_status),%eax
 		sar    $0x2,%edx
 		mov    0x10(%eax,%edx,2),%bx
 		add    $0x10,%eax
@@ -122234,7 +122236,7 @@ func_c790c:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		incw   data_199840(,%eax,8)
+		incw   EXPORT_SYMBOL(mission_status)+0x18(,%eax,8) # mission_status[].EnemiesKilled
 		jmp    jump_c79ec
 
 
@@ -122245,7 +122247,7 @@ func_c792b:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		incw   data_199838(,%eax,8)
+		incw   EXPORT_SYMBOL(mission_status)+0x10(,%eax,8) # mission_status[].CivsKilled
 		jmp    jump_c79ec
 
 
@@ -122256,7 +122258,7 @@ func_c794a:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		incw   data_19983c(,%eax,8)
+		incw   EXPORT_SYMBOL(mission_status)+0x14(,%eax,8) # mission_status[].SecurityKilled
 		jmp    jump_c79ec
 	jump_c7969:
 		mov    0x8(%ebx),%al
@@ -122298,7 +122300,7 @@ func_c794a:
 		shl    $0x2,%eax
 		add    %edx,%eax
 		shl    $0x3,%eax
-		add    $mission_status,%eax
+		add    $EXPORT_SYMBOL(mission_status),%eax
 		lea    0x10(%eax),%edx
 		xor    %eax,%eax
 		mov    0x54(%ebx),%ax
@@ -122501,7 +122503,7 @@ func_c7c18:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		incw   data_199840(,%eax,8)
+		incw   EXPORT_SYMBOL(mission_status)+0x18(,%eax,8) # mission_status[].EnemiesKilled
 		jmp    jump_c7cfa
 
 
@@ -122512,7 +122514,7 @@ func_c7c37:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		incw   data_199838(,%eax,8)
+		incw   EXPORT_SYMBOL(mission_status)+0x10(,%eax,8) # mission_status[].CivsKilled
 		jmp    jump_c7cfa
 
 
@@ -122523,7 +122525,7 @@ func_c7c56:
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		incw   data_19983c(,%eax,8)
+		incw   EXPORT_SYMBOL(mission_status)+0x14(,%eax,8) # mission_status[].SecurityKilled
 		jmp    jump_c7cfa
 	jump_c7c75:
 		mov    0x8(%ebx),%al
@@ -122566,7 +122568,7 @@ func_c7c56:
 		shl    $0x2,%eax
 		add    %edx,%eax
 		shl    $0x3,%eax
-		add    $mission_status,%eax
+		add    $EXPORT_SYMBOL(mission_status),%eax
 		lea    0x10(%eax),%edx
 		xor    %eax,%eax
 		mov    0x54(%ebx),%ax
@@ -129289,15 +129291,15 @@ GLOBAL_FUNC(ASM_update_mission_time)	/* 0x0CFD88 */
 		add    $0xf,%ecx
 		shl    $0x3,%ebx
 		xor    %edx,%edx
-		mov    %ecx,data_19982c(%ebx)
+		mov    %ecx,EXPORT_SYMBOL(mission_status)+0x04(%ebx) # mission_status[].CityHours
 		mov    $0x18,%ecx
-		mov    data_19982c(%ebx),%eax
+		mov    EXPORT_SYMBOL(mission_status)+0x04(%ebx),%eax # mission_status[].CityHours
 		div    %ecx
-		mov    %eax,mission_status(%ebx)
+		mov    %eax,EXPORT_SYMBOL(mission_status)+0x00(%ebx) # mission_status[].CityDays
 		xor    %edx,%edx
-		mov    data_19982c(%ebx),%eax
+		mov    EXPORT_SYMBOL(mission_status)+0x04(%ebx),%eax # mission_status[].CityHours
 		div    %ecx
-		mov    %edx,data_19982c(%ebx)
+		mov    %edx,EXPORT_SYMBOL(mission_status)+0x04(%ebx) # mission_status[].CityHours
 		xor    %edx,%edx
 		call   ac_LbRandomAnyShort
 		mov    %ax,%dx
@@ -129306,11 +129308,11 @@ GLOBAL_FUNC(ASM_update_mission_time)	/* 0x0CFD88 */
 		sar    $0x1f,%edx
 		idiv   %ecx
 		inc    %edx
-		mov    mission_status(%ebx),%ecx
+		mov    EXPORT_SYMBOL(mission_status)+0x00(%ebx),%ecx # mission_status[].CityDays
 		add    %edx,%ecx
 		mov    EXPORT_SYMBOL(open_brief)-2,%edx
 		sar    $0x10,%edx
-		mov    %ecx,mission_status(%ebx)
+		mov    %ecx,EXPORT_SYMBOL(mission_status)+0x00(%ebx) # mission_status[].CityDays
 		lea    0x0(,%edx,4),%ebx
 		add    %edx,%ebx
 		xor    %edx,%edx
@@ -129321,53 +129323,53 @@ GLOBAL_FUNC(ASM_update_mission_time)	/* 0x0CFD88 */
 		sar    $0x1f,%edx
 		idiv   %ecx
 		shl    $0x3,%ebx
-		mov    data_19982c(%ebx),%esi
+		mov    EXPORT_SYMBOL(mission_status)+0x04(%ebx),%esi # mission_status[].CityHours
 		add    %edx,%esi
 		mov    EXPORT_SYMBOL(open_brief)-2,%edx
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
 		shl    $0x3,%eax
-		mov    %esi,data_19982c(%ebx)
-		cmpl   $0x17,data_19982c(%eax)
+		mov    %esi,EXPORT_SYMBOL(mission_status)+0x04(%ebx) # mission_status[].CityHours
+		cmpl   $0x17,EXPORT_SYMBOL(mission_status)+0x04(%eax) # mission_status[].CityHours
 		jbe    jump_cfe9d
-		mov    mission_status(%eax),%ebp
-		mov    data_19982c(%eax),%edx
+		mov    EXPORT_SYMBOL(mission_status)+0x00(%eax),%ebp # mission_status[].CityDays
+		mov    EXPORT_SYMBOL(mission_status)+0x04(%eax),%edx # mission_status[].CityHours
 		inc    %ebp
 		sub    %ecx,%edx
-		mov    %ebp,mission_status(%eax)
-		mov    %edx,data_19982c(%eax)
+		mov    %ebp,EXPORT_SYMBOL(mission_status)+0x00(%eax) # mission_status[].CityDays
+		mov    %edx,EXPORT_SYMBOL(mission_status)+0x04(%eax) # mission_status[].CityHours
 	jump_cfe9d:
 		mov    EXPORT_SYMBOL(open_brief)-2,%edx
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
 		shl    $0x3,%eax
-		mov    mission_status(%eax),%edx
-		mov    data_199830(%eax),%ebx
-		mov    data_199834(%eax),%ecx
+		mov    EXPORT_SYMBOL(mission_status)+0x00(%eax),%edx # mission_status[].CityDays
+		mov    EXPORT_SYMBOL(mission_status)+0x08(%eax),%ebx # mission_status[].Days
+		mov    EXPORT_SYMBOL(mission_status)+0x0C(%eax),%ecx # mission_status[].Hours
 		add    %edx,%ebx
-		mov    data_19982c(%eax),%edx
-		mov    %ebx,data_199830(%eax)
+		mov    EXPORT_SYMBOL(mission_status)+0x04(%eax),%edx # mission_status[].CityHours
+		mov    %ebx,EXPORT_SYMBOL(mission_status)+0x08(%eax) # mission_status[].Days
 		add    %edx,%ecx
-		mov    %ecx,data_199834(%eax)
+		mov    %ecx,EXPORT_SYMBOL(mission_status)+0x0C(%eax) # mission_status[].Hours
 		cmp    $0x17,%ecx
 		jbe    jump_cfefb
-		mov    data_199830(%eax),%edi
-		mov    data_199834(%eax),%ebp
+		mov    EXPORT_SYMBOL(mission_status)+0x08(%eax),%edi # mission_status[].Days
+		mov    EXPORT_SYMBOL(mission_status)+0x0C(%eax),%ebp # mission_status[].Hours
 		inc    %edi
 		sub    $0x18,%ebp
-		mov    %edi,data_199830(%eax)
-		mov    %ebp,data_199834(%eax)
+		mov    %edi,EXPORT_SYMBOL(mission_status)+0x08(%eax) # mission_status[].Days
+		mov    %ebp,EXPORT_SYMBOL(mission_status)+0x0C(%eax) # mission_status[].Hours
 	jump_cfefb:
 		mov    EXPORT_SYMBOL(open_brief)-2,%edx
 		sar    $0x10,%edx
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
-		mov    mission_status(,%eax,8),%dl
+		mov    EXPORT_SYMBOL(mission_status)+0x00(,%eax,8),%dl # mission_status[].CityDays
 		mov    EXPORT_SYMBOL(global_date)+0x1,%bl
 		mov    EXPORT_SYMBOL(global_date)+0x2,%dh
-		mov    data_19982c(,%eax,8),%al
+		mov    EXPORT_SYMBOL(mission_status)+0x04(,%eax,8),%al # mission_status[].CityHours
 		add    %dl,%dh
 		add    %al,%bl
 		xor    %eax,%eax
@@ -129662,7 +129664,7 @@ GLOBAL_FUNC(ASM_activate_queued_mail)	/* 0x0D23B4 */
 		xor    %edx,%edx
 		shl    $0x3,%eax
 		mov    $0x28,%ebx
-		add    $mission_status,%eax
+		add    $EXPORT_SYMBOL(mission_status),%eax
 		mov    %di,EXPORT_SYMBOL(next_brief)
 		call   ac_memset
 		xor    %ebx,%ebx
@@ -129670,8 +129672,8 @@ GLOBAL_FUNC(ASM_activate_queued_mail)	/* 0x0D23B4 */
 		lea    0x0(,%ebx,4),%eax
 		add    %ebx,%eax
 		xor    %edx,%edx
-		mov    %edx,data_199830(,%eax,8)
-		mov    %edx,data_199834(,%eax,8)
+		mov    %edx,EXPORT_SYMBOL(mission_status)+0x08(,%eax,8) # mission_status[].Days
+		mov    %edx,EXPORT_SYMBOL(mission_status)+0x0C(,%eax,8) # mission_status[].Hours
 		movl   $0x1,(%esp)
 		mov    $0x1,%edx
 		mov    EXPORT_SYMBOL(new_mail),%cl
@@ -129759,8 +129761,8 @@ GLOBAL_FUNC(ASM_delete_mail)	/* 0x0D2540 */
 		movsl  %ds:(%esi),%es:(%edi)
 		movsb  %ds:(%esi),%es:(%edi)
 		mov    $0xa,%ecx
-		lea    mission_status(%edx),%esi
-		lea    mission_status(%ebx),%edi
+		lea    EXPORT_SYMBOL(mission_status)(%edx),%esi
+		lea    EXPORT_SYMBOL(mission_status)(%ebx),%edi
 		inc    %eax
 		mov    EXPORT_SYMBOL(next_brief),%dx
 		rep movsl %ds:(%esi),%es:(%edi)
@@ -130550,30 +130552,15 @@ data_1770fa:
 GLOBAL (save_hashtbl_verify_code)	/* 0x1770FC */
 		.long	0x0
 
-/* static ulong last_sel_agent_turn[8] */
-last_sel_agent_turn:
-		.long	0x0
-data_17711c:
-		.long	0x0
-data_177120:
-		.long	0x0
-data_177124:
-		.fill   0x9
 GLOBAL (mission_result)	/* 0x17712D */
 		.ascii  "\x00\x00\x00"
+		.align	4
 
 GLOBAL (mouser)	/* 0x177138 */
 		.ascii  "\x00\x00\x00"
-
-unkn_player_groups_m1_GroupActive:
 		.byte	0x0
 GLOBAL (unkn_player_groups)	/* 0x17713C */
-		.long	0x0
-data_177140:
-		.fill   0x8
-data_177148:
-		.fill   0x8
-data_177150:
+		.fill   0x14
 		.fill   0x334
 
 GLOBAL (word_1774E8)	/* 0x1774E8 no purpose - remove pending */
@@ -130582,17 +130569,8 @@ GLOBAL (dword_177790)	/* 0x177790 no purpose - remove pending */
 		.long	0x0
 
 GLOBAL (my_paths)	/* 0x1777CC */
-		.byte	0x0
-data_1777cd:
-		.fill   0x6
-		.short  0x0
-data_1777d5:
-		.fill   0x8
-		.fill   0x769c
-data_17ee79:
-		.fill   0x11
-data_17ee8a:
-		.short  0x0
+		.fill   0x76ad
+		.fill   0x13
 GLOBAL (path_count)	/* 0x17EE8C */
 		.long	0x0
 
@@ -130601,67 +130579,22 @@ data_17fa52:	/* 0x17fa52 remove pending */
 		.align	4
 
 GLOBAL (login_control)	/* 0x181180 */
-		.byte	0x0
-		.byte	0x0
-		.byte	0x0
-		.byte	0x0
-		.long	0x0
+		.fill   0x08
 		.byte	0x0
 		.byte	0x0
 		.fill   0x1e
 
 GLOBAL (nsvc)	/* 0x1811A8 */
-		.long	0x0
-nsvc__I__GameId:
-		.short  0x0
-nsvc__I__Type:	/* 0x1811AE */
-		.short  0x0
-nsvc__I__Flags:
-		.short  0x0
-nsvc__I__Param:
-		.short  0x0
-data_1811b4:
-		.fill   0x6
-data_1811ba:
-		.fill   0x8
-data_1811c2:
-		.short  0x0
-data_1811c4:
-		.fill   0x1e
-GLOBAL (byte_1811E2)	/* 0x1811E2 */
-		.fill   0x10
-GLOBAL (net_game_play_flags)	/* 0x1811F2 */
-		.byte	0x0
-		.fill   0x4b1
+		.fill   0x06
+		.fill   0x06
+		.fill   0x2e
+		.align	4
 
 GLOBAL (mission_status)	/* 0x199828 */
-		.long	0x0
-data_19982c:
-		.long	0x0
-data_199830:
-		.long	0x0
-data_199834:
-		.long	0x0
-data_199838:
-		.short  0x0
-data_19983a:
-		.short  0x0
-data_19983c:
-		.short  0x0
-data_19983e:
-		.short  0x0
-data_199840:
-		.short  0x0
-data_199842:
-		.fill   0xc
-data_19984e:
-		.byte	0x0
-data_19984f:
+		.fill   0x27
 		.fill   0x1298
-data_19aae7:
 		.byte	0x0
 GLOBAL (level_def)	/* 0x19AAE8 */
-level_def__PlayableGroups:
 		.fill   0x2c
 
 GLOBAL (things_used)	/* 0x19EC7E */
@@ -131127,97 +131060,6 @@ data_1c476e:
 data_1c4770:
 		.long	0x0
 
-
-GLOBAL (byte_1C47EA)	/* 0x1C47EA */
-		.short  0x0
-GLOBAL (net_unkn1_text)	/* 0x1C47EC */
-		.fill   0x19
-GLOBAL (byte_1C4805)	/* 0x1C4805 */
-		.byte	0x0
-GLOBAL (byte_1C4806)	/* 0x1C4806 */
-		.short  0x0
-GLOBAL (scientist_lost_reason)	/* 0x1C4808 */
-		.fill   0x3c
-data_1c4844:
-		.short  0x0
-GLOBAL (word_1C4846)	/* 0x1C4846 */
-		.fill   0xe
-data_1c4854:
-		.short  0x0
-GLOBAL(word_1C4856)	/* 0x1C4856 */
-		.fill   0x10
-GLOBAL(word_1C4866)	/* 0x1C4866 */
-		.short  0x0
-		.short  0x0
-		.short  0x0
-GLOBAL (textpos)	/* 0x1C486C */
-		.short  0x0
-data_1c486e:
-		.fill   0x12
-GLOBAL (byte_1C4880)	/* 0x1C4880 */
-		.fill   0x8
-GLOBAL (byte_1C4888)	/* 0x1C4888 */
-		.short  0x0
-GLOBAL (word_1C488A)	/* 0x1C488A */
-		.fill   0xc
-GLOBAL (word_1C4896)	/* 0x1C4896 */
-		.fill   0xc
-GLOBAL (word_1C48A2)	/* 0x1C48A2 */
-		.fill   0xc
-GLOBAL (word_1C48AE)	/* 0x1C48AE */
-		.fill   0xe
-GLOBAL (landmap_8BC)	/* 0x1C48BC */
-		.long	0x0
-GLOBAL (landmap_8C0)	/* 0x1C48C0 */
-		.long	0x0
-GLOBAL (landmap_8C4)	/* 0x1C48C4 */
-		.long	0x0
-GLOBAL (landmap_8C8)	/* 0x1C48C8 */
-		.long	0x0
-GLOBAL (word_1C48CC)	/* 0x1C48CC */
-		.short  0x0
-		.short  0x0
-GLOBAL (dword_1C48D0)	/* 0x1C48D0 */
-		.long	0x0
-GLOBAL (dword_1C48D4)	/* 0x1C48D4 */
-		.long	0x0
-		.fill   0x8
-GLOBAL (dword_1C48E0)	/* 0x1C48E0 */
-		.fill   0x18
-GLOBAL (dword_1C48F8)	/* 0x1C48F8 */
-		.long	0x0
-GLOBAL (dword_1C48FC)	/* 0x1C48FC */
-		.long	0x0
-		.fill   0x8
-GLOBAL (dword_1C4908)	/* 0x1C4908 */
-		.fill   0x18
-GLOBAL (dword_1C4920)	/* 0x1C4920 */
-		.long	0x0
-GLOBAL (dword_1C4924)	/* 0x1C4924 */
-		.long	0x0
-		.fill   0x8
-GLOBAL (dword_1C4930)	/* 0x1C4930 */
-		.fill   0x18
-data_1c4948:
-		.fill   0x14
-GLOBAL (byte_1C495C)	/* 0x1C495C */
-		.fill   0x14
-GLOBAL (byte_1C4970)	/* 0x1C4970 */
-		.ascii  "\x00\x00\x00"
-GLOBAL (research_completed)	/* 0x1C4973 */
-		.byte	0x0
-GLOBAL (cheat_research_weapon)	/* 0x1C4974 */
-		.byte	0x0
-GLOBAL (equip_agents_panel_draw_state)	/* 0x1C4975 */
-		.byte	0x0
-GLOBAL (equip_agent_name_draw_state)	/* 0x1C4976 */
-		.byte	0x0
-GLOBAL (cheat_research_cybmods)	/* 0x1C4977 */
-		.byte	0x0
-GLOBAL (byte_1C4978)	/* 0x1C4978 */
-		.byte	0x0
-GLOBAL (byte_1C4979)	/* 0x1C4979 */
-		.short  0x0
 GLOBAL (research_curr_wep_daily_done)	/* 0x1C497B */
 		.byte	0x0
 GLOBAL (research_curr_mod_daily_done)	/* 0x1C497C */

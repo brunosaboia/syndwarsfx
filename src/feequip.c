@@ -64,9 +64,9 @@ struct ScreenInfoBox equip_cost_box = {0};
 extern struct ScreenButton equip_all_agents_button;
 extern struct ScreenShape equip_agent_select_shapes[5];
 
-extern ubyte cheat_research_weapon;
-extern ubyte equip_agents_panel_draw_state;
-extern ubyte equip_agent_name_draw_state;
+ubyte cheat_research_weapon = 0;
+ubyte equip_agents_panel_draw_state = 0;
+ubyte equip_agent_name_draw_state = 0;
 
 extern ubyte mo_from_agent;
 ubyte refresh_equip_list = 0;

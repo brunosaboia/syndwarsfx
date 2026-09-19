@@ -49,7 +49,7 @@ struct ScreenButton controls_defaults_button = {0};
 struct ScreenButton controls_save_button = {0};
 struct ScreenButton controls_calibrate_button = {0};
 
-extern ubyte byte_1C4970;
+ubyte byte_1C4970 = 0;
 ubyte controls_hlight_gkey = 1;
 
 short sheet_columns_x[] = {4, 200, 300};
