@@ -68,6 +68,8 @@ struct ModemResponse { // sizeof=0x2C
 #pragma pack()
 /******************************************************************************/
 
+struct TbNetworkService nsvc;
+
 ubyte lbICommSessionActive;
 extern struct TbIPXHandler *IPXHandler;
 extern struct TbIPXPlayer IPXPlayer;

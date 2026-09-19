@@ -214,6 +214,9 @@ ubyte sfx_woman_shot[] = {
 };
 
 ushort female_peep = 0x2028;
+
+struct MyPath my_paths[1600];
+ushort path_count = 0;
 ushort head_my_path = 1;
 ushort word_1531DA = 1;
 

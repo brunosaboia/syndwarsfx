@@ -33,6 +33,10 @@ const ubyte month_days[12] = {
   31, 28, 31, 30, 31, 30, 31, 31, 30, 31,
 };
 
+struct MissionStatus mission_status[MISSION_STATUS_LIMIT];
+
+/******************************************************************************/
+
 long time_difference(struct SynTime *tm1, struct SynTime *tm2)
 {
     return 60 * (tm1->Hour - (long)tm2->Hour) + tm1->Minute - (long)tm2->Minute;

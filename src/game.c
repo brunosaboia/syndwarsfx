@@ -255,6 +255,8 @@ extern long dword_1DDECC;
 
 extern struct GamePanel unknstrct7_arr2[];
 
+ubyte mouser = 0;
+
 s32 gamep_unknval_10 = 0;
 s32 gamep_unknval_11 = 0;
 s32 gamep_unknval_12 = 0;
@@ -280,6 +282,11 @@ int mouse_map_z = 0x3200;
 
 extern short last_map_for_lights_func_11;
 
+struct LoginControl login_control[4];
+
+struct LevelDef level_def;
+
+sbyte mission_result;
 char mission_status_text[100];
 
 char *data_15319c = mission_status_text;

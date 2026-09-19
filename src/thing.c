@@ -64,8 +64,9 @@ struct UnkFLight { // sizeof=0x0A
 #pragma pack()
 /******************************************************************************/
 
+struct UnkFLight unkn_full_lights[50];
 ushort next_unkn_full_light = 1;
-extern struct UnkFLight unkn_full_lights[50];
+
 extern u32 things_init_times; // = 0;
 
 ubyte debug_log_things = 0;
@@ -151,6 +152,14 @@ const char *state_change_result_names[] = {
     "change denied",
     "goal unattainable",
 };
+
+ushort things_used;
+ThingIdx things_used_head;
+ThingIdx things_empty_head;
+
+ushort sthings_used;
+ThingIdx sthings_used_head;
+ThingIdx sthings_empty_head;
 
 ThingIdx same_type_head[256 + PEOPLE_GROUPS_LIMIT + 1] = {0};
 

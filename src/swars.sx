@@ -102,6 +102,11 @@
 .global EXPORT_SYMBOL(gamep_unknval_16);	/* 0x1777B0 */
 .global EXPORT_SYMBOL(shield_frm);			/* 0x1777B8 */
 .global EXPORT_SYMBOL(gamep_scene_effect_type);	/* 0x1777C8 */
+.global EXPORT_SYMBOL(mission_result);		/* 0x17712D */
+.global EXPORT_SYMBOL(mouser);				/* 0x177138 */
+.global EXPORT_SYMBOL(unkn_player_groups);	/* 0x17713C */
+.global EXPORT_SYMBOL(my_paths);			/* 0x1777CC */
+.global EXPORT_SYMBOL(path_count);			/* 0x17EE8C */
 .global EXPORT_SYMBOL(word_17FA58);			/* 0x17FA58 */
 .global EXPORT_SYMBOL(ingame);				/* 0x1807D4 */
 .global EXPORT_SYMBOL(player_message_text);	/* 0x180CC9 */
@@ -119,6 +124,10 @@
 
 .global EXPORT_SYMBOL(shrapnel_free);		/* 0x19714C */
 .global EXPORT_SYMBOL(phwoar_free);			/* 0x19714E */
+.global EXPORT_SYMBOL(login_control);		/* 0x181180 */
+.global EXPORT_SYMBOL(nsvc);				/* 0x1811A8 */
+.global EXPORT_SYMBOL(mission_status);		/* 0x199828 */
+.global EXPORT_SYMBOL(level_def);			/* 0x19AAE8 */
 .global EXPORT_SYMBOL(bul_starts);			/* 0x19AB14 */
 
 .global EXPORT_SYMBOL(scratch_buf1);		/* 0x19CB54 */
@@ -131,6 +140,14 @@
 .global EXPORT_SYMBOL(engine_render_lights);/* 0x19ec6f */
 .global EXPORT_SYMBOL(game_perspective);	/* 0x19EC71 */
 .global EXPORT_SYMBOL(unkn_flags_01);		/* 0x19EC72 */
+.global EXPORT_SYMBOL(things_used);			/* 0x19EC7E */
+.global EXPORT_SYMBOL(things_empty_head);	/* 0x19EC86 */
+.global EXPORT_SYMBOL(things_used_head);	/* 0x19EC88 */
+.global EXPORT_SYMBOL(sthings_used);		/* 0x19EC80 */
+.global EXPORT_SYMBOL(sthings_empty_head);	/* 0x19EC82 */
+.global EXPORT_SYMBOL(sthings_used_head);	/* 0x19EC84 */
+.global EXPORT_SYMBOL(war_flags);			/* 0x19EC98 */
+.global EXPORT_SYMBOL(group_actions);		/* 0x19F198 */
 .global EXPORT_SYMBOL(mission_open);		/* 0x19F430 */
 .global EXPORT_SYMBOL(mission_state);		/* 0x19F494 */
 .global EXPORT_SYMBOL(nuclear_overexposure);	/* 0x19F4F8 */
@@ -152,6 +169,8 @@
 
 .global EXPORT_SYMBOL(next_col_column);		/* 0x19f73a */
 .global EXPORT_SYMBOL(textwalk_data);		/* 0x19F73C */
+.global EXPORT_SYMBOL(unkn_full_lights);	/* 0x19F9BC */
+.global EXPORT_SYMBOL(local_mats);			/* 0x19FBB0 */
 
 .global EXPORT_SYMBOL(game_floor_tiles);	/* 0x1a09c0 */
 .global EXPORT_SYMBOL(game_light_commands);	/* 0x1a09c4 */
@@ -2229,7 +2248,7 @@ GLOBAL_FUNC(ASM_show_goto_point)	/* 0x020938 */
 		lea    0x0(,%eax,4),%edx
 		sub    %eax,%edx
 		xor    %eax,%eax
-		mov    mouser,%al
+		mov    EXPORT_SYMBOL(mouser),%al
 		mov    EXPORT_SYMBOL(players)+0x088(%edx,%eax,4),%edx # players[0].DirectControl[0]
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
@@ -2498,7 +2517,7 @@ GLOBAL_FUNC(ASM_draw_hud)	/* 0x020C80 */
 		sub    %edx,%eax
 		mov    %eax,%edx
 		xor    %eax,%eax
-		mov    mouser,%al
+		mov    EXPORT_SYMBOL(mouser),%al
 		mov    EXPORT_SYMBOL(players)+0x088(%edx,%eax,4),%edx # players[0].DirectControl[0]
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
@@ -2725,7 +2744,7 @@ func_20fea:
 		shl    $0x3,%edx
 		lea    (%ecx,%edx,1),%ebx
 		xor    %edx,%edx
-		mov    mouser,%dl
+		mov    EXPORT_SYMBOL(mouser),%dl
 		mov    EXPORT_SYMBOL(players)+0x088(%eax,%edx,4),%edx # players[0].DirectControl[0]
 		lea    0x0(,%edx,4),%eax
 		add    %edx,%eax
@@ -5003,7 +5022,7 @@ GLOBAL_FUNC(ASM_search_things_for_uniqueid)	/* 0x0318C8 */
 		mov    0x6(%eax),%dx
 		jmp    jump_318e3
 	jump_31912:
-		mov    sthings_used_head,%ax
+		mov    EXPORT_SYMBOL(sthings_used_head),%ax
 		movswl %bx,%esi
 	jump_3191b:
 		movswl %ax,%edx
@@ -5319,7 +5338,7 @@ GLOBAL_FUNC(ASM_update_map_thing_and_traffic_refs)	/* 0x031C38 */
 		mov    0x6(%edx),%ax
 		jmp    jump_31c45
 	jump_31cbf:
-		mov    sthings_used_head,%ax
+		mov    EXPORT_SYMBOL(sthings_used_head),%ax
 		xor    %esi,%esi
 	jump_31cc7:
 		movswl %ax,%edi
@@ -5419,7 +5438,7 @@ GLOBAL_FUNC(ASM_update_map_thing_and_traffic_refs)	/* 0x031C38 */
 		mov    0x6(%eax),%dx
 		jmp    jump_31dad
 	jump_31dd6:
-		mov    sthings_used_head,%dx
+		mov    EXPORT_SYMBOL(sthings_used_head),%dx
 	jump_31ddd:
 		movswl %dx,%eax
 		test   %eax,%eax
@@ -6871,7 +6890,7 @@ GLOBAL_FUNC (ASM_process_mouse_inputs)	/* 0x03AA04 */
 		mov    %eax,%edx
 		lea    0x0(,%eax,4),%ebx
 		xor    %eax,%edx
-		mov    mouser,%dl
+		mov    EXPORT_SYMBOL(mouser),%dl
 		sub    %eax,%ebx
 		mov    %edx,%eax
 		shl    $0x4,%eax
@@ -6890,7 +6909,7 @@ GLOBAL_FUNC (ASM_process_mouse_inputs)	/* 0x03AA04 */
 		mov    %eax,%edx
 		lea    0x0(,%eax,4),%ebx
 		xor    %eax,%edx
-		mov    mouser,%dl
+		mov    EXPORT_SYMBOL(mouser),%dl
 		sub    %eax,%ebx
 		mov    %edx,%eax
 		shl    $0x4,%eax
@@ -6940,7 +6959,7 @@ GLOBAL_FUNC (ASM_process_mouse_inputs)	/* 0x03AA04 */
 		sub    %esi,%eax
 		xor    %ecx,%ecx
 		add    %eax,%eax
-		mov    mouser,%cl
+		mov    EXPORT_SYMBOL(mouser),%cl
 		mov    %eax,%edx
 		shl    $0x2,%eax
 		lea    0x0(,%ecx,4),%ebx
@@ -7159,7 +7178,7 @@ func_3ad8b:
 		sub    %edx,%eax
 		xor    %edx,%edx
 		push   $0x0
-		mov    mouser,%dl
+		mov    EXPORT_SYMBOL(mouser),%dl
 		push   $0x0
 		mov    EXPORT_SYMBOL(players)+0x100(%eax),%ecx # players[].Target
 		mov    EXPORT_SYMBOL(players)+0x088(%eax,%edx,4),%esi # players[0].DirectControl[0]
@@ -7211,7 +7230,7 @@ func_3adf0:
 		mov    %eax,%edx
 		lea    0x0(,%eax,4),%ebx
 		xor    %eax,%edx
-		mov    mouser,%dl
+		mov    EXPORT_SYMBOL(mouser),%dl
 		sub    %eax,%ebx
 		mov    %edx,%eax
 		shl    $0x4,%eax
@@ -7245,7 +7264,7 @@ func_3adf0:
 		sub    %edx,%eax
 		mov    %eax,%edx
 		xor    %eax,%eax
-		mov    mouser,%al
+		mov    EXPORT_SYMBOL(mouser),%al
 		movzbl EXPORT_SYMBOL(local_player_no),%esi
 		mov    EXPORT_SYMBOL(players)+0x088(%edx,%eax,4),%ebx # players[0].DirectControl[0]
 		lea    0x0(,%esi,4),%eax
@@ -7331,7 +7350,7 @@ func_3adf0:
 		add    %eax,%eax
 		xor    %ecx,%ecx
 		lea    0x0(,%eax,4),%edi
-		mov    mouser,%cl
+		mov    EXPORT_SYMBOL(mouser),%cl
 		sub    %eax,%edi
 		mov    %ecx,%eax
 		shl    $0x4,%eax
@@ -7417,7 +7436,7 @@ func_3adf0:
 		shl    $0x3,%eax
 		sub    %edx,%eax
 		add    %eax,%eax
-		movzbl mouser,%ebp
+		movzbl EXPORT_SYMBOL(mouser),%ebp
 		mov    %eax,%edx
 		shl    $0x2,%eax
 		lea    0x0(,%ebp,4),%ebx
@@ -7539,7 +7558,7 @@ func_3adf0:
 		shl    $0x2,%eax
 		xor    %ebx,%ebx
 		sub    %edx,%eax
-		mov    mouser,%bl
+		mov    EXPORT_SYMBOL(mouser),%bl
 		mov    %eax,%edx
 		mov    %ebx,%eax
 		shl    $0x4,%eax
@@ -7651,7 +7670,7 @@ func_3adf0:
 		mov    %eax,%edx
 		lea    0x0(,%eax,4),%ebx
 		xor    %eax,%edx
-		mov    mouser,%dl
+		mov    EXPORT_SYMBOL(mouser),%dl
 		sub    %eax,%ebx
 		mov    %edx,%eax
 		shl    $0x4,%eax
@@ -7691,7 +7710,7 @@ func_3adf0:
 		sar    $0x10,%ebx
 		push   %ebx
 		xor    %ebx,%ebx
-		mov    mouser,%bl
+		mov    EXPORT_SYMBOL(mouser),%bl
 		mov    EXPORT_SYMBOL(mouse_map_x),%ecx
 		mov    EXPORT_SYMBOL(players)+0x088(%edx,%ebx,4),%ebx # players[0].DirectControl[0]
 		mov    $0x38,%edx
@@ -7714,7 +7733,7 @@ func_3adf0:
 		je     jump_3b4ff
 		xor    %ebx,%ebx
 		push   $0x0
-		mov    mouser,%bl
+		mov    EXPORT_SYMBOL(mouser),%bl
 		push   $0x0
 		mov    EXPORT_SYMBOL(players)+0x088(%edx,%ebx,4),%ebx # players[0].DirectControl[0]
 		mov    $0x1e,%edx
@@ -7758,7 +7777,7 @@ func_3adf0:
 		sub    %edx,%eax
 		mov    %eax,%edx
 		xor    %eax,%eax
-		mov    mouser,%al
+		mov    EXPORT_SYMBOL(mouser),%al
 		mov    EXPORT_SYMBOL(players)+0x088(%edx,%eax,4),%esi # players[0].DirectControl[0]
 		lea    0x0(,%ebx,4),%eax
 		mov    %ebp,%ecx
@@ -7798,7 +7817,7 @@ GLOBAL_FUNC(ASM_init_game_controls)	/* 0x03BAE4 */
 		push   %ecx
 		push   %edx
 		mov    EXPORT_SYMBOL(my_build_packet),%ebx
-		mov    mouser,%cl
+		mov    EXPORT_SYMBOL(mouser),%cl
 		xor    %eax,%eax
 	jump_3baf5:
 		add    $0x15,%eax
@@ -7828,7 +7847,7 @@ GLOBAL_FUNC(ASM_init_game_controls)	/* 0x03BAE4 */
 		jne    jump_3bb62
 		mov    $EXPORT_SYMBOL(build_packet),%ebx
 		xor    %cl,%cl
-		mov    %cl,mouser
+		mov    %cl,EXPORT_SYMBOL(mouser)
 		mov    %ebx,EXPORT_SYMBOL(my_build_packet)
 		pop    %edx
 		pop    %ecx
@@ -7841,7 +7860,7 @@ GLOBAL_FUNC(ASM_init_game_controls)	/* 0x03BAE4 */
 		jne    jump_3bb89
 		mov    $EXPORT_SYMBOL(build_packet2),%ebx
 		mov    $0x1,%cl
-		mov    %cl,mouser
+		mov    %cl,EXPORT_SYMBOL(mouser)
 		mov    %ebx,EXPORT_SYMBOL(my_build_packet)
 		pop    %edx
 		pop    %ecx
@@ -7854,7 +7873,7 @@ GLOBAL_FUNC(ASM_init_game_controls)	/* 0x03BAE4 */
 		jne    jump_3bbb0
 		mov    $EXPORT_SYMBOL(build_packet3),%ebx
 		mov    $0x2,%cl
-		mov    %cl,mouser
+		mov    %cl,EXPORT_SYMBOL(mouser)
 		mov    %ebx,EXPORT_SYMBOL(my_build_packet)
 		pop    %edx
 		pop    %ecx
@@ -7868,7 +7887,7 @@ GLOBAL_FUNC(ASM_init_game_controls)	/* 0x03BAE4 */
 		mov    $EXPORT_SYMBOL(build_packet4),%ebx
 		mov    $0x3,%cl
 	jump_3bbc7:
-		mov    %cl,mouser
+		mov    %cl,EXPORT_SYMBOL(mouser)
 		mov    %ebx,EXPORT_SYMBOL(my_build_packet)
 		pop    %edx
 		pop    %ecx
@@ -8710,7 +8729,7 @@ GLOBAL_FUNC (ASM_player_chat_message_add_key)	/* 0x3E580 */
 		shl    $0x2,%edx
 		sub    %eax,%edx
 		xor    %eax,%eax
-		mov    mouser,%al
+		mov    EXPORT_SYMBOL(mouser),%al
 		xor    %bl,%bl
 		mov    %bl,EXPORT_SYMBOL(players)+0x0B0(%edx,%eax,1) # players[].PanelState[]
 		add    $0x4,%esp
@@ -63558,7 +63577,7 @@ GLOBAL_FUNC (ASM_init_just_things)	/* 0x075CF0 */
 		xor    %ebx,%ebx
 		xor    %esi,%esi
 		mov    %dx,EXPORT_SYMBOL(sthings_empty_head)
-		mov    %bx,sthings_used_head
+		mov    %bx,EXPORT_SYMBOL(sthings_used_head)
 		jmp    jump_75d9a
 	jump_75d67:
 		imul   $0xa8,%eax,%edi
@@ -63876,7 +63895,7 @@ GLOBAL_FUNC(ASM_get_new_sthing)	/* 0x076120 */
 		push   %esi
 		push   %edi
 		mov    EXPORT_SYMBOL(sthings_empty_head),%si
-		mov    sthings_used_head,%di
+		mov    EXPORT_SYMBOL(sthings_used_head),%di
 		xor    %eax,%eax
 		mov    EXPORT_SYMBOL(sthings_used),%ax
 		cmp    $0x5d7,%eax
@@ -63910,7 +63929,7 @@ GLOBAL_FUNC(ASM_get_new_sthing)	/* 0x076120 */
 		mov    %edi,%eax
 		mov    %dx,EXPORT_SYMBOL(sthings_used)
 	jump_761a4:
-		mov    %di,sthings_used_head
+		mov    %di,EXPORT_SYMBOL(sthings_used_head)
 		mov    %si,EXPORT_SYMBOL(sthings_empty_head)
 		pop    %edi
 		pop    %esi
@@ -63945,9 +63964,9 @@ GLOBAL_FUNC(ASM_remove_sthing)	/* 0x0761B8 */
 		sub    %ecx,%eax
 		mov    %si,0x4(%edi,%eax,4)
 	jump_761f1:
-		cmp    sthings_used_head,%dx
+		cmp    EXPORT_SYMBOL(sthings_used_head),%dx
 		jne    jump_76203
-		mov    %bx,sthings_used_head
+		mov    %bx,EXPORT_SYMBOL(sthings_used_head)
 		jmp    jump_76218
 	jump_76203:
 		movswl %si,%ecx
@@ -101881,7 +101900,7 @@ SCANNER_draw_new_transparent_sub3:	/* 0xAEFFD */
 		test   %edx,%edx
 		jg     jump_af49f
 	jump_af96e:
-		mov    sthings_used_head,%ax
+		mov    EXPORT_SYMBOL(sthings_used_head),%ax
 		test   %ax,%ax
 		je     SCANNER_draw_new_transparent_sub8_end
 	jump_af97d:
@@ -102296,7 +102315,7 @@ GLOBAL_FUNC(ASM_SCANNER_unkn_func_205)	/* 0x0B0908 */
 		shl    $0x2,%eax
 		sub    %edx,%eax
 		xor    %edx,%edx
-		mov    mouser,%dl
+		mov    EXPORT_SYMBOL(mouser),%dl
 		mov    EXPORT_SYMBOL(players)+0x0B0(%edx,%eax,1),%al # players[].PanelState[]
 		and    $0xff,%eax
 		cmp    $0x11,%eax
@@ -129016,77 +129035,15 @@ data_1770fa:
 GLOBAL (save_hashtbl_verify_code)	/* 0x1770FC */
 		.long	0x0
 
-GLOBAL (mission_result)	/* 0x17712D */
-		.ascii  "\x00\x00\x00"
-		.align	4
-
-GLOBAL (mouser)	/* 0x177138 */
-		.ascii  "\x00\x00\x00"
-		.byte	0x0
-GLOBAL (unkn_player_groups)	/* 0x17713C */
-		.fill   0x14
-		.fill   0x334
-
-GLOBAL (my_paths)	/* 0x1777CC */
-		.fill   0x76ad
-		.fill   0x13
-GLOBAL (path_count)	/* 0x17EE8C */
-		.long	0x0
-
 data_17fa52:	/* 0x17fa52 remove pending */
 		.short  0x0
 		.align	4
 
-GLOBAL (login_control)	/* 0x181180 */
-		.fill   0x28
-
-GLOBAL (nsvc)	/* 0x1811A8 */
-		.fill   0x06
-		.fill   0x06
-		.fill   0x2e
-		.align	4
-
-GLOBAL (mission_status)	/* 0x199828 */
-		.fill   0x27
-		.fill   0x1298
-		.byte	0x0
-GLOBAL (level_def)	/* 0x19AAE8 */
-		.fill   0x2c
-
-GLOBAL (things_used)	/* 0x19EC7E */
-		.short  0x0
-GLOBAL (sthings_used)	/* 0x19EC80 */
-		.short  0x0
-GLOBAL (sthings_empty_head)	/* 0x19EC82 */
-		.short  0x0
-GLOBAL (sthings_used_head)	/* 0x19EC84 */
-		.short  0x0
-GLOBAL (things_empty_head)	/* 0x19EC86 */
-		.short  0x0
-GLOBAL (things_used_head)	/* 0x19EC88 */
-		.short  0x0
-		.short  0x0
 GLOBAL (link__MapColListEmptyHead)	/* 0x19EC8C */
 		.short  0x0
 GLOBAL (link__MapColVectEmptyHead)	/* 0x19EC8E */
 		.short  0x0
 		.fill   0x8
-
-GLOBAL (war_flags)	/* 0x19EC98 */
-		.fill   0x10
-		.fill   0x4f0
-GLOBAL (group_actions)	/* 0x19F198 */
-		.fill   0x8
-		.fill   0x6
-		.fill   0x28A
-		.align  4
-
-GLOBAL (unkn_full_lights)	/* 0x19F9BC */
-		.fill   0x8
-		.fill   0x1ec
-GLOBAL (local_mats)		/* 0x19FBB0 */
-		.fill   0x20
-		.fill   0xdf0
 
 /* struct Thing *things;
  */
