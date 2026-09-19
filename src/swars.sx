@@ -184,6 +184,9 @@
 .global EXPORT_SYMBOL(dword_1AA5DC);	/* 0x1AA5DC */
 .global EXPORT_SYMBOL(dword_1AA5E0);	/* 0x1AA5E0 */
 .global EXPORT_SYMBOL(dword_1AA5E4);	/* 0x1AA5E4 */
+.global EXPORT_SYMBOL(minimum_explode_size);	/* 0x1AA5E8 */
+.global EXPORT_SYMBOL(minimum_explode_and);	/* 0x1AA5EC */
+.global EXPORT_SYMBOL(minimum_explode_depth);	/* 0x1AA5F0 */
 
 .global EXPORT_SYMBOL(outro_hot_chars);	/* 0x1ddb70 */
 
@@ -75857,10 +75860,10 @@ point_new:	/* 0x7EB48 */
 		mov    %edx,EXPORT_SYMBOL(triangulation)+0x2C # triangulation[0].free_Points
 		jmp    jump_7eb78
 	jump_7eb69:
-		mov    EXPORT_SYMBOL(triangulation)+0x24,%edx
+		mov    EXPORT_SYMBOL(triangulation)+0x24,%edx # triangulation[0].ix_Points
 		mov    %edx,%eax
 		inc    %edx
-		mov    %edx,EXPORT_SYMBOL(triangulation)+0x24
+		mov    %edx,EXPORT_SYMBOL(triangulation)+0x24 # triangulation[0].ix_Points
 	jump_7eb78:
 		mov    EXPORT_SYMBOL(triangulation)+0x28,%ecx # triangulation[0].count_Points
 		mov    EXPORT_SYMBOL(triangulation)+0x38,%ebx # triangulation[0].Points
@@ -75996,7 +75999,7 @@ GLOBAL_FUNC(ASM_triangulation_initxy)	/* 0x7ec24 */
 		movb   $0x0,0xe(%eax)
 		mov    $0x4,%ecx
 		movb   $0x0,0x1e(%eax)
-		mov    %ecx,EXPORT_SYMBOL(triangulation)+0x24
+		mov    %ecx,EXPORT_SYMBOL(triangulation)+0x24 # triangulation[0].ix_Points
 		movb   $0x7,0xf(%eax)
 		mov    %ecx,EXPORT_SYMBOL(triangulation)+0x28 # triangulation[0].count_Points
 		movb   $0x7,0x1f(%eax)
@@ -129035,10 +129038,7 @@ data_17fa52:	/* 0x17fa52 remove pending */
 		.align	4
 
 GLOBAL (login_control)	/* 0x181180 */
-		.fill   0x08
-		.byte	0x0
-		.byte	0x0
-		.fill   0x1e
+		.fill   0x28
 
 GLOBAL (nsvc)	/* 0x1811A8 */
 		.fill   0x06
@@ -129162,18 +129162,6 @@ GLOBAL (dword_1AA5C4)	/* 0x1AA5C4 */
 GLOBAL (dword_1AA5C8)	/* 0x1AA5C8 */
 		.long	0x0
 
-GLOBAL (expl_unkn_cor_x)	/* 0x1AA5D0 */
-		.long	0x0
-GLOBAL (expl_unkn_cor_z)
-		.long	0x0
-
-GLOBAL (minimum_explode_size)	/* 0x1AA5E8 */
-		.long	0x0
-GLOBAL (minimum_explode_and)	/* 0x1AA5EC */
-		.long	0x0
-GLOBAL (minimum_explode_depth)	/* 0x1AA5F0 */
-		.long	0x0
-
 data_1aa660:
 		.short  0x0
 data_1aa662:
@@ -129214,37 +129202,8 @@ data_1aaa58:
 data_1aaa8a:
 		.short  0x0
 GLOBAL (animations)	/* 0x1AAA8C */
-		.long	0x0
-data_1aaa90:
-		.long	0x0
-data_1aaa94:
-		.short  0x0
-data_1aaa96:
-		.short  0x0
-data_1aaa98:
-		.short  0x0
-data_1aaa9a:
-		.short  0x0
-data_1aaa9c:
-		.fill   0xa
-data_1aaaa6:
-		.short  0x0
-data_1aaaa8:
-		.short  0x0
-data_1aaaaa:
-		.short  0x0
-data_1aaaac:
-		.long	0x0
-data_1aaab0:
-		.short  0x0
-data_1aaab2:
-		.fill   0xa
-data_1aaabc:
-		.fill   0x8
-data_1aaac4:
-		.fill   0x36
-data_1aaafa:
-		.fill   0x72
+		.fill   0x70
+		.fill   0x70
 GLOBAL (ASM_active_anim)	/* 0x1AAB6C */
 		.fill   0x8
 GLOBAL (dword_1AAB74)	/* 0x1AAB74 */
@@ -129268,65 +129227,7 @@ GLOBAL (data_1aabd8)	/* 0x1AABD8 */
 		.long	0x0
 		.long	0x0
 GLOBAL (triangulation)	/* 0x1AABE0 */
-		.long	0x0
-		.long	0x0
-		.long	0x0
-		.long	0x0
-		.long	0x0
-		.long	0x0
-		.long	0x0
-		.long	0x0
-		.long	0x0
-triangulation_0_ix_Points:	/* 0x1aabec */
-		.long	0x0
-triangulation_0_count_Points:	/* 0x1aabf0 */
-		.long	0x0
-triangulation_0_free_Points:	/* 0x1aabf4 */
-		.long	0x0
-		.long	0x0
-		.long	0x0
-/* Point *points
- */
-triangulation_0_Points:	/* 0x1aac18 */
-		.long	0x0
-data_1aac1c:
-		.long	0x0
-data_1aac20:
-		.fill   0x8
-data_1aac28:
-		.fill   0x10
-data_1aac38:
-		.long	0x0
-data_1aac3c:
-		.fill   0x14
-data_1aac50:
-		.long	0x0
-data_1aac54:
-		.long	0x0
-data_1aac58:
-		.long	0x0
-data_1aac5c:
-		.fill   0x8
-data_1aac64:
-		.fill   0x10
-data_1aac74:
-		.long	0x0
-data_1aac78:
-		.fill   0x14
-data_1aac8c:
-		.long	0x0
-data_1aac90:
-		.long	0x0
-data_1aac94:
-		.fill   0x1c
-data_1aacb0:
-		.long	0x0
-data_1aacb4:
-		.fill   0x14
-data_1aacc8:
-		.long	0x0
-data_1aaccc:
-		.fill   0x16c
+		.fill   0x258
 GLOBAL (triangulation_initied)	/* 0x1AAE38 */
 		.long	0x0
 data_1aae3c:

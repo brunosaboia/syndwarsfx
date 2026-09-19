@@ -52,9 +52,12 @@ TbBool ex_face_anim_enabled = true;
 
 extern struct rectangle redo_scanner[128];
 
-extern s32 minimum_explode_depth;
-extern u32 minimum_explode_and;
-extern s32 minimum_explode_size;
+s32 expl_unkn_cor_x;
+s32 expl_unkn_cor_z;
+
+s32 minimum_explode_size;
+u32 minimum_explode_and;
+s32 minimum_explode_depth;
 
 extern s32 dword_1AA5C4;
 extern s32 dword_1AA5C8;
