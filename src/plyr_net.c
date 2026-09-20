@@ -19,6 +19,8 @@
 /******************************************************************************/
 #include "plyr_net.h"
 
+#include "bfmemut.h"
+
 #include "network.h"
 
 /******************************************************************************/
@@ -29,8 +31,15 @@ ubyte net_serial_uses_modem = 0;
 
 ubyte net_host_player_no = 0;
 
+struct NetPlayer2 net_players[5];
+ubyte net_players_num = 1;
+
 /******************************************************************************/
 
+TbBool netgame_service_is_multi_client_capable(void)
+{
+    return nsvc.I.Type == NetSvc_IPX;
+}
 
 void netgame_service_owned_link_reset(void)
 {
@@ -43,4 +52,13 @@ void netgame_service_owned_link_reset(void)
     }
 
 }
+
+void init_net_players(void)
+{
+    int i;
+    for (i = 0; i < 5; i++) {
+        LbMemorySet(&net_players[i], '\0', sizeof(struct NetPlayer2));
+    }
+}
+
 /******************************************************************************/

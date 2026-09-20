@@ -430,7 +430,7 @@ skip_modem_init:
     selected_net_session = -1;
     selected_net_user = -1;
 
-    if (nsvc.I.Type != NetSvc_IPX) {
+    if (!netgame_service_is_multi_client_capable()) {
         players[local_player_no].DoubleMode = 0;
     }
     load_missions(99);
@@ -515,7 +515,7 @@ skip_modem_init:
     byte_1C6D4A = 1;
     LbMemoryCopy(&nsvc.S, p_nsession, sizeof(struct TbNetworkSession));
 
-    if (nsvc.I.Type != NetSvc_IPX) {
+    if (!netgame_service_is_multi_client_capable()) {
         players[local_player_no].DoubleMode = 0;
     }
     load_missions(99);

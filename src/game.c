@@ -148,6 +148,7 @@
 #include "command.h"
 #include "packetfe.h"
 #include "player.h"
+#include "plyr_net.h"
 #include "plyr_usrinp.h"
 #include "plyr_packet.h"
 #include "research.h"
@@ -4419,14 +4420,6 @@ TbBool player_try_spend_money(long cost)
     return true;
 }
 
-void init_net_players(void)
-{
-    int i;
-    for (i = 0; i < 5; i++) {
-        LbMemorySet(&net_players[i], '\0', sizeof(struct NetPlayer2));
-    }
-}
-
 void campaign_new_game_prepare(void)
 {
     struct Campaign *p_campgn;
@@ -5958,7 +5951,7 @@ void show_load_and_prep_mission(void)
 
         if (in_network_game)
         {
-            if (nsvc.I.Type != NetSvc_IPX)
+            if (!netgame_service_is_multi_client_capable())
                 ingame.InNetGame_UNSURE = ((1 << 0) | (1 << 1)); // two players
             ingame.DetailLevel = 0;
             bang_set_detail(ingame.DetailLevel == 0);

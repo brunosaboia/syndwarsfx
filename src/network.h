@@ -84,14 +84,6 @@ struct TbNetworkService { // sizeof=10
     };
 };
 
-// TODO maybe this only ocntains one string?
-struct NetPlayer2 {
-  char field_0[13];
-  char field_D;
-  char field_E[10];
-  char field_18;
-};
-
 struct ModemCommand {
   char cmd[80];
 };
@@ -278,10 +270,8 @@ struct TbNetworkSessionList { // sizeof=218
 #pragma pack()
 /******************************************************************************/
 extern ubyte modem_is_configured;
-extern ubyte net_players_num;
 extern struct TbNetworkService NetworkServicePtr;
 extern ulong NetTimeoutTicks;
-extern struct NetPlayer2 net_players[5];
 // Application-accessible copy of the service structure?
 extern struct TbNetworkService nsvc;
 

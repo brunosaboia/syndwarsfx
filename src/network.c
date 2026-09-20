@@ -87,9 +87,6 @@ extern ulong ipx_got_player_send_packet_count[8];
 extern struct TbIPXPlayerHeader loggon_header;
 extern ubyte player_loggon;
 
-struct NetPlayer2 net_players[5];
-ubyte net_players_num = 1;
-
 extern struct ComHandlerInfo com_dev[4];
 extern struct IPXDatagramBackup datagram_backup[8];
 
