@@ -25,6 +25,11 @@
 #include "trlog.h"
 /******************************************************************************/
 
+struct Triangulation triangulation[TRIANGULATIONS_COUNT];
+int triangulation_initied = 0;
+
+/******************************************************************************/
+
 void triangulation_initialize(void)
 {
     int n;

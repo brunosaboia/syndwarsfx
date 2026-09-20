@@ -216,6 +216,8 @@
 .global EXPORT_SYMBOL(minimum_explode_size);	/* 0x1AA5E8 */
 .global EXPORT_SYMBOL(minimum_explode_and);	/* 0x1AA5EC */
 .global EXPORT_SYMBOL(minimum_explode_depth);	/* 0x1AA5F0 */
+.global EXPORT_SYMBOL(triangulation);	/* 0x1AABE0 */
+.global EXPORT_SYMBOL(triangulation_initied);	/* 0x1AAE38 */
 
 .global EXPORT_SYMBOL(outro_hot_chars);	/* 0x1ddb70 */
 
@@ -259,6 +261,8 @@
 .global EXPORT_SYMBOL(map_from_mission);	/* 0x1C4B79 */
 .global EXPORT_SYMBOL(reload_background_flag);	/* 0x1C4B80 */
 .global EXPORT_SYMBOL(cryo_agents);		/* 0x1C4BA0 */
+.global EXPORT_SYMBOL(num_cities);		/* 0x1C52B8 */
+.global EXPORT_SYMBOL(cities);			/* 0x1C52BC */
 .global EXPORT_SYMBOL(background_type);	/* 0x1C6DEC */
 .global EXPORT_SYMBOL(global_date);		/* 0x1C6DF0 */
 .global EXPORT_SYMBOL(save_slot_base);	/* 0x1C82FC */
@@ -75822,7 +75826,7 @@ GLOBAL_FUNC(ASM_triangulation_select)	/* 0x7E9AC */
 		je     jump_7ea48
 		shl    $0x4,%eax
 		sub    %edx,%eax
-		mov    triangulation(,%eax,4),%ecx
+		mov    EXPORT_SYMBOL(triangulation)(,%eax,4),%ecx
 		push   %ecx
 		push   %edx
 		push   $aTriIdDDTriangu
@@ -75835,11 +75839,11 @@ GLOBAL_FUNC(ASM_triangulation_select)	/* 0x7E9AC */
 		je     jump_7ea17
 		mov    %esi,%eax
 		shl    $0x4,%eax
-		mov    $triangulation,%edi
+		mov    $EXPORT_SYMBOL(triangulation),%edi
 		sub    %esi,%eax
 		mov    $0x3c,%ecx
 		shl    $0x2,%eax
-		mov    $triangulation,%esi
+		mov    $EXPORT_SYMBOL(triangulation),%esi
 		add    %eax,%edi
 		push   %edi
 		mov    %ecx,%eax
@@ -75852,11 +75856,11 @@ GLOBAL_FUNC(ASM_triangulation_select)	/* 0x7E9AC */
 	jump_7ea17:
 		mov    %edx,%eax
 		shl    $0x4,%eax
-		mov    $triangulation,%esi
+		mov    $EXPORT_SYMBOL(triangulation),%esi
 		sub    %edx,%eax
 		mov    $0x3c,%ecx
 		shl    $0x2,%eax
-		mov    $triangulation,%edi
+		mov    $EXPORT_SYMBOL(triangulation),%edi
 		add    %eax,%esi
 		mov    %edx,EXPORT_SYMBOL(selected_triangulation_no)
 		push   %edi
@@ -127996,16 +128000,16 @@ GLOBAL_FUNC(ASM_find_closest_city)	/* 0x0D01F8 */
 		inc    %edx
 	jump_d021b:
 		xor    %eax,%eax
-		mov    num_cities,%al
+		mov    EXPORT_SYMBOL(num_cities),%al
 		cmp    %eax,%edx
 		jge    jump_d0263
 		xor    %esi,%esi
-		mov    cities(%ebx),%edi
+		mov    EXPORT_SYMBOL(cities)(%ebx),%edi
 		mov    0x4(%esp),%si
 		sar    $0x10,%edi
 		sub    %esi,%edi
 		imul   %edi,%edi
-		mov    word_1C52BA(%ebx),%eax
+		mov    EXPORT_SYMBOL(cities)-0x02(%ebx),%eax
 		xor    %esi,%esi
 		sar    $0x10,%eax
 		mov    (%esp),%si
@@ -129139,10 +129143,7 @@ GLOBAL (data_1aabd4)
 GLOBAL (data_1aabd8)	/* 0x1AABD8 */
 		.long	0x0
 		.long	0x0
-GLOBAL (triangulation)	/* 0x1AABE0 */
-		.fill   0x258
-GLOBAL (triangulation_initied)	/* 0x1AAE38 */
-		.long	0x0
+
 data_1aae3c:
 		.fill   0xc
 
@@ -129353,25 +129354,6 @@ GLOBAL (dword_1C4B84)	/* 0x1C4B84 no function - remove pending */
 GLOBAL (dword_1C4B88)	/* 0x1C4B88 no function - remove pending  */
 		.long	0x0
 
-GLOBAL (num_cities)	/* 0x1C52B8 */
-		.short  0x0
-word_1C52BA:	/* 0x1C52BA */
-		.short  0x0
-GLOBAL (cities)	/* 0x1C52BC */
-		.short  0x0
-		.short  0x0
-data_1c52c0:
-		.byte	0x0
-		.byte	0x0
-data_1c52c2:
-		.byte	0x0
-		.byte	0x0
-data_1c52c4:
-		.fill   0x47e
-data_1c5742:
-		.short  0x0
-world_landmap_box_x:	/* 0x1C5744 */
-		.fill   0x348
 GLOBAL (netscan_objectives)	/* 0x1C5A8C */
 		.short  0x0
 data_1c5a8e:

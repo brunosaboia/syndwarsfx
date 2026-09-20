@@ -62,7 +62,12 @@ const struct TbNamedEnum cities_conf_city_cmds[] = {
 
 char *memload_city_prop_text = NULL;
 
+ubyte num_cities = 0;
+struct City cities[50];
+
 sbyte selected_city_id = -1;
+
+/******************************************************************************/
 
 void load_city_prop_text(void)
 {
