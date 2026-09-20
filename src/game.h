@@ -166,8 +166,6 @@ extern ushort word_1531E0;
 
 extern ubyte *spare_map_buffer;
 
-extern ubyte net_service_started;
-
 extern ubyte net_host_player_no;
 extern ubyte byte_1C6D4A;
 extern ubyte byte_1C6DDC[5];
@@ -216,11 +214,6 @@ extern ushort next_mission;
 extern int mouse_map_x;
 extern int mouse_map_y;
 extern int mouse_map_z;
-
-extern ubyte game_gfx_advanced_lights;
-extern ubyte game_billboard_movies;
-extern ubyte game_gfx_deep_radar;
-extern ubyte byte_1C4A6F;
 
 extern char *misc_text[5];
 

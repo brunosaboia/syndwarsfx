@@ -161,6 +161,8 @@ syndwarsfx_SOURCES = \
 	pepgroup.h \
 	player.c \
 	player.h \
+	plyr_net.c \
+	plyr_net.h \
 	plyr_packet.c \
 	plyr_packet.h \
 	plyr_usrinp.c \

@@ -40,6 +40,7 @@
 #include "network.h"
 #include "packet.h"
 #include "player.h"
+#include "plyr_net.h"
 #include "research.h"
 #include "sound.h"
 #include "thing.h"

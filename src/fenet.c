@@ -50,6 +50,7 @@
 #include "purpldrw.h"
 #include "purpldrwlst.h"
 #include "player.h"
+#include "plyr_net.h"
 #include "sound.h"
 #include "swlog.h"
 #include "util.h"
@@ -468,6 +469,7 @@ ubyte net_unkn_func_31(struct TbNetworkSession *p_nsession)
 
     LbNetworkSetBaud(unkn_rate);
     players[local_player_no].DoubleMode = 0;
+
     if (!byte_1C4A6F)
         goto skip_modem_init;
 

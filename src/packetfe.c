@@ -33,6 +33,7 @@
 #include "network.h"
 #include "packet.h"
 #include "player.h"
+#include "plyr_net.h"
 #include "swlog.h"
 /******************************************************************************/
 #pragma pack(1)
@@ -454,13 +455,7 @@ TbBool net_players_immediate_exchange(int plyr)
     {
         LbNetworkSessionStop(plyr);
         net_new_game_prepare();
-        if (nsvc.I.Type != NetSvc_IPX)
-        {
-            if (byte_1C4A6F)
-                LbNetworkHangUp();
-            LbNetworkReset();
-            net_service_started = 0;
-        }
+        netgame_service_owned_link_reset();
         return false;
     }
     return true;
@@ -565,11 +560,8 @@ void net_player_action_execute(int plyr, int netplyr)
             if (i != netplyr)
                 LbNetworkSessionStop(netplyr);
             net_new_game_prepare();
-            if (byte_1C4A6F)
-                LbNetworkHangUp();
-            LbNetworkReset();
-            net_service_started = 0;
         }
+        netgame_service_owned_link_reset();
         break;
     case NPAct_PlyrLogOut:
         if (nsvc.I.Type == NetSvc_IPX)
@@ -591,11 +583,8 @@ void net_player_action_execute(int plyr, int netplyr)
             LbNetworkSessionStop(netplyr);
             net_new_game_prepare();
             net_player_names_clear();
-            if (byte_1C4A6F)
-                LbNetworkHangUp();
-            LbNetworkReset();
-            net_service_started = 0;
         }
+        netgame_service_owned_link_reset();
         if (screentype == SCRT_CRYO)
         {
             update_flic_mods(flic_mods);

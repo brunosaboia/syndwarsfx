@@ -34,6 +34,10 @@ struct InGame ingame;
 
 ubyte net_game_play_flags = 0;
 
+ubyte game_gfx_advanced_lights;
+ubyte game_billboard_movies;
+ubyte game_gfx_deep_radar;
+
 short user_sel_brightness = 0;
 
 TbPixel deep_radar_surface_col = 0xd8;

@@ -129230,14 +129230,6 @@ data_1c4770:
 		.long	0x0
 		.align  4
 
-GLOBAL (game_gfx_advanced_lights)	/* 0x1C4A6C */
-		.byte	0x0
-GLOBAL (game_billboard_movies)	/* 0x1C4A6D */
-		.byte	0x0
-GLOBAL (game_gfx_deep_radar)	/* 0x1C4A6E */
-		.byte	0x0
-GLOBAL (byte_1C4A6F)
-		.byte	0x0
 GLOBAL (data_1c4a70)
 		.long	0x0
 /* ScreenPoint *hotspot_buffer;
