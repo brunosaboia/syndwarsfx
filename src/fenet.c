@@ -197,7 +197,7 @@ void net_service_gui_switch(void)
     case NetSvc_COM4:
         net_protocol_option_button.Text = net_baudrate_text;
         net_protocol_option_button.CallBackFn = do_serial_speed_switch;
-        if (byte_1C4A6F)
+        if (net_serial_uses_modem)
             text = gui_strings[GSTR_NET_PROTO_MODEM_NAMES - NetSvc_COM1 + nsvc.I.Type];
         else
             text = gui_strings[GSTR_NET_PROTO_NAMES + nsvc.I.Type];
@@ -387,7 +387,7 @@ ubyte net_unkn_func_32(void)
     LbNetworkSetBaud(unkn_rate);
     players[local_player_no].DoubleMode = 0;
 
-    if (!byte_1C4A6F)
+    if (!net_serial_uses_modem)
         goto skip_modem_init;
 
     if (LbNetworkInit() != Lb_SUCCESS) {
@@ -470,7 +470,7 @@ ubyte net_unkn_func_31(struct TbNetworkSession *p_nsession)
     LbNetworkSetBaud(unkn_rate);
     players[local_player_no].DoubleMode = 0;
 
-    if (!byte_1C4A6F)
+    if (!net_serial_uses_modem)
         goto skip_modem_init;
 
     if (LbNetworkInit() != Lb_SUCCESS) {
@@ -1211,18 +1211,18 @@ ubyte do_net_protocol_select(ubyte click)
         if (proto <= NetSvc_NONE)
         {
             proto = NetSvc_COM4;
-            if (data_1c4a70)
+            if (modem_is_configured)
             {
                 net_protocol_select_button.X -= 12;
                 net_unkn40_button.X = pos_x;
-                byte_1C4A6F = 1;
+                net_serial_uses_modem = 1;
             }
         }
         else if (proto == NetSvc_IPX) // IPX needs to be accepted
         {
-            if (byte_1C4A6F)
+            if (net_serial_uses_modem)
             {
-                byte_1C4A6F = 0;
+                net_serial_uses_modem = 0;
                 proto = NetSvc_COM4;
                 net_protocol_select_button.X += 12;
             }
@@ -1233,12 +1233,12 @@ ubyte do_net_protocol_select(ubyte click)
         proto++;
         if (proto > NetSvc_COM4)
         {
-            if (byte_1C4A6F || !data_1c4a70)
+            if (net_serial_uses_modem || !modem_is_configured)
             {
                 proto = NetSvc_IPX;
-                if (byte_1C4A6F)
+                if (net_serial_uses_modem)
                 {
-                    byte_1C4A6F = 0;
+                    net_serial_uses_modem = 0;
                     net_protocol_select_button.X += 12;
                 }
             }
@@ -1247,7 +1247,7 @@ ubyte do_net_protocol_select(ubyte click)
                 proto = NetSvc_COM1;
                 net_protocol_select_button.X -= 12;
                 net_unkn40_button.X = pos_x;
-                byte_1C4A6F = 1;
+                net_serial_uses_modem = 1;
             }
         }
     }
@@ -1477,7 +1477,7 @@ ubyte show_net_protocol_box(struct ScreenBox *p_box)
         }
         else
         {
-            if (byte_1C4A6F)
+            if (net_serial_uses_modem)
             {
               drawn = net_unkn40_button.DrawFn(&net_unkn40_button);
               if (drawn == 3)
@@ -2252,7 +2252,7 @@ void switch_net_screen_boxes_to_execute(void)
     const char *text;
 
     net_INITIATE_button.Text = gui_strings[387];
-    if (byte_1C4A6F)
+    if (net_serial_uses_modem)
         text = gui_strings[520];
     else
         text = gui_strings[388];

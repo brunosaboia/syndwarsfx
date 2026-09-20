@@ -2,7 +2,7 @@
 // Syndicate Wars Fan Expansion, source port of the classic game from Bullfrog.
 /******************************************************************************/
 /** @file plyr_net.c
- *     Players network session handling.
+ *     Players network session handling during mission gameplay.
  * @par Purpose:
  *     Implement functions for maintaining and switching states of the
  *     network session during a multiplayer game.
@@ -23,7 +23,9 @@
 
 /******************************************************************************/
 
-ubyte byte_1C4A6F = 0;
+ubyte net_serial_uses_modem = 0;
+
+ubyte net_host_player_no = 0;
 
 /******************************************************************************/
 
@@ -32,7 +34,7 @@ void netgame_service_owned_link_reset(void)
 {
     if (nsvc.I.Type != NetSvc_IPX)
     {
-        if (byte_1C4A6F)
+        if (net_serial_uses_modem)
             LbNetworkHangUp();
         LbNetworkReset();
         net_service_started = 0;

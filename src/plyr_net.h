@@ -4,7 +4,7 @@
 /** @file plyr_net.h
  *     Header file for plyr_net.c.
  * @par Purpose:
- *     Players network session handling.
+ *     Players network session handling during mission gameplay.
  * @par Comment:
  *     Just a header file - #defines, typedefs, function prototypes etc.
  * @author   Tomasz Lis
@@ -34,7 +34,9 @@ extern "C" {
 
 extern ubyte net_service_started;
 
-extern ubyte byte_1C4A6F;
+extern ubyte net_serial_uses_modem;
+
+extern ubyte net_host_player_no;
 
 /******************************************************************************/
 

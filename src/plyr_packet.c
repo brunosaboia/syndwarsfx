@@ -60,7 +60,7 @@ void net_player_leave(PlayerIdx plyr)
         StopAllSamples();
         SetMusicVolume(100, 0);
         LbNetworkSessionStop(local_player_no);
-        if (nsvc.I.Type != NetSvc_IPX && byte_1C4A6F)
+        if (nsvc.I.Type != NetSvc_IPX && net_serial_uses_modem)
             LbNetworkHangUp();
     }
     else

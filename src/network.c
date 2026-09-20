@@ -79,6 +79,7 @@ char ModemRequestString[80];
 extern struct TbUnknCommSt netunkst_1E81E0;
 
 extern struct TbSerialDev *dword_1E85E3;
+ubyte modem_is_configured = 0;
 
 extern int last_pkt_size;
 extern ulong ipx_send_packet_count[8][8];
@@ -2924,7 +2925,7 @@ void net_system_init0(void)
     LbNetworkSetSessionAnswerFunction(my_net_session_callback);
     LbNetworkSetSessionHangUpFunction(my_net_session_callback);
     if (LbNetworkReadConfig("modem.cfg") != Lb_FAIL)
-        data_1c4a70 = 1;
+        modem_is_configured = 1;
 }
 
 void net_system_init2(void)
@@ -2937,7 +2938,7 @@ void net_system_init2(void)
     LbNetworkSetSessionAnswerFunction(my_net_session_callback);
     LbNetworkSetSessionHangUpFunction(my_net_session_callback);
     if (LbNetworkReadConfig("modem.cfg") != Lb_FAIL)
-        data_1c4a70 = 1;
+        modem_is_configured = 1;
 }
 
 void net_system_reset(void)
