@@ -251,6 +251,9 @@ extern s32 dword_152E38[5]; // = {-1, -1, -1, -1, -1,};
 
 u32 active_flags_general_unkn01 = 0;
 
+ubyte mouse_sprite_anim_frame;
+ushort replay_intro_timer = 0;
+
 extern long dword_1DDECC;
 
 extern struct GamePanel unknstrct7_arr2[];
@@ -306,6 +309,7 @@ extern ushort word_1AABD0;
 
 ubyte old_screentype;
 ubyte screentype = 0;
+ubyte data_1c498d = 0;
 
 ubyte exit_game = 0;
 
@@ -5886,8 +5890,8 @@ void show_load_and_prep_mission(void)
             load_mission_name_text(missi);
             ingame.CurrentMission = missi;
             // The names are propagated by fenet only in network game
-            net_unkn2_names_clear();
-            strncpy(unkn2_names[0], login_name, 16);
+            net_player_names_clear();
+            net_player_name_set(0, login_name);
             debug_trace_place(12);
         }
     }

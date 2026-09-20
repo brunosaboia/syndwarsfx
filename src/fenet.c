@@ -89,11 +89,13 @@ char net_proto_param_text[8] = "0000";
 int unkn_rate = 19200;
 char net_baudrate_text[8] = "19200";
 
+char net_unkn2_text[20] = "";
+
 ubyte byte_1C47EA = 0;
 ubyte byte_1C4805 = 0;
 ubyte byte_1C4806 = 0;
-extern ubyte byte_1C4994;
-extern ubyte net_autostart_done;
+ubyte byte_1C4994 = 0;
+ubyte net_autostart_done = 0;
 char net_unkn1_text[25];
 char byte_1811E2[16];
 TbClockMSec sessionlist_last_update[MONITORED_SESSIONS_COUNT] = {0};
@@ -176,15 +178,6 @@ void net_sessionlist_update_latest_one(void)
     sessionlist_last_update[sess_no] = LbTimerClock();
 }
 
-void net_unkn2_names_clear(void)
-{
-    ushort plyr;
-
-    for (plyr = 0; plyr < PLAYERS_LIMIT; plyr++) {
-        unkn2_names[plyr][0] = '\0';
-    }
-}
-
 void net_service_gui_switch(void)
 {
     const char *text;
@@ -217,7 +210,7 @@ void net_service_switch(ushort svctp)
     nsvc.I.Type = svctp;
     if (nsvc.I.Type == NetSvc_IPX) {
         net_sessionlist_clear();
-        net_unkn2_names_clear();
+        net_player_names_clear();
     }
     net_service_gui_switch();
 }
@@ -228,7 +221,7 @@ TbBool net_service_restart(void)
 {
     LOGSYNC("Restart");
     net_sessionlist_clear();
-    net_unkn2_names_clear();
+    net_player_names_clear();
 
     if (LbNetworkServiceStart(&nsvc.I) != Lb_SUCCESS)
     {
@@ -1832,17 +1825,17 @@ int refresh_users_in_net_game(void)
         ret = LbNetworkPlayerName(locstr, plyr);
         if (ret != Lb_SUCCESS)
         {
-            unkn2_names[plyr][0] = '\0';
+            net_player_names[plyr][0] = '\0';
             ingame.InNetGame_UNSURE &= ~(1 << plyr);
             continue;
         }
         if (locstr[0] == '\0')
         {
-            unkn2_names[plyr][0] = '\0';
+            net_player_names[plyr][0] = '\0';
             ingame.InNetGame_UNSURE &= ~(1 << plyr);
             continue;
         }
-        strncpy(unkn2_names[plyr], locstr, sizeof(unkn2_names[0]));
+        net_player_name_set(plyr, locstr);
         n++;
     }
     LOGSYNC("Net players %d", n);
@@ -1896,7 +1889,7 @@ ubyte show_net_users_box(struct ScreenBox *p_box)
     {
         for (plyr = 0; plyr < PLAYERS_LIMIT; plyr++)
         {
-            text = unkn2_names[plyr];
+            text = net_player_names[plyr];
             if (text[0] == '\0')
             {
                 continue;

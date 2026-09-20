@@ -65,7 +65,7 @@ void net_player_leave(PlayerIdx plyr)
     else
     {
         net_players_num--;
-        player_message_fmt(plyr, "%s %s", unkn2_names[plyr], gui_strings[GSTR_NET_LEFT_GAME]);
+        player_message_fmt(plyr, "%s %s", net_player_names[plyr], gui_strings[GSTR_NET_LEFT_GAME]);
         LbNetworkSessionStop(plyr);
         ingame.InNetGame_UNSURE &= ~(1 << plyr);
     }
@@ -468,7 +468,7 @@ void net_unkn_check_1(void)
                 if (recvd2[i] == recvd3[i])
                     continue;
 
-                sprintf(locstr, " Player >%s< Has Timed Out", unkn2_names[i]);
+                sprintf(locstr, " Player >%s< Has Timed Out", net_player_names[i]);
                 show_message(locstr);
                 ingame.InNetGame_UNSURE &= ~(1 << i);
                 if (i == local_player_no)
@@ -556,7 +556,7 @@ void net_unkn_check_1(void)
 
         if ((nsvc.I.Type == NetSvc_IPX) && (recvd[i] == 1) && (net_players_num > 2))
         {
-            sprintf(locstr, " Player >%s< is out of sync", unkn2_names[i]);
+            sprintf(locstr, " Player >%s< is out of sync", net_player_names[i]);
             show_message(locstr);
         }
         if (check_val != packets[i].D2Check)

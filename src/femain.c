@@ -100,9 +100,9 @@ struct ScreenTextBox unkn13_SYSTEM_button = {0};
 
 struct SynTime research_curr_wep_date;
 struct SynTime research_curr_mod_date;
-extern ubyte research_curr_wep_daily_done;
-extern ubyte research_curr_mod_daily_done;
-extern ubyte byte_1C497D;
+ubyte research_curr_wep_daily_done = 0;
+ubyte research_curr_mod_daily_done = 0;
+ubyte byte_1C497D;
 
 ubyte byte_155174 = 166;
 ubyte byte_155175[] = {

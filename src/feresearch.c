@@ -56,6 +56,10 @@ ubyte research_on_weapons = true;
 ubyte research_selected_wep = 0;
 ubyte research_selected_mod = 0;
 
+u32 new_weapons_researched;
+u32 new_mods_researched;
+ubyte scientists_lost;
+
 /******************************************************************************/
 
 ubyte do_research_submit(ubyte click);

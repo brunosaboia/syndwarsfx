@@ -257,6 +257,7 @@
 .global EXPORT_SYMBOL(route_bak);		/* 0x1BF9C8 */
 
 .global EXPORT_SYMBOL(byte_1C47EA);		/* 0x1C47EA */
+.global EXPORT_SYMBOL(net_player_names);		/* 0x1C49AC */
 .global EXPORT_SYMBOL(screentype);		/* 0x1C4AA5 */
 .global EXPORT_SYMBOL(map_from_mission);	/* 0x1C4B79 */
 .global EXPORT_SYMBOL(reload_background_flag);	/* 0x1C4B80 */
@@ -2382,7 +2383,7 @@ GLOBAL_FUNC(ASM_draw_engine_net_text)	/* 0x020B50 */
 		mov    0x54(%edx),%ax
 		and    $0xffff,%eax
 		sar    $0x2,%eax
-		mov    $unkn2_names,%esi
+		mov    $EXPORT_SYMBOL(net_player_names),%esi
 		shl    $0x4,%eax
 		mov    %esp,%edi
 		add    %eax,%esi
@@ -8985,7 +8986,7 @@ GLOBAL_FUNC (ASM_net_unkn_check_1)	/* 0x03FF04 */
 		je     jump_40124
 		mov    %ebx,%eax
 		shl    $0x4,%eax
-		add    $unkn2_names,%eax
+		add    $EXPORT_SYMBOL(net_player_names),%eax
 		push   %eax
 		push   $aPlayerSHasTime
 		lea    0x8(%esp),%eax
@@ -9127,7 +9128,7 @@ GLOBAL_FUNC (ASM_net_unkn_check_1)	/* 0x03FF04 */
 		jle    jump_40334
 		mov    %ebx,%eax
 		shl    $0x4,%eax
-		add    $unkn2_names,%eax
+		add    $EXPORT_SYMBOL(net_player_names),%eax
 		push   %eax
 		push   $aPlayerSIsOutOf
 		lea    0x6c(%esp),%eax
@@ -102508,7 +102509,7 @@ GLOBAL_FUNC(ASM_SCANNER_unkn_func_205)	/* 0x0B0908 */
 		cmp    %eax,%ebp
 		jbe    jump_b0bb5
 	jump_b0b24:
-		cmpb   $0x0,unkn2_names(%edi)
+		cmpb   $0x0,EXPORT_SYMBOL(net_player_names)(%edi)
 		je     jump_b0b0d
 		mov    0x54(%esp),%cl
 		xor    %ebx,%ebx
@@ -102521,7 +102522,7 @@ GLOBAL_FUNC(ASM_SCANNER_unkn_func_205)	/* 0x0B0908 */
 		movb   $0x1,(%edx)
 		mov    EXPORT_SYMBOL(net_player_colours)(%eax),%al
 		mov    %al,0x1(%edx)
-		mov    $unkn2_names,%eax
+		mov    $EXPORT_SYMBOL(net_player_names),%eax
 		add    %edi,%eax
 		inc    %edx
 		mov    (%eax),%bl
@@ -112373,7 +112374,7 @@ GLOBAL_FUNC(ASM_build_navigate_path_to_person)	/* 0x0BFD00 */
 		je     jump_c01ba
 		push   $0xfffffffe
 		mov    0x80(%esi),%bh
-		mov    $g_nav_data,%eax
+		mov    $EXPORT_SYMBOL(g_nav_data),%eax
 		or     $0x10,%bh
 		mov    EXPORT_SYMBOL(navi2_unkn_counter),%edi
 		mov    %bh,0x80(%esi)
@@ -112402,17 +112403,17 @@ GLOBAL_FUNC(ASM_build_navigate_path_to_person)	/* 0x0BFD00 */
 		mov    0xc(%esp),%edx
 		mov    0x8(%esp),%ecx
 		push   %eax
-		mov    $g_nav_data,%ebx
+		mov    $EXPORT_SYMBOL(g_nav_data),%ebx
 		mov    0x1e(%esp),%eax
 		push   %edx
 		movswl %di,%edx
 		sar    $0x10,%eax
 		call   tri_path_init8
 	jump_c01ff:
-		cmpl   $0x0,data_1dc8e0
+		cmpl   $0x0,EXPORT_SYMBOL(g_nav_data)+0x10
 		jne    jump_c026d
 		mov    (%esp),%eax
-		mov    %eax,g_fat_data
+		mov    %eax,EXPORT_SYMBOL(g_fat_data)
 		mov    0x4(%esp),%eax
 		mov    %eax,data_1dd0e8
 		mov    0x8(%esp),%eax
@@ -112442,8 +112443,8 @@ GLOBAL_FUNC(ASM_build_navigate_path_to_person)	/* 0x0BFD00 */
 		ret
 	jump_c026d:
 		mov    $0x80,%ebx
-		mov    $g_fat_data,%edx
-		mov    $g_nav_data,%eax
+		mov    $EXPORT_SYMBOL(g_fat_data),%edx
+		mov    $EXPORT_SYMBOL(g_nav_data),%eax
 		call   fatter_than_nothing
 		mov    %esi,%eax
 	jump_c0283:
@@ -112597,7 +112598,7 @@ GLOBAL_FUNC(ASM_build_navigate_path_to_face)	/* 0x0C0298 */
 		mov    %edx,0x8(%esp)
 		push   %edx
 		mov    %ebx,EXPORT_SYMBOL(nav_stats__ThisTurn)
-		mov    $g_nav_data,%ebx
+		mov    $EXPORT_SYMBOL(g_nav_data),%ebx
 		push   %eax
 		mov    0x18(%esp),%eax
 		movswl %di,%edx
@@ -112605,10 +112606,10 @@ GLOBAL_FUNC(ASM_build_navigate_path_to_face)	/* 0x0C0298 */
 		movswl %cx,%eax
 		mov    0x18(%esp),%ecx
 		call   tri_path_init8
-		cmpl   $0x0,data_1dc8e0
+		cmpl   $0x0,EXPORT_SYMBOL(g_nav_data)+0x10
 		jne    jump_c04a3
 		mov    0x8(%esp),%eax
-		mov    %eax,g_fat_data
+		mov    %eax,EXPORT_SYMBOL(g_fat_data)
 		mov    0xc(%esp),%eax
 		mov    %eax,data_1dd0e8
 		mov    (%esp),%eax
@@ -112635,8 +112636,8 @@ GLOBAL_FUNC(ASM_build_navigate_path_to_face)	/* 0x0C0298 */
 		ret
 	jump_c04a3:
 		mov    $0x80,%ebx
-		mov    $g_fat_data,%edx
-		mov    $g_nav_data,%eax
+		mov    $EXPORT_SYMBOL(g_fat_data),%edx
+		mov    $EXPORT_SYMBOL(g_nav_data),%eax
 		call   fatter_than_nothing
 		mov    %esi,%eax
 		call   use_nav_data
@@ -112780,17 +112781,17 @@ GLOBAL_FUNC(ASM_build_navigate_path_to_face_xz)	/* 0x0C04C8 */
 		inc    %ebx
 		push   %ebp
 		mov    %ebx,EXPORT_SYMBOL(nav_stats__ThisTurn)
-		mov    $g_nav_data,%ebx
+		mov    $EXPORT_SYMBOL(g_nav_data),%ebx
 		push   %edx
 		movswl %ax,%edx
 		movswl %cx,%eax
 		mov    0x10(%esp),%ecx
 		call   tri_path_init8
-		cmpl   $0x0,data_1dc8e0
+		cmpl   $0x0,EXPORT_SYMBOL(g_nav_data)+0x10
 		jne    jump_c06a2
 		mov    (%esp),%eax
 		mov    %ebp,data_1dd0ec
-		mov    %eax,g_fat_data
+		mov    %eax,EXPORT_SYMBOL(g_fat_data)
 		mov    0x4(%esp),%eax
 		mov    %edi,data_1dd0f0
 		mov    %eax,data_1dd0e8
@@ -112810,8 +112811,8 @@ GLOBAL_FUNC(ASM_build_navigate_path_to_face_xz)	/* 0x0C04C8 */
 		ret
 	jump_c06a2:
 		mov    $0x80,%ebx
-		mov    $g_fat_data,%edx
-		mov    $g_nav_data,%eax
+		mov    $EXPORT_SYMBOL(g_fat_data),%edx
+		mov    $EXPORT_SYMBOL(g_nav_data),%eax
 		call   fatter_than_nothing
 		mov    %esi,%eax
 		mov    $0x1,%edx
@@ -113007,9 +113008,9 @@ GLOBAL_FUNC(ASM_build_navigate_path)	/* 0x0C06D0 */
 		push   %eax
 		movswl %cx,%eax
 		mov    %ebx,%ecx
-		mov    $g_nav_data,%ebx
+		mov    $EXPORT_SYMBOL(g_nav_data),%ebx
 		call   tri_path_init8
-		mov    data_1dc8e0,%ax
+		mov    EXPORT_SYMBOL(g_nav_data)+0x10,%ax
 		and    $0xffff,%eax
 		jne    jump_c0a61
 		mov    $0x1,%ebx
@@ -113017,7 +113018,7 @@ GLOBAL_FUNC(ASM_build_navigate_path)	/* 0x0C06D0 */
 		mov    %ebp,data_1dd0f0
 		mov    0x18(%esi),%eax
 		mov    %edi,g_fat_data__WayPoints__x8
-		mov    %eax,g_fat_data
+		mov    %eax,EXPORT_SYMBOL(g_fat_data)
 		mov    0x20(%esi),%eax
 		mov    %ebp,g_fat_data__WayPoints__y8
 		mov    %eax,data_1dd0e8
@@ -113056,7 +113057,7 @@ GLOBAL_FUNC(ASM_build_navigate_path)	/* 0x0C06D0 */
 		push   $0xfffffffe
 		mov    0x1e(%esp),%ebp
 		mov    0x22(%esp),%edi
-		mov    $g_nav_data,%eax
+		mov    $EXPORT_SYMBOL(g_nav_data),%eax
 		mov    0x20(%esi),%ebx
 		sar    $0x10,%ebp
 		sar    $0x10,%edi
@@ -113066,7 +113067,7 @@ GLOBAL_FUNC(ASM_build_navigate_path)	/* 0x0C06D0 */
 		mov    0x18(%esi),%edx
 		mov    %edi,%ecx
 		call   path_init8_thing
-		mov    data_1dc8e0,%ax
+		mov    EXPORT_SYMBOL(g_nav_data)+0x10,%ax
 		xor    %edx,%edx
 		mov    %ax,%dx
 		test   %edx,%edx
@@ -113076,7 +113077,7 @@ GLOBAL_FUNC(ASM_build_navigate_path)	/* 0x0C06D0 */
 		mov    %ebp,data_1dd0f0
 		mov    0x18(%esi),%eax
 		mov    %edi,g_fat_data__WayPoints__x8
-		mov    %eax,g_fat_data
+		mov    %eax,EXPORT_SYMBOL(g_fat_data)
 		mov    0x20(%esi),%eax
 		mov    %ebp,g_fat_data__WayPoints__y8
 		mov    %eax,data_1dd0e8
@@ -113104,16 +113105,16 @@ GLOBAL_FUNC(ASM_build_navigate_path)	/* 0x0C06D0 */
 		sar    $0x10,%edx
 		shl    $0x8,%edx
 		and    $0xffff,%eax
-		mov    %edx,data_1dc8e4(,%eax,8)
+		mov    %edx,EXPORT_SYMBOL(g_nav_data)+0x14(,%eax,8)
 		mov    0xe(%esp),%edx
 		sar    $0x10,%edx
 		shl    $0x8,%edx
-		mov    %edx,data_1dc8e8(,%eax,8)
-		incl   data_1dc8e0
+		mov    %edx,EXPORT_SYMBOL(g_nav_data)+0x18(,%eax,8)
+		incl   EXPORT_SYMBOL(g_nav_data)+0x10
 	jump_c0a61:
 		mov    $0x80,%ebx
-		mov    $g_fat_data,%edx
-		mov    $g_nav_data,%eax
+		mov    $EXPORT_SYMBOL(g_fat_data),%edx
+		mov    $EXPORT_SYMBOL(g_nav_data),%eax
 		call   fatter_than_nothing
 		mov    %esi,%eax
 		mov    $0x1,%edx
@@ -113241,14 +113242,14 @@ ariadne_initialise_route:
 		mov    0x20(%esi),%ebx
 		mov    %edx,%ecx
 		mov    %eax,%edx
-		mov    $g_nav_data,%eax
+		mov    $EXPORT_SYMBOL(g_nav_data),%eax
 		call   path_init8_wide
-		mov    data_1dc8e0,%eax
+		mov    EXPORT_SYMBOL(g_nav_data)+0x10,%eax
 		test   %eax,%eax
 		je     jump_c0c13
 		mov    $0x100,%ebx
-		mov    $g_fat_data,%edx
-		mov    $g_nav_data,%eax
+		mov    $EXPORT_SYMBOL(g_fat_data),%edx
+		mov    $EXPORT_SYMBOL(g_nav_data),%eax
 		call   fatter_than_nothing
 		mov    %esi,%eax
 		call   use_nav_data
@@ -113395,14 +113396,14 @@ build_tank_path:	/* 0x0C0C58 */
 		mov    0x20(%esi),%ebx
 		mov    %edx,%ecx
 		mov    %eax,%edx
-		mov    $g_nav_data,%eax
+		mov    $EXPORT_SYMBOL(g_nav_data),%eax
 		call   path_init8_tank
-		mov    data_1dc8e0,%eax
+		mov    EXPORT_SYMBOL(g_nav_data)+0x10,%eax
 		test   %eax,%eax
 		je     jump_c0df1
 		mov    $0x100,%ebx
-		mov    $g_fat_data,%edx
-		mov    $g_nav_data,%eax
+		mov    $EXPORT_SYMBOL(g_fat_data),%edx
+		mov    $EXPORT_SYMBOL(g_nav_data),%eax
 		call   fatter_than_nothing
 		mov    %esi,%eax
 		mov    $0x1,%edx
@@ -129227,48 +129228,8 @@ data_1c476e:
 		.short  0x0
 data_1c4770:
 		.long	0x0
+		.align  4
 
-GLOBAL (research_curr_wep_daily_done)	/* 0x1C497B */
-		.byte	0x0
-GLOBAL (research_curr_mod_daily_done)	/* 0x1C497C */
-		.byte	0x0
-GLOBAL (byte_1C497D)	/* 0x1C497D */
-		.byte	0x0
-GLOBAL (byte_1C497E)	/* 0x1C497E */
-		.byte	0x0
-GLOBAL (byte_1C497F)	/* 0x1C497F */
-		.byte	0x0
-GLOBAL (byte_1C4980)	/* 0x1C4980 */
-		.byte	0x0
-		.fill	0x03
-GLOBAL (byte_1C4984)	/* 0x1C4984 */
-		.fill   0x6
-GLOBAL (word_1C498A)	/* 0x1C498A */
-		.short  0x0
-GLOBAL (byte_1C498C)	/* 0x1C498C */
-		.byte	0x0
-GLOBAL (data_1c498d)	/* 0x1c498d */
-		.byte	0x0
-GLOBAL (mouse_sprite_anim_frame)
-		.byte	0x0
-
-GLOBAL (replay_intro_timer)	/* 0x1C4992 */
-		.short  0x0
-GLOBAL (byte_1C4994)	/* 0x1C4994 */
-		.byte	0x0
-GLOBAL (net_autostart_done)	/* 0x1C4995 */
-		.ascii  "\x00\x00\x00"
-GLOBAL (net_unkn2_text)	/* 0x1C4998 */
-		.fill   0x14
-GLOBAL (unkn2_names)	/* 0x1C49AC */
-		.fill   0x80
-GLOBAL (new_weapons_researched)	/* 0x1c4a2c */
-		.long	0x0
-GLOBAL (new_mods_researched)	/* 0x1c4a30 */
-		.long	0x0
-GLOBAL (scientists_lost)
-		.byte	0x0
-		.fill   0x37
 GLOBAL (game_gfx_advanced_lights)	/* 0x1C4A6C */
 		.byte	0x0
 GLOBAL (game_billboard_movies)	/* 0x1C4A6D */
@@ -129517,15 +129478,10 @@ GLOBAL (dword_1DC538)	/* 0x1DC538 */
 		.long	0x0
 		.align  4
 
-g_nav_data:	/* 0x1DC8D0 */
-		.fill   0x10
-data_1dc8e0:
-		.long	0x0
-data_1dc8e4:
-		.long	0x0
-data_1dc8e8:
+GLOBAL (g_nav_data)	/* 0x1DC8D0 */
+		.fill   0x18
 		.fill   0x7fc
-g_fat_data:	/* 0x1DD0E4 */
+GLOBAL (g_fat_data)	/* 0x1DD0E4 */
 		.long	0x0
 data_1dd0e8:
 		.long	0x0

@@ -478,7 +478,7 @@ void draw_players_chat_talk(int x, int y)
         if (player_message_timer[plyr] == 0)
             continue;
 
-        plname = unkn2_names[plyr];
+        plname = net_player_names[plyr];
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-truncation"
         if (player_message_text[plyr][0] != '\0')

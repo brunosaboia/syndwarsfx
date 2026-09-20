@@ -579,7 +579,7 @@ void net_player_action_execute(int plyr, int netplyr)
                 LbNetworkSessionStop(netplyr);
                 net_new_game_prepare();
                 net_sessionlist_clear();
-                net_unkn2_names_clear();
+                net_player_names_clear();
             }
             else
             {
@@ -590,7 +590,7 @@ void net_player_action_execute(int plyr, int netplyr)
         {
             LbNetworkSessionStop(netplyr);
             net_new_game_prepare();
-            net_unkn2_names_clear();
+            net_player_names_clear();
             if (byte_1C4A6F)
                 LbNetworkHangUp();
             LbNetworkReset();
@@ -612,7 +612,7 @@ void net_player_action_execute(int plyr, int netplyr)
         {
             for (i = 0; i < PLAYERS_LIMIT; i++)
             {
-                if (unkn2_names[i][0] == '\0')
+                if (net_player_names[i][0] == '\0')
                     continue;
                 agents_copy_wepmod_netplayer_to_player(i, p_netplyr);
             }
@@ -638,7 +638,7 @@ void net_player_action_execute(int plyr, int netplyr)
         {
             for (i = 0; i < PLAYERS_LIMIT; i++)
             {
-                if (unkn2_names[i][0] == '\0')
+                if (net_player_names[i][0] == '\0')
                     continue;
                 agents_copy_fourpacks_netplayer_to_player(i, p_netplyr);
             }

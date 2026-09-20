@@ -142,7 +142,6 @@ struct UnkPlayerGroup {
 
 extern char session_name[20];
 extern char user_name[50];
-extern char unkn2_names[8][16];
 
 extern ubyte in_network_game;
 extern ubyte is_single_game;
@@ -176,8 +175,6 @@ extern ushort word_1C8446;
 
 extern ubyte old_screentype;
 extern ubyte screentype;
-extern ubyte data_1c498d;
-extern ubyte mouse_sprite_anim_frame;
 extern char *outro_text_s;
 extern char *outro_text_z;
 extern long data_1dd91c;
@@ -191,10 +188,6 @@ extern char *dev_credits_desc[];
 extern char *dev_credits_groups[];
 
 extern sbyte mission_result;
-
-extern ubyte scientists_lost;
-extern ulong new_mods_researched;
-extern ulong new_weapons_researched;
 
 extern ubyte net_player_teams[8];
 extern long dword_153194;
@@ -219,7 +212,6 @@ extern long dword_1AA5C4;
 extern long dword_1AA5C8;
 
 extern ushort next_mission;
-extern ushort replay_intro_timer;
 
 extern int mouse_map_x;
 extern int mouse_map_y;
@@ -230,7 +222,6 @@ extern ubyte game_billboard_movies;
 extern ubyte game_gfx_deep_radar;
 extern ubyte byte_1C4A6F;
 
-extern char net_unkn2_text[];
 extern char *misc_text[5];
 
 // To be replaced by LbArcTanAngle()

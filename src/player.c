@@ -51,6 +51,8 @@ ubyte playable_agents;
 
 PlayerInfo players[PLAYERS_LIMIT];
 PlayerIdx local_player_no;
+
+char net_player_names[PLAYERS_LIMIT][16];
 /******************************************************************************/
 
 void player_mission_agents_toggle_reset(PlayerIdx plyr)
@@ -856,6 +858,21 @@ void place_single_player(void)
     playable_agents = pl_agents;
     if (pl_agents == 0)
       place_default_player(0, 1);
+}
+
+void net_player_names_clear(void)
+{
+    ushort plyr;
+
+    for (plyr = 0; plyr < PLAYERS_LIMIT; plyr++) {
+        net_player_names[plyr][0] = '\0';
+    }
+}
+
+void net_player_name_set(PlayerIdx plyr, const char *nname)
+{
+    assert(plyr < PLAYERS_LIMIT);
+    strncpy(net_player_names[plyr], nname, sizeof(net_player_names[0]));
 }
 
 /******************************************************************************/

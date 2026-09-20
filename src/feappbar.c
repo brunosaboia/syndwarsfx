@@ -59,12 +59,12 @@ ubyte byte_15512C[] = {
   8, 8, 3, 12, 8, 4, 0, 0, -1, 121,
 };
 
-extern ubyte byte_1C497E;
-extern ubyte byte_1C497F;
-extern ubyte byte_1C4980;
-extern ubyte byte_1C4984[];
-extern short word_1C498A;
-extern ubyte byte_1C498C;
+ubyte byte_1C497E;
+ubyte byte_1C497F;
+ubyte byte_1C4980 = 0;
+ubyte byte_1C4984[6];
+short word_1C498A = 0;
+ubyte byte_1C498C = 0;
 
 short app_icons_first_email = 0;
 short app_icons_first_brief = 0;

@@ -231,7 +231,7 @@ int stats_mp_count_players_agents_killed(PlayerIdx plyr)
     p_mistat = &mission_status[plyr];
     for (k = 0; k < PLAYERS_LIMIT; k++)
     {
-        if (unkn2_names[k][0] == '\0')
+        if (net_player_names[k][0] == '\0')
             continue;
 
         n += p_mistat->MP.AgentsKilled[k];
@@ -249,7 +249,7 @@ int stats_mp_count_net_players_agents_kills(PlayerIdx plyr)
     p_mistat = &mission_status[plyr];
     for (k = 0; k < PLAYERS_LIMIT; k++)
     {
-        if (unkn2_names[k][0] == '\0')
+        if (net_player_names[k][0] == '\0')
             continue;
 
         if (k == plyr)
