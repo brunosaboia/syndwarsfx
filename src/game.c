@@ -298,7 +298,6 @@ char *data_15319c = mission_status_text;
 ubyte net_player_teams[8];
 ubyte group_factions[8];
 ubyte byte_1C6D4A;
-ubyte byte_1C6DDC[5];
 
 s32 navi2_unkn_counter = 0;
 s32 navi2_unkn_counter_max = 0;
@@ -4497,7 +4496,7 @@ void net_new_game_prepare(void)
     srm_reset_research();
     init_agents();
 
-    init_net_players();
+    net_player_chat_init();
     net_grpaint_clear_op();
 }
 
@@ -6304,7 +6303,7 @@ void show_menu_screen(void)
         net_players_num = LbNetworkSessionNumberPlayers();
         switch_net_screen_boxes_to_initiate();
         net_players_copy_equip_and_cryo_now();
-        init_net_players();
+        net_player_chat_init();
     }
 
     memcpy(lbDisplay.WScreen, back_buffer, lbDisplay.GraphicsScreenWidth * lbDisplay.GraphicsScreenHeight);

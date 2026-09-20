@@ -167,7 +167,6 @@ extern ushort word_1531E0;
 extern ubyte *spare_map_buffer;
 
 extern ubyte byte_1C6D4A;
-extern ubyte byte_1C6DDC[5];
 extern ushort word_1C8446;
 
 extern ubyte old_screentype;

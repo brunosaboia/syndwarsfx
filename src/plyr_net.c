@@ -19,6 +19,7 @@
 /******************************************************************************/
 #include "plyr_net.h"
 
+#include <string.h>
 #include "bfmemut.h"
 
 #include "network.h"
@@ -31,8 +32,10 @@ ubyte net_serial_uses_modem = 0;
 
 ubyte net_host_player_no = 0;
 
-struct NetPlayer2 net_players[5];
 ubyte net_players_num = 1;
+
+struct NetPlayerChat net_player_chat[NET_CHAT_MSG_LIMIT];
+ubyte net_player_chat_plyr[NET_CHAT_MSG_LIMIT];
 
 /******************************************************************************/
 
@@ -53,12 +56,44 @@ void netgame_service_owned_link_reset(void)
 
 }
 
-void init_net_players(void)
+void net_player_chat_init(void)
 {
+    struct NetPlayerChat *p_npchat;
     int i;
-    for (i = 0; i < 5; i++) {
-        LbMemorySet(&net_players[i], '\0', sizeof(struct NetPlayer2));
+
+    for (i = 0; i < NET_CHAT_MSG_LIMIT; i++)
+    {
+        p_npchat = &net_player_chat[i];
+        LbMemorySet(p_npchat, '\0', sizeof(struct NetPlayerChat));
     }
+}
+
+void net_player_chat_free_old_msg(void)
+{
+    struct NetPlayerChat *p_npchat1;
+    struct NetPlayerChat *p_npchat2;
+    int i;
+
+    p_npchat2 = &net_player_chat[1];
+    p_npchat1 = &net_player_chat[0];
+    for (i = 0; i < NET_CHAT_MSG_LIMIT-2; i++)
+    {
+        net_player_chat_plyr[i] = net_player_chat_plyr[i+1];
+        LbMemoryCopy(p_npchat1, p_npchat2, sizeof(struct NetPlayerChat));
+        p_npchat1++;
+        p_npchat2++;
+    }
+    p_npchat2->Msg[0] = '\0';
+}
+
+void net_player_chat_set_last(PlayerIdx plyr, const char *text)
+{
+    struct NetPlayerChat *p_npchat;
+
+    net_player_chat_plyr[NET_CHAT_MSG_LIMIT - 1] = plyr;
+    p_npchat = &net_player_chat[NET_CHAT_MSG_LIMIT - 1];
+    strncpy(p_npchat->Msg, text, NET_CHAT_MSG_LEN - 1);
+    p_npchat->Msg[NET_CHAT_MSG_LEN - 1] = '\0';
 }
 
 /******************************************************************************/

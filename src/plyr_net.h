@@ -28,12 +28,11 @@ extern "C" {
 /******************************************************************************/
 #pragma pack(1)
 
-// TODO maybe this only contains one string?
-struct NetPlayer2 {
-  char field_0[13];
-  char field_D;
-  char field_E[10];
-  char field_18;
+#define NET_CHAT_MSG_LIMIT 5
+#define NET_CHAT_MSG_LEN 25
+
+struct NetPlayerChat {
+  char Msg[NET_CHAT_MSG_LEN];
 };
 
 #pragma pack()
@@ -45,14 +44,18 @@ extern ubyte net_serial_uses_modem;
 
 extern ubyte net_host_player_no;
 
-extern struct NetPlayer2 net_players[5];
 extern ubyte net_players_num;
+
+extern struct NetPlayerChat net_player_chat[NET_CHAT_MSG_LIMIT];
+extern ubyte net_player_chat_plyr[NET_CHAT_MSG_LIMIT];
 
 /******************************************************************************/
 TbBool netgame_service_is_multi_client_capable(void);
 void netgame_service_owned_link_reset(void);
 
-void init_net_players(void);
+void net_player_chat_init(void);
+void net_player_chat_free_old_msg(void);
+void net_player_chat_set_last(PlayerIdx plyr, const char *text);
 
 /******************************************************************************/
 #ifdef __cplusplus

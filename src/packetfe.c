@@ -509,29 +509,10 @@ void net_player_action_execute(int plyr, int netplyr)
         ingame.GameMode = p_netplyr->U.MissInit.GameMode;
         break;
     case NPAct_ChatMsg:
-        // Free last net_players[] slot
-        {
-            struct NetPlayer2 *p_nplyr1;
-            struct NetPlayer2 *p_nplyr2;
-            p_nplyr2 = &net_players[1];
-            p_nplyr1 = &net_players[0];
-            for (i = 0; i < 3; i++)
-            {
-                byte_1C6DDC[i] = byte_1C6DDC[i+1];
-                strcpy(p_nplyr1->field_0, p_nplyr2->field_0);
-                p_nplyr1++;
-                p_nplyr2++;
-            }
-        }
+        // Free last player chat slot
+        net_player_chat_free_old_msg();
         // Fill the slot from packet
-        {
-            struct NetPlayer2 *p_nplyr1;
-            const char *p_text;
-            byte_1C6DDC[4] = plyr;
-            p_nplyr1 = &net_players[4];
-            p_text = p_netplyr->U.Text;
-            strcpy(p_nplyr1->field_0, p_text);
-        }
+        net_player_chat_set_last(plyr, p_netplyr->U.Text);
         break;
     case NPAct_GrPaintDrawLn:
         net_grpaint_draw_op(

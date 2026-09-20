@@ -1149,7 +1149,7 @@ ubyte show_net_comms_box(struct ScreenBox *p_box)
         reset_buffered_keys();
     }
 
-    if (login_control[0].State != 5)
+    if (login_control[0].State != LognCt_NetStarted)
     {
         edit_flag = 0;
         return 0;
@@ -1159,15 +1159,15 @@ ubyte show_net_comms_box(struct ScreenBox *p_box)
     dx = 14;
     for (i = 0; i < 5; i++)
     {
-        if ((LbNetworkPlayerName(plyrname, byte_1C6DDC[i]) == 1) &&
-          (net_players[i].field_0[0] != '\0'))
+        if ((LbNetworkPlayerName(plyrname, net_player_chat_plyr[i]) == 1) &&
+          (net_player_chat[i].Msg[0] != '\0'))
         {
             const char *text;
 
             plyrname[7] = '\0';
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-truncation"
-            snprintf(locstr, sizeof(locstr)-1, "%s: %s", plyrname, net_players[i].field_0);
+            snprintf(locstr, sizeof(locstr)-1, "%s: %s", plyrname, net_player_chat[i].Msg);
             locstr[sizeof(locstr)-1] = '\0';
 #pragma GCC diagnostic pop
             text = loctext_to_gtext(locstr);
