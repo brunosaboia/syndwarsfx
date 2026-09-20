@@ -263,6 +263,11 @@
 .global EXPORT_SYMBOL(cryo_agents);		/* 0x1C4BA0 */
 .global EXPORT_SYMBOL(num_cities);		/* 0x1C52B8 */
 .global EXPORT_SYMBOL(cities);			/* 0x1C52BC */
+.global EXPORT_SYMBOL(network_players);	/* 0x1C5B58 */
+.global EXPORT_SYMBOL(net_player_colours);	/* 0x1C5C30 */
+.global EXPORT_SYMBOL(group_factions);	/* 0x1C5C38 */
+.global EXPORT_SYMBOL(net_host_player_no);	/* 0x1C6D49 */
+.global EXPORT_SYMBOL(login_name);		/* 0x1C6D4C */
 .global EXPORT_SYMBOL(background_type);	/* 0x1C6DEC */
 .global EXPORT_SYMBOL(global_date);		/* 0x1C6DF0 */
 .global EXPORT_SYMBOL(save_slot_base);	/* 0x1C82FC */
@@ -2234,28 +2239,28 @@ GLOBAL_FUNC(ASM_show_goto_point)	/* 0x020938 */
 		mov    EXPORT_SYMBOL(nstart_ani),%eax
 		xor    %esi,%esi
 		mov    0x73c(%eax),%ax
-		mov    %si,data_176cb6
-		mov    %ax,data_176cb4
+		mov    %si,EXPORT_SYMBOL(word_176CB6)
+		mov    %ax,EXPORT_SYMBOL(word_176CB4)
 		jmp    jump_20b04
 	jump_2096a:
-		cmpw   $0x0,data_176cb4
+		cmpw   $0x0,EXPORT_SYMBOL(word_176CB4)
 		je     jump_20b04
-		mov    data_176cb6,%ax
+		mov    EXPORT_SYMBOL(word_176CB6),%ax
 		xor    %edx,%edx
 		mov    %ax,%dx
 		inc    %eax
-		mov    %ax,data_176cb6
+		mov    %ax,EXPORT_SYMBOL(word_176CB6)
 		cmp    $0x5,%edx
 		jle    jump_20998
 		xor    %ebx,%ebx
-		mov    %bx,data_176cb4
+		mov    %bx,EXPORT_SYMBOL(word_176CB4)
 	jump_20998:
 		xor    %eax,%eax
 		mov    EXPORT_SYMBOL(frame),%edx
-		mov    data_176cb4,%ax
+		mov    EXPORT_SYMBOL(word_176CB4),%ax
 		mov    0x6(%edx,%eax,8),%ax
 		movzbl EXPORT_SYMBOL(local_player_no),%esi
-		mov    %ax,data_176cb4
+		mov    %ax,EXPORT_SYMBOL(word_176CB4)
 		lea    0x0(,%esi,8),%eax
 		add    %esi,%eax
 		shl    $0x3,%eax
@@ -2283,7 +2288,7 @@ GLOBAL_FUNC(ASM_show_goto_point)	/* 0x020938 */
 		testb  $0x40,0x44(%esi)
 		jne    jump_20b04
 		xor    %eax,%eax
-		mov    data_176cb6,%ax
+		mov    EXPORT_SYMBOL(word_176CB6),%ax
 		cmp    $0x1,%eax
 		jne    jump_20a40
 		push   $0x3
@@ -2348,7 +2353,7 @@ GLOBAL_FUNC(ASM_show_goto_point)	/* 0x020938 */
 		mov    0x8(%esp),%al
 		xor    %ecx,%ecx
 		push   %eax
-		mov    data_176cb4,%cx
+		mov    EXPORT_SYMBOL(word_176CB4),%cx
 		lea    0x4(%esp),%eax
 		call   func_70a88
 	jump_20b04:
@@ -9099,7 +9104,7 @@ GLOBAL_FUNC (ASM_net_unkn_check_1)	/* 0x03FF04 */
 		jne    jump_402e2
 		cmpb   $0x0,EXPORT_SYMBOL(in_network_game)
 		je     jump_402e2
-		mov    net_host_player_no,%al
+		mov    EXPORT_SYMBOL(net_host_player_no),%al
 		cmp    EXPORT_SYMBOL(local_player_no),%al
 		jne    jump_402e2
 		imul   $0x30,%ebx,%eax
@@ -62297,8 +62302,8 @@ GLOBAL_FUNC (ASM_gproc3_unknsub2)	/* 0x73798 */
 		jge    jump_739c5
 		movl   $0xfffffed4,EXPORT_SYMBOL(dword_1AAB78)
 	jump_739c5:
-		mov    data_155012,%edx
-		mov    data_15500e,%eax
+		mov    EXPORT_SYMBOL(dword_155014)-0x2,%edx
+		mov    EXPORT_SYMBOL(dword_155010)-0x2,%eax
 		sar    $0x10,%edx
 		sar    $0x10,%eax
 		call   ac_alt_at_point
@@ -62307,8 +62312,8 @@ GLOBAL_FUNC (ASM_gproc3_unknsub2)	/* 0x73798 */
 		sub    $0x32,%eax
 		cmp    %ebx,%eax
 		jle    jump_73a0c
-		mov    data_155012,%edx
-		mov    data_15500e,%eax
+		mov    EXPORT_SYMBOL(dword_155014)-0x2,%edx
+		mov    EXPORT_SYMBOL(dword_155010)-0x2,%eax
 		sar    $0x10,%edx
 		sar    $0x10,%eax
 		call   ac_alt_at_point
@@ -67873,12 +67878,12 @@ GLOBAL_FUNC(ASM_process_unplacing)	/* 0x078C3C */
 		jg     jump_78d15
 		lea    0x0(,%esi,4),%eax
 		sub    %esi,%eax
-		mov    data_155060(,%eax,2),%dx
+		mov    EXPORT_SYMBOL(unplace)+0x4(,%eax,2),%dx
 		mov    %dx,0x5a(%ecx)
-		mov    unplace(,%eax,2),%dx
+		mov    EXPORT_SYMBOL(unplace)+0x0(,%eax,2),%dx
 		shl    $0x3,%edx
 		mov    %dx,0x62(%ecx)
-		mov    data_15505e(,%eax,2),%ax
+		mov    EXPORT_SYMBOL(unplace)+0x2(,%eax,2),%ax
 		add    %ax,0x64(%ecx)
 		test   %esi,%esi
 		jle    jump_78ce3
@@ -92808,14 +92813,14 @@ GLOBAL_FUNC(ASM_show_login_name)	/* 0x08D300 */
 	jump_8d3fa:
 		mov    $0x1,%ebx
 		mov    $0xf,%edx
-		mov    $login_name,%eax
+		mov    $EXPORT_SYMBOL(login_name),%eax
 		call   ac_user_read_value
 		xor    %ecx,%ecx
-		mov    $login_name,%ebx
+		mov    $EXPORT_SYMBOL(login_name),%ebx
 		mov    $0x2,%edx
 		lea    0x2(%edi),%eax
 		call   ac_draw_text_purple_list2
-		cmpb   $0x50,login_name
+		cmpb   $0x50,EXPORT_SYMBOL(login_name)
 		jne    jump_8d49a
 		mov    EXPORT_SYMBOL(login_name)+1,%bl
 		cmp    $0x4f,%bl
@@ -92854,7 +92859,7 @@ GLOBAL_FUNC(ASM_show_login_name)	/* 0x08D300 */
 		add    $0x54,%ebx
 		add    $0x6,%edx
 		add    %eax,%edi
-		mov    $login_name,%eax
+		mov    $EXPORT_SYMBOL(login_name),%eax
 		add    $0x2,%edi
 		call   ac_my_string_width
 		add    %edi,%eax
@@ -93133,10 +93138,10 @@ GLOBAL_FUNC(ASM_show_net_grpaint)	/* 0x08E3C0 */
 		mov    %cl,EXPORT_SYMBOL(lbDisplay)+103 # lbDisplay.LeftButton
 		testb  $0x1,EXPORT_SYMBOL(lbShift)
 		je     jump_8e6a7
-		movb   $0x10,network_players(%eax)
+		movb   $0x10,EXPORT_SYMBOL(network_players)(%eax)
 		jmp    jump_8e6ae
 	jump_8e6a7:
-		movb   $0xb,network_players(%eax)
+		movb   $0xb,EXPORT_SYMBOL(network_players)(%eax)
 	jump_8e6ae:
 		xor    %eax,%eax
 		mov    EXPORT_SYMBOL(lbDisplay)+100,%ax # lbDisplay.ScreenMode
@@ -93157,7 +93162,7 @@ GLOBAL_FUNC(ASM_show_net_grpaint)	/* 0x08E3C0 */
 		sub    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    %bx,data_1c5b61(,%eax,2)
+		mov    %bx,EXPORT_SYMBOL(network_players)+0x09(,%eax,2)
 		xor    %eax,%eax
 		mov    EXPORT_SYMBOL(lbDisplay)+100,%ax # lbDisplay.ScreenMode
 		cmp    $0x1,%eax
@@ -93170,10 +93175,10 @@ GLOBAL_FUNC(ASM_show_net_grpaint)	/* 0x08E3C0 */
 		jmp    jump_8e77e
 	jump_8e70e:
 		xor    %ebx,%ebx
-		mov    network_players(%eax),%bl
+		mov    EXPORT_SYMBOL(network_players)(%eax),%bl
 		cmp    $0x11,%ebx
 		jne    jump_8e7ae
-		movb   $0x12,network_players(%eax)
+		movb   $0x12,EXPORT_SYMBOL(network_players)(%eax)
 		xor    %eax,%eax
 		mov    EXPORT_SYMBOL(lbDisplay)+100,%ax # lbDisplay.ScreenMode
 		cmp    $0x1,%eax
@@ -93193,7 +93198,7 @@ GLOBAL_FUNC(ASM_show_net_grpaint)	/* 0x08E3C0 */
 		sub    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    %bx,data_1c5b61(,%eax,2)
+		mov    %bx,EXPORT_SYMBOL(network_players)+0x09(,%eax,2)
 		xor    %eax,%eax
 		mov    EXPORT_SYMBOL(lbDisplay)+100,%ax # lbDisplay.ScreenMode
 		cmp    $0x1,%eax
@@ -93213,9 +93218,9 @@ GLOBAL_FUNC(ASM_show_net_grpaint)	/* 0x08E3C0 */
 		sub    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		mov    %bx,data_1c5b63(,%eax,2)
+		mov    %bx,EXPORT_SYMBOL(network_players)+0x0b(,%eax,2)
 		mov    EXPORT_SYMBOL(byte_1C47EA),%bl
-		mov    %bl,data_1c5b6b(,%eax,2)
+		mov    %bl,EXPORT_SYMBOL(network_players)+0x13(,%eax,2)
 	jump_8e7ae:
 		cmpb   $0x0,EXPORT_SYMBOL(lbDisplay)+107 # lbDisplay.MRightButton
 		je     jump_8e7de
@@ -93228,7 +93233,7 @@ GLOBAL_FUNC(ASM_show_net_grpaint)	/* 0x08E3C0 */
 		sub    %edx,%eax
 		shl    $0x2,%eax
 		add    %edx,%eax
-		movb   $0x3,network_players(,%eax,2)
+		movb   $0x3,EXPORT_SYMBOL(network_players)(,%eax,2)
 	jump_8e7de:
 		xor    %al,%al
 		add    $0x4,%esp
@@ -93305,7 +93310,7 @@ GLOBAL_FUNC(ASM_my_preprocess_text)	/* 0x0A35AC */
 		inc    %esi
 		jmp    jump_a35d0
 	jump_a361d:
-		mov    $login_name,%edi
+		mov    $EXPORT_SYMBOL(login_name),%edi
 		mov    (%esp),%ebx
 		sub    %ecx,%ecx
 		dec    %ecx
@@ -93322,14 +93327,14 @@ GLOBAL_FUNC(ASM_my_preprocess_text)	/* 0x0A35AC */
 		call   ac_memmove
 		xor    %eax,%eax
 	jump_a3643:
-		mov    net_host_player_no(%eax),%edx
+		mov    EXPORT_SYMBOL(net_host_player_no)(%eax),%edx
 		sar    $0x18,%edx
 		test   %edx,%edx
 		je     jump_a35f4
 		mov    %eax,%ebx
 		mov    %esi,%edx
 		inc    %eax
-		mov    login_name(%ebx),%bl
+		mov    EXPORT_SYMBOL(login_name)(%ebx),%bl
 		inc    %esi
 		mov    %bl,(%edx,%ebp,1)
 		jmp    jump_a3643
@@ -126304,16 +126309,16 @@ GLOBAL_FUNC (ASM_traffic_unkn_func_01)	/* 0x0CB738 */
 		shl    $0x2,%eax
 		add    %eax,%edi
 		movswl (%edi),%eax
-		mov    %eax,data_1556f4
+		mov    %eax,EXPORT_SYMBOL(dword_1556F4)
 		mov    (%edi),%eax
 		sar    $0x10,%eax
 		mov    %edi,%ebx
-		mov    %eax,data_1556f8
+		mov    %eax,EXPORT_SYMBOL(dword_1556F8)
 		mov    0x2(%edi),%eax
 		mov    %edi,%ecx
 		sar    $0x10,%eax
 		add    $0x8,%edi
-		mov    %eax,data_1556fc
+		mov    %eax,EXPORT_SYMBOL(dword_1556FC)
 		jmp    jump_cb80e
 	jump_cb806:
 		add    $0x2,%ebx
@@ -126334,8 +126339,8 @@ GLOBAL_FUNC (ASM_traffic_unkn_func_01)	/* 0x0CB738 */
 		mov    0x2(%edx,%eax,1),%edx
 		sar    $0x10,%edx
 		mov    %esi,%eax
-		mov    data_1556fc,%esi
-		mov    data_1556f4,%ebp
+		mov    EXPORT_SYMBOL(dword_1556FC),%esi
+		mov    EXPORT_SYMBOL(dword_1556F4),%ebp
 		sub    %esi,%edx
 		sub    %ebp,%eax
 		neg    %edx
@@ -126363,8 +126368,8 @@ GLOBAL_FUNC (ASM_traffic_unkn_func_01)	/* 0x0CB738 */
 		sar    $0x10,%edx
 		mov    0x70(%esp),%ecx
 		mov    %edx,0x74(%esp)
-		mov    data_1556f4,%edx
-		mov    data_1556f8,%ebx
+		mov    EXPORT_SYMBOL(dword_1556F4),%edx
+		mov    EXPORT_SYMBOL(dword_1556F8),%ebx
 		sub    %edx,%ecx
 		mov    0x6c(%esp),%edx
 		sub    %ebx,%edx
@@ -126372,7 +126377,7 @@ GLOBAL_FUNC (ASM_traffic_unkn_func_01)	/* 0x0CB738 */
 		imul   %ecx,%ebx
 		mov    %edx,0x78(%esp)
 		imul   %edx,%edx
-		mov    data_1556fc,%esi
+		mov    EXPORT_SYMBOL(dword_1556FC),%esi
 		mov    0x74(%esp),%edi
 		sub    %esi,%edi
 		add    %edx,%ebx
@@ -126389,10 +126394,10 @@ GLOBAL_FUNC (ASM_traffic_unkn_func_01)	/* 0x0CB738 */
 	jump_cb8f5:
 		test   $0x20,%dl
 		je     jump_cb906
-		movl   $0xffffff06,data_1556f0
+		movl   $0xffffff06,EXPORT_SYMBOL(dword_1556F0)
 		jmp    jump_cb961
 	jump_cb906:
-		movl   $0xffffff83,data_1556f0
+		movl   $0xffffff83,EXPORT_SYMBOL(dword_1556F0)
 		jmp    jump_cb961
 	jump_cb912:
 		mov    0x4(%ebx),%eax
@@ -126441,19 +126446,19 @@ GLOBAL_FUNC (ASM_traffic_unkn_func_01)	/* 0x0CB738 */
 		mov    EXPORT_SYMBOL(game_traffic_nodes),%edx
 		testb  $0x4,0x13(%edx,%eax,1)
 		je     jump_cb9ad
-		movl   $0x400,data_155700
+		movl   $0x400,EXPORT_SYMBOL(dword_155700)
 	jump_cb9ad:
 		imul   $0x24,data_1dd91c,%edx
 		mov    EXPORT_SYMBOL(game_traffic_nodes),%eax
 		testb  $0x8,0x12(%edx,%eax,1)
 		je     jump_cb9ca
-		movl   $0x800,data_155700
+		movl   $0x800,EXPORT_SYMBOL(dword_155700)
 	jump_cb9ca:
 		imul   $0x24,data_1dd91c,%eax
 		mov    EXPORT_SYMBOL(game_traffic_nodes),%edx
 		testb  $0x8,0x13(%edx,%eax,1)
 		je     jump_cb9e8
-		movl   $0x1000,data_155700
+		movl   $0x1000,EXPORT_SYMBOL(dword_155700)
 	jump_cb9e8:
 		imul   $0x24,data_1dd91c,%eax
 		mov    EXPORT_SYMBOL(game_traffic_nodes),%edx
@@ -126461,7 +126466,7 @@ GLOBAL_FUNC (ASM_traffic_unkn_func_01)	/* 0x0CB738 */
 		mov    0x12(%eax),%dl
 		test   $0x10,%dl
 		je     jump_cb8f5
-		movl   $0xffffffba,data_1556f0
+		movl   $0xffffffba,EXPORT_SYMBOL(dword_1556F0)
 		jmp    jump_cb961
 	jump_cba12:
 		mov    %edi,%eax
@@ -126526,12 +126531,12 @@ GLOBAL_FUNC (ASM_traffic_unkn_func_01)	/* 0x0CB738 */
 		jne    jump_cba8f
 		mov    $0x1,%ebx
 	jump_cba8f:
-		mov    data_155700,%edx
+		mov    EXPORT_SYMBOL(dword_155700),%edx
 		imul   %ecx,%edx
 		mov    %edx,%eax
 		sar    $0x1f,%edx
 		idiv   %ebx
-		mov    data_155700,%esi
+		mov    EXPORT_SYMBOL(dword_155700),%esi
 		mov    0x78(%esp),%edx
 		imul   %esi,%edx
 		mov    %eax,%ecx
@@ -126582,12 +126587,12 @@ GLOBAL_FUNC (ASM_traffic_unkn_func_01)	/* 0x0CB738 */
 		mov    0x78(%esp),%eax
 		mov    data_1dd8fc,%ebx
 		mov    data_1dd904,%esi
-		mov    data_1556f8,%ebp
-		mov    data_1556fc,%edx
+		mov    EXPORT_SYMBOL(dword_1556F8),%ebp
+		mov    EXPORT_SYMBOL(dword_1556FC),%edx
 		add    %ecx,%ebx
 		add    %edi,%esi
 		mov    data_1dd900,%ecx
-		mov    data_1556f4,%edi
+		mov    EXPORT_SYMBOL(dword_1556F4),%edi
 		mov    %ebx,data_1dd8fc
 		mov    %esi,data_1dd904
 		add    %eax,%ecx
@@ -126597,17 +126602,17 @@ GLOBAL_FUNC (ASM_traffic_unkn_func_01)	/* 0x0CB738 */
 		mov    data_1dd908,%ebx
 		add    %eax,%edi
 		mov    %ecx,%eax
-		mov    %edi,data_1556f4
+		mov    %edi,EXPORT_SYMBOL(dword_1556F4)
 		sar    $0x4,%eax
 		mov    %edi,EXPORT_SYMBOL(engn_xc)
 		add    %eax,%ebp
 		mov    %esi,%eax
-		mov    %ebp,data_1556f8
+		mov    %ebp,EXPORT_SYMBOL(dword_1556F8)
 		sar    $0x4,%eax
 		mov    %ebp,EXPORT_SYMBOL(engn_yc)
 		add    %eax,%edx
 		mov    data_1dd918,%eax
-		mov    %edx,data_1556fc
+		mov    %edx,EXPORT_SYMBOL(dword_1556FC)
 		sub    %ebx,%eax
 		mov    %edx,EXPORT_SYMBOL(engn_zc)
 		cmp    $0xffff8000,%eax
@@ -126640,7 +126645,7 @@ GLOBAL_FUNC (ASM_traffic_unkn_func_01)	/* 0x0CB738 */
 		mov    data_1dd908,%eax
 		mov    data_1dd90c,%ebp
 		mov    %eax,EXPORT_SYMBOL(engn_cam_yaw)
-		mov    data_1556f0,%eax
+		mov    EXPORT_SYMBOL(dword_1556F0),%eax
 		sub    %ebp,%eax
 		mov    %esi,data_1dd910
 		cmp    $0xfffffc00,%eax
@@ -128740,25 +128745,14 @@ effect_52_angle_div:	/* 0x154F78, used in unused_create_effects_52_circle */
 plasma_width:
 		.ascii  "\x03\x02\x01\x01\x01\x02\x03\x00"
 
-GLOBAL (anim_slots)	/* 0x155000 */
-		.byte	0x0
-		.byte	0x0
-		.byte	0x1
-		.fill   0x5
-		.byte	0x0
-data_155009:
-		.ascii  "\x00\x00\x00\x0a\x00"
-data_15500e:
-		.short  0x0
 GLOBAL (dword_155010)	/* 0x155010 */
 		.ascii  "\x00\x40"
-data_155012:
 		.short  0x0
 GLOBAL (dword_155014)	/* 0x155014 */
-		.ascii  "\x00\x40\x00\x00"
+		.ascii  "\x00\x40"
+		.short  0x0
 GLOBAL (dword_155018)	/* 0x155018 */
 		.ascii  "\x32\x00"
-data_15501a:
 		.short  0x0
 GLOBAL (last_map_for_lights_func_11)	/* 0x15501C */
 		.byte	0xff
@@ -128773,32 +128767,27 @@ quiver:	/* 0x155020 */
 		.ascii  "\x08\x05\x02\xfe\xfb\xf8\xf6\xf4"
 		.ascii  "\xf3\xf3\xf3\xf4\xf6\xf8\xfb\xfe"
 		.byte	0x63
-unplace:	/* 0x15505C */
-		.ascii  "\xfb\xff"
-data_15505e:
-		.short  0x0
-data_155060:
-		.ascii  "\xc8\x00\xf6\xff\x00\x00\x96\x00"
-		.ascii  "\xec\xff\x00\x00\x64\x00\xe2\xff"
-		.ascii  "\x00\x00\x32\x00\xd8\xff"
-		.long	0x0
-		.ascii  "\xce\xff"
-		.long	0x0
-		.ascii  "\xc4\xff"
-		.long	0x0
-		.ascii  "\xba\xff\x00\x00\xce\xff\xc4\xff"
-		.ascii  "\x00\x00\x9c\xff\xce\xff\x00\x00"
-		.ascii  "\x6a\xff\xd8\xff\x00\x00\x06\xff"
-		.ascii  "\xe2\xff\x00\x00\xd4\xfe\xec\xff"
-		.ascii  "\x00\x00\xa2\xfe\xf6\xff\x00\x00"
-		.ascii  "\x70\xfe\xf6\xff\x00\x00\x3e\xfe"
+GLOBAL (unplace)	/* 0x15505C */
+		.ascii  "\xfb\xff\x00\x00\xc8\x00"
+		.ascii  "\xf6\xff\x00\x00\x96\x00"
+		.ascii  "\xec\xff\x00\x00\x64\x00"
+		.ascii  "\xe2\xff\x00\x00\x32\x00"
+		.ascii  "\xd8\xff\x00\x00\x00\x00"
+		.ascii  "\xce\xff\x00\x00\x00\x00"
+		.ascii  "\xc4\xff\x00\x00\x00\x00"
+		.ascii  "\xba\xff\x00\x00\xce\xff"
+		.ascii  "\xc4\xff\x00\x00\x9c\xff"
+		.ascii  "\xce\xff\x00\x00\x6a\xff"
+		.ascii  "\xd8\xff\x00\x00\x06\xff"
+		.ascii  "\xe2\xff\x00\x00\xd4\xfe"
+		.ascii  "\xec\xff\x00\x00\xa2\xfe"
+		.ascii  "\xf6\xff\x00\x00\x70\xfe"
+		.ascii  "\xf6\xff\x00\x00\x3e\xfe"
 		.ascii  "\xfb\xff\x00\x00\x3e\xfe"
-		.long	0x0
-		.ascii  "\x0c\xfe"
-		.long	0x0
-		.ascii  "\x0c\xfe"
-		.long	0x0
-		.ascii  "\x0c\xfe\x00\x00"
+		.ascii  "\x00\x00\x00\x00\x0c\xfe"
+		.ascii  "\x00\x00\x00\x00\x0c\xfe"
+		.ascii  "\x00\x00\x00\x00\x0c\xfe"
+		.ascii  "\x00\x00"
 nav_rulesA2B:	/* 0x1550D0 */
 		.long   Synd_nav_rulesA2B
 
@@ -128873,15 +128862,15 @@ data_155558:
 		.ascii  "\x28\x00\x00\x00\x28\x00\x00\x00"
 		.ascii  "\xf6\xff\xff\xff"
 
-data_1556f0:
+GLOBAL (dword_1556F0)	/* 0x1556F0 */
 		.ascii  "\xce\xff\xff\xff"
-data_1556f4:
+GLOBAL (dword_1556F4)	/* 0x1556F4 */
 		.ascii  "\x00\x40\x00\x00"
-data_1556f8:
+GLOBAL (dword_1556F8)	/* 0x1556F8 */
 		.ascii  "\x00\x02\x00\x00"
-data_1556fc:
+GLOBAL (dword_1556FC)	/* 0x1556FC */
 		.ascii  "\x00\x40\x00\x00"
-data_155700:
+GLOBAL (dword_155700)	/* 0x155700 */
 		.ascii  "\x00\x04\x00\x00"
 		.align  4
 
@@ -129015,9 +129004,9 @@ GLOBAL (dword_176CAC)	/* 0x176CAC */
 		.long	0x0
 GLOBAL (dword_176CB0)	/* 0x176CB0 */
 		.long	0x0
-data_176cb4:
+GLOBAL (word_176CB4)	/* 0x176CB4 */
 		.short  0x0
-data_176cb6:
+GLOBAL (word_176CB6)	/* 0x176CB6 */
 		.short  0x0
 		.align  4
 
@@ -129354,85 +129343,6 @@ GLOBAL (dword_1C4B84)	/* 0x1C4B84 no function - remove pending */
 GLOBAL (dword_1C4B88)	/* 0x1C4B88 no function - remove pending  */
 		.long	0x0
 
-GLOBAL (netscan_objectives)	/* 0x1C5A8C */
-		.short  0x0
-data_1c5a8e:
-		.short  0x0
-data_1c5a90:
-		.ascii  "\x00\x00\x00"
-data_1c5a93:
-		.byte	0x0
-data_1c5a94:
-		.fill   0x5
-data_1c5a99:
-		.fill   0xa5
-data_1c5b3e:
-		.fill   0x16
-GLOBAL (netscan_objectives_count)	/* 0x1C5B54 */
-		.byte	0x0
-data_1c5b55:
-		.ascii  "\x00\x00\x00"
-GLOBAL (network_players)	/* 0x1C5B58 */
-		.byte	0x0
-data_1c5b59:
-		.long	0x0
-data_1c5b5d:
-		.byte	0x0
-data_1c5b5e:
-		.byte	0x0
-data_1c5b5f:
-		.byte	0x0
-data_1c5b60:
-		.byte	0x0
-data_1c5b61:
-		.short  0x0
-data_1c5b63:
-		.byte	0x0
-data_1c5b64:
-		.byte	0x0
-data_1c5b65:
-		.short  0x0
-data_1c5b67:
-		.short  0x0
-data_1c5b69:
-		.byte	0x0
-data_1c5b6a:
-		.byte	0x0
-data_1c5b6b:
-		.byte	0x0
-data_1c5b6c:
-		.byte	0x0
-data_1c5b6d:
-		.fill   0xbb
-GLOBAL (net_player_teams)
-		.fill   0x8
-GLOBAL (net_player_colours)
-		.fill   0x8
-GLOBAL (group_factions)	/* 0x1C5C38 */
-		.fill   0x8
-GLOBAL (unkstruct04_arr)	/* 0x1C5C40 */
-		.fill   0x1108
-		.fill   0x100
-		.align	4
-GLOBAL (byte_1C6D48)	/* 0x1c6d48 */
-		.byte	0x0
-GLOBAL (net_host_player_no)	/* 0x1C6D49 */
-		.byte	0x0
-GLOBAL (byte_1C6D4A)	/* 0x1C6D4A */
-		.short  0x0
-GLOBAL (login_name)	/* 0x1C6D4C */
-		.fill   0x10
-GLOBAL (net_players)
-		.fill   0x64
-data_1c6dc0:
-		.fill   0x1a
-data_1c6dda:
-		.byte	0x0
-data_1c6ddb:
-		.byte	0x0
-GLOBAL (byte_1C6DDC)	/* 0x1C6DDC */
-		.fill   0x5
-		.fill   0x3
 GLOBAL (dword_1C6DE4)	/* 0x1c6de4 */
 		.long	0x0
 GLOBAL (dword_1C6DE8)	/* 0x1c6de8 */

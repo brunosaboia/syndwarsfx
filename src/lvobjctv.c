@@ -248,7 +248,10 @@ const struct TbNamedEnum missions_conf_netscan_objctv_params[] = {
 #define OBJECTIVE_TEXT_MAX 300
 
 struct NetscanObjective mission_netscan_objectives[MISSION_NETSCAN_OBV_COUNT];
-ushort next_mission_netscan_objective;
+ushort next_mission_netscan_objective = 1;
+
+struct NetscanObjective netscan_objectives[NETSCAN_OBJECTIVES_MAX_COUNT];
+ubyte netscan_objectives_count;
 
 struct Objective *game_used_objectives = NULL;
 ushort next_used_objective = 1;

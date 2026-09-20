@@ -39,7 +39,7 @@
 
 #pragma pack()
 /******************************************************************************/
-extern struct NetworkPlayer network_players[8];
+struct NetworkPlayer network_players[8];
 
 TbBool net_local_player_hosts_the_game(void)
 {

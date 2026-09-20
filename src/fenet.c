@@ -97,8 +97,8 @@ extern ubyte net_autostart_done;
 char net_unkn1_text[25];
 char byte_1811E2[16];
 TbClockMSec sessionlist_last_update[MONITORED_SESSIONS_COUNT] = {0};
-extern ubyte byte_1C6D48;
-extern struct TbNetworkSessionList unkstruct04_arr[MONITORED_SESSIONS_COUNT];
+ubyte byte_1C6D48 = 0;
+struct TbNetworkSessionList unkstruct04_arr[MONITORED_SESSIONS_COUNT];
 
 sbyte selected_net_session = -1;
 sbyte selected_net_user = -1;

@@ -394,6 +394,8 @@ extern long SCANNER_unknarr_1DBB6C[512];
 extern TbPixel *SCANNER_screenptr;
 extern u32 SCANNER_keep_arcs;
 
+ubyte net_player_colours[8];
+
 void SCANNER_dnt_SCANNER_dw070_update(ushort flags1)
 {
     s64 nm_prec;

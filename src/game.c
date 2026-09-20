@@ -291,6 +291,12 @@ char mission_status_text[100];
 
 char *data_15319c = mission_status_text;
 
+ubyte net_player_teams[8];
+ubyte group_factions[8];
+ubyte net_host_player_no = 0;
+ubyte byte_1C6D4A;
+ubyte byte_1C6DDC[5];
+
 s32 navi2_unkn_counter = 0;
 s32 navi2_unkn_counter_max = 0;
 
