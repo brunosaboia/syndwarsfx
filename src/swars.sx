@@ -57404,9 +57404,9 @@ build_continuos_slice_3d:	/* 0x06B13C */
 		mov    %ebx,0x1c(%esp)
 		call   ac_transform_point
 		mov    (%esp),%eax
-		mov    %ax,data_1aa662
+		mov    %ax,EXPORT_SYMBOL(word_1AA662)
 		mov    0x4(%esp),%eax
-		mov    %ax,data_1aa664
+		mov    %ax,EXPORT_SYMBOL(word_1AA664)
 	jump_6b195:
 		mov    EXPORT_SYMBOL(engn_xc),%edi
 		xor    %dh,%dh
@@ -57449,19 +57449,19 @@ build_continuos_slice_3d:	/* 0x06B13C */
 		push   %eax
 		mov    0x4e(%esp),%eax
 		sar    $0x10,%eax
-		mov    data_1aa662,%edx
+		mov    EXPORT_SYMBOL(word_1AA664)-2,%edx
 		push   %eax
 		mov    0x4e(%esp),%eax
 		movswl %di,%ecx
 		sar    $0x10,%eax
 		movswl %si,%ebx
 		push   %eax
-		mov    data_1aa660,%eax
+		mov    EXPORT_SYMBOL(word_1AA662)-2,%eax
 		sar    $0x10,%edx
 		sar    $0x10,%eax
 		call   ac_build_polygon_slice
-		mov    %si,data_1aa662
-		mov    %di,data_1aa664
+		mov    %si,EXPORT_SYMBOL(word_1AA662)
+		mov    %di,EXPORT_SYMBOL(word_1AA664)
 		add    $0x28,%esp
 		pop    %ebp
 		pop    %edi
@@ -58277,7 +58277,7 @@ find_a_target:	/* 0x06BCF0 */
 		jne    jump_6be82
 	jump_6befc:
 		mov    0x14(%esp),%eax
-		mov    %ebp,data_1aa67c
+		mov    %ebp,EXPORT_SYMBOL(dword_1AA67C)
 		add    $0x24,%esp
 		pop    %ebp
 		pop    %edi
@@ -58431,7 +58431,7 @@ find_best_guardian:	/* 0x06BFC0 */
 	jump_6c07e:
 		mov    (%esp),%eax
 		mov    0x4(%esp),%ecx
-		mov    %eax,data_1aa680
+		mov    %eax,EXPORT_SYMBOL(dword_1AA680)
 		test   %cx,%cx
 		je     jump_6c0af
 		xor    %ebx,%ebx
@@ -58513,7 +58513,7 @@ GLOBAL_FUNC(ASM_find_and_alert_guardian)	/* 0x06C0BC */
 		mov    0x16(%ebx),%dx
 		mov    %dx,0x3c(%eax)
 		orb    $0x40,0xe(%ebx)
-		cmpl   $0x1000,data_1aa680
+		cmpl   $0x1000,EXPORT_SYMBOL(dword_1AA680)
 		jge    jump_6c165
 		xor    %eax,%eax
 		mov    %cx,%ax
@@ -60290,7 +60290,7 @@ GLOBAL_FUNC(ASM_people_intel)	/* 0x06D9F8 */
 		cmp    $0x1,%eax
 		jne    jump_6da20
 		xor    %ebx,%ebx
-		mov    %bx,data_1aa678
+		mov    %bx,EXPORT_SYMBOL(word_1AA678)
 		jmp    jump_6dde8
 	jump_6da20:
 		mov    $0x66,%ebp
@@ -60435,7 +60435,7 @@ GLOBAL_FUNC(ASM_people_intel)	/* 0x06D9F8 */
 		xor    %ecx,%ecx
 		test   %edx,%edx
 		je     jump_6dde8
-		mov    data_1aa678,%di
+		mov    EXPORT_SYMBOL(word_1AA678),%di
 	jump_6dbbc:
 		cmp    %di,%cx
 		jae    jump_6dbdf
@@ -60455,7 +60455,7 @@ GLOBAL_FUNC(ASM_people_intel)	/* 0x06D9F8 */
 		test   %edx,%edx
 		jne    jump_6dbf6
 		xor    %eax,%eax
-		mov    %ax,data_1aa678
+		mov    %ax,EXPORT_SYMBOL(word_1AA678)
 		mov    EXPORT_SYMBOL(same_type_head)+2,%ax
 	jump_6dbf6:
 		mov    $0xfffff7ff,%edi
@@ -60598,14 +60598,14 @@ GLOBAL_FUNC(ASM_people_intel)	/* 0x06D9F8 */
 		call   find_target_from_group
 		jmp    jump_6ddc5
 	jump_6ddbe:
-		mov    %si,data_1aa678
+		mov    %si,EXPORT_SYMBOL(word_1AA678)
 	jump_6ddc5:
 		mov    (%esp),%edx
-		mov    data_1aa678,%cx
+		mov    EXPORT_SYMBOL(word_1AA678),%cx
 		mov    0x10(%ebx),%ax
 		inc    %ecx
 		dec    %edx
-		mov    %cx,data_1aa678
+		mov    %cx,EXPORT_SYMBOL(word_1AA678)
 		mov    %edx,(%esp)
 		cmp    %dx,%si
 		jne    jump_6dc02
@@ -129103,23 +129103,21 @@ GLOBAL (dword_1AA5C8)	/* 0x1AA5C8 */
 
 data_1aa660:
 		.short  0x0
-data_1aa662:
+GLOBAL (word_1AA662)	/* 0x1aa662 */
 		.short  0x0
-data_1aa664:
+GLOBAL (word_1AA664)	/* 0x1aa664 */
+		.short  0x0
+		.short  0x0
 		.long	0x0
-data_1aa668:
 		.long	0x0
-data_1aa66c:
 		.long	0x0
-data_1aa670:
 		.long	0x0
-data_1aa674:
+GLOBAL (word_1AA678)	/* 0x1aa678 */
+		.short  0x0
+		.short  0x0
+GLOBAL (dword_1AA67C)	/* 0x1aa67c */
 		.long	0x0
-data_1aa678:
-		.long	0x0
-data_1aa67c:
-		.long	0x0
-data_1aa680:
+GLOBAL (dword_1AA680)	/* 0x1aa680 */
 		.long	0x0
 		.align  4
 
