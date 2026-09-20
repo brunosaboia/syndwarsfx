@@ -257,7 +257,9 @@
 .global EXPORT_SYMBOL(route_bak);		/* 0x1BF9C8 */
 
 .global EXPORT_SYMBOL(byte_1C47EA);		/* 0x1C47EA */
-.global EXPORT_SYMBOL(net_player_names);		/* 0x1C49AC */
+.global EXPORT_SYMBOL(net_player_names);	/* 0x1C49AC */
+.global EXPORT_SYMBOL(back_buffer);		/* 0x1C4A78 */
+.global EXPORT_SYMBOL(change_screen);	/* 0x1C4A7D */
 .global EXPORT_SYMBOL(screentype);		/* 0x1C4AA5 */
 .global EXPORT_SYMBOL(map_from_mission);	/* 0x1C4B79 */
 .global EXPORT_SYMBOL(reload_background_flag);	/* 0x1C4B80 */
@@ -93434,7 +93436,7 @@ GLOBAL_FUNC(ASM_flashy_draw_text)	/* 0x0A4EF0 */
 		mov    %edx,0xc(%esp)
 		cmp    %edx,%eax
 		jge    jump_a5068
-		mov    back_buffer,%ebx
+		mov    EXPORT_SYMBOL(back_buffer),%ebx
 		add    EXPORT_SYMBOL(text_buf_pos),%ebx
 		test   %eax,%eax
 		jle    jump_a4f5a
@@ -128379,7 +128381,7 @@ GLOBAL_FUNC(ASM_accept_mission)	/* 0x0D33B8 */
 		jle    jump_d33e1
 		mov    $0x3,%ah
 		mov    $0x1,%dl
-		mov    %ah,change_screen
+		mov    %ah,EXPORT_SYMBOL(change_screen)
 		mov    EXPORT_SYMBOL(open_brief),%ax
 		mov    %dl,EXPORT_SYMBOL(map_from_mission)
 		mov    %ax,EXPORT_SYMBOL(old_mission_brief)
@@ -129230,27 +129232,6 @@ data_1c4770:
 		.long	0x0
 		.align  4
 
-/* ScreenPoint *hotspot_buffer;
- */
-GLOBAL (hotspot_buffer)	/* 0x1C4A74 */
-		.long	0x0
-/* ubyte *back_buffer;
- */
-GLOBAL (back_buffer)
-		.long	0x0
-GLOBAL (net_service_started)	/* 0x1C4A7C */
-		.byte	0x0
-GLOBAL (change_screen)	/* 0x1C4A7D */
-		.byte	0x0
-GLOBAL (restore_savegame)	/* 0x1C4A7E */
-		.short  0x0
-/* The maximum volume is 322. */
-GLOBAL (startscr_samplevol)			/* 1c4a80 */
-		.short  0x0
-GLOBAL (startscr_midivol)	/* 1c4a82 */
-		.short  0x0
-GLOBAL (startscr_cdvolume)		/* 1c4a84 */
-		.long	0x0
 GLOBAL (flic_mods)	/* 0x1C4A88 */
 		.byte	0x0
 data_1c4a89:

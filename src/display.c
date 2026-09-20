@@ -46,6 +46,8 @@
 
 /******************************************************************************/
 
+ubyte *back_buffer = NULL;
+
 TbScreenMode screen_mode_game_hi = Lb_SCREEN_MODE_640_480_8;
 TbScreenMode screen_mode_game_lo = Lb_SCREEN_MODE_320_200_8;
 TbScreenMode screen_mode_menu = Lb_SCREEN_MODE_640_480_8;
@@ -56,6 +58,8 @@ ushort text_window_x1, text_window_y1;
 ushort text_window_x2, text_window_y2;
 
 ubyte game_high_resolution = 0;
+
+/******************************************************************************/
 
 #if defined(WIN32)
 

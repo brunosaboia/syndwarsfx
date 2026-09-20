@@ -44,6 +44,8 @@ struct ScreenButton storage_NEW_MORTAL_button = {0};
 struct ScreenTextBox storage_slots_box = {0};
 ubyte byte_1C4880[8];
 
+ubyte restore_savegame = 0;
+
 /******************************************************************************/
 
 ubyte do_storage_NEW_MORTAL(ubyte click);

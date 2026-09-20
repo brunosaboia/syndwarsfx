@@ -23,6 +23,8 @@
 
 /******************************************************************************/
 
+ubyte net_service_started = 0;
+
 ubyte net_serial_uses_modem = 0;
 
 ubyte net_host_player_no = 0;

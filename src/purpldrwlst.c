@@ -40,6 +40,7 @@
 struct PurpleDrawItem *purple_draw_list = NULL;
 ushort purple_draw_index = 0;
 
+struct ScreenPoint *hotspot_buffer = NULL;
 ushort hotspot_next = 1;
 
 ubyte purple_joy_move = 0;

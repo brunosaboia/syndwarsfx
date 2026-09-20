@@ -321,6 +321,7 @@ ubyte unkn_flags_01 = 0;
 
 ubyte start_into_mission = false;
 ubyte edit_flag = 0;
+ubyte change_screen = 0;
 
 struct OutroHotChar outro_hot_chars[OUTRO_HOT_CHARS_COUNT];
 
