@@ -250,6 +250,24 @@ void SCANNER_process_turn(void)
     SCANNER_process_bbpoints();
 }
 
+/** Fill the scanner map for a single scanline of a rasterized triangle.
+ *
+ *  Coordinates are given in 16.16 fixed point; the left boundary is excluded
+ *  and the right boundary is included (so adjoining triangles sharing an
+ *  edge don't double-draw it).
+ */
+static void SCANNER_scanconvert_fill_row(int left_fx, int right_fx, int row, ubyte colour)
+{
+    int left = left_fx >> 16;
+    int right = right_fx >> 16;
+    int col;
+
+    if (right <= left)
+        return;
+    for (col = left + 1; col <= right; col++)
+        SCANNER_data[col - 1][row] = colour;
+}
+
 /** Fills in a triangle/quad shape on the scanner map, using the map-projected
  *  coordinates of the given 3 or 6 points.
  */
@@ -332,8 +350,44 @@ void SCANNER_fill_in_object(int object_idx, TbPixel colour)
 
 void SCANNER_fill_in_road(int thing_idx)
 {
+#if 0
     asm volatile ("call ASM_SCANNER_fill_in_road\n"
         : : "a" (thing_idx) : );
+    return;
+#endif
+    struct Thing *p_thing;
+    int off_x, off_z, off_x_scaled, off_z_scaled;
+    int x8, z8, x_minus, x_plus, z_minus, z_plus;
+    int p1z, p1x, p2z, p2x, p3z, p3x, p4z, p4x;
+    TbPixel colour;
+
+    p_thing = &things[thing_idx];
+    x8 = PRCCOORD_TO_MAPCOORD(p_thing->X);
+    z8 = PRCCOORD_TO_MAPCOORD(p_thing->Z);
+    off_x = p_thing->U.UObject.OffX;
+    off_z = p_thing->U.UObject.OffZ;
+    // Strength-reduced form of off_x*3.5 / off_z*3.5,
+    // arithmetic shifts round toward -inf.
+    off_x_scaled = off_x + (off_x * 2 + (off_x >> 1));
+    off_z_scaled = off_z + (off_z * 2 + (off_z >> 1));
+
+    x_minus = x8 - off_x * 8;
+    x_plus = x8 + off_x * 8;
+    z_minus = z8 - off_z * 8;
+    z_plus = z8 + off_z * 8;
+
+    p1z = z_minus + off_x_scaled;
+    p1x = x_minus - off_z_scaled;
+    p2z = z_minus - off_x_scaled;
+    p2x = x_minus + off_z_scaled;
+    p3z = z_plus + off_x_scaled;
+    p3x = x_plus - off_z_scaled;
+    p4z = z_plus - off_x_scaled;
+    p4x = x_plus + off_z_scaled;
+
+    colour = SCANNER_colour[ScnClr_Roadway];
+
+    SCANNER_fill_quad(p1z, p1x, p2z, p2x, p3z, p3x, p4z, p4x, colour);
 }
 
 void SCANNER_outline(void)
