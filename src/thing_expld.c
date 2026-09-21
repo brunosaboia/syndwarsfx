@@ -34,6 +34,7 @@
 #include "swlog.h"
 #include "thing.h"
 #include "thing_fire.h"
+#include "weapon.h"
 
 /******************************************************************************/
 #pragma pack(1)
@@ -458,6 +459,9 @@ static void explode_face3_quad_final_ground_hit(int exface, int cor_gnd_y)
           if ((minimum_explode_and & LbRandomAnyShort()) == 0)
           {
               quick_crater(tile_x, tile_z, minimum_explode_depth);
+              // On a fluid the crater is a no-op, as the surface is not
+              // damaged; let the debris raise a small splash instead.
+              fluid_floor_creates_splash(cor_x, cor_z, 62, 8);
               bang_new4(cor_x << 8, 32 * cor_gnd_y, cor_z << 8, 20);
               if ((LbRandomAnyShort() & 7) == 0)
               {
