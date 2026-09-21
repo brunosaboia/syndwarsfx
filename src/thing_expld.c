@@ -34,6 +34,7 @@
 #include "swlog.h"
 #include "thing.h"
 #include "thing_fire.h"
+#include "weapon.h"
 
 /******************************************************************************/
 #pragma pack(1)
@@ -455,6 +456,10 @@ static void explode_face3_quad_final_ground_hit(int exface, int cor_gnd_y)
     {
       if (tile_z >= 0 && tile_z < 128)
       {
+          // On a fluid no crater is made, as the surface is not damaged;
+          // let every landing shard raise a small splash instead.
+          fluid_floor_creates_splash(cor_x, cor_z, 62, 8);
+
           if ((minimum_explode_and & LbRandomAnyShort()) == 0)
           {
               quick_crater(tile_x, tile_z, minimum_explode_depth);
