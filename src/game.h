@@ -194,10 +194,7 @@ extern ubyte start_into_mission;
 extern ubyte edit_flag;
 extern ubyte change_screen;
 extern ubyte current_drawing_mod;
-extern ubyte mod_draw_states[4];
 extern ubyte new_current_drawing_mod;
-extern ubyte flic_mods[5];
-extern ubyte old_flic_mods[5];
 
 extern struct LevelDef level_def;
 

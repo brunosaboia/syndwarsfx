@@ -66,6 +66,10 @@ ubyte byte_1DDC40 = 0;
  */
 ubyte current_frame = 0;
 
+ubyte flic_mods[5];
+ubyte old_flic_mods[5];
+ubyte mod_draw_states[4];
+
 short word_15511E = -1;
 
 ubyte cheat_research_cybmods = 0;

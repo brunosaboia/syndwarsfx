@@ -129037,27 +129037,6 @@ data_1c4770:
 		.long	0x0
 		.align  4
 
-GLOBAL (flic_mods)	/* 0x1C4A88 */
-		.byte	0x0
-data_1c4a89:
-		.byte	0x0
-data_1c4a8a:
-		.byte	0x0
-data_1c4a8b:
-		.fill   0x5
-GLOBAL (old_flic_mods)	/* 0x1C4A90 */
-		.fill   0x5
-		.fill   0x2
-data_1c4a97:
-		.byte	0x0
-GLOBAL (mod_draw_states)	/* 0x1C4A98 */
-		.byte	0x0
-data_1c4a99:
-		.byte	0x0
-data_1c4a9a:
-		.byte	0x0
-data_1c4a9b:
-		.byte	0x0
 GLOBAL (new_current_drawing_mod)	/* 0x1C4A9C */
 		.byte	0x0
 GLOBAL (current_drawing_mod)	/* 0x1C4A9D */
