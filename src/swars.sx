@@ -89147,6 +89147,19 @@ process_map_crater:	/* 0x08907C */
 		cmpb   $0x0,0x3(%esp)
 		je     jump_897ff
 	jump_8991f:
+		/* Fix for the same original game bug as in ASM_quick_crater() - the
+		 * hole filling pass has to skip sea tiles, or the growing crater
+		 * punches scorched ground into the water surface. */
+		push   %eax
+		imul   $0x12,%eax,%eax
+		mov    EXPORT_SYMBOL(game_my_big_map),%edx
+		mov    (%edx,%eax,1),%ax
+		and    $0x3f,%ah
+		cwtl
+		call   is_that_a_sea_texture
+		test   %eax,%eax
+		pop    %eax
+		jne    jump_897ff
 		imul   $0x12,%eax,%eax
 		mov    EXPORT_SYMBOL(game_my_big_map),%edx
 		add    %edx,%eax
@@ -92309,6 +92322,20 @@ func_8ae35:
 		cmpb   $0x0,0x3(%esp)
 		je     jump_8c060
 	jump_8c033:
+		/* Fix for an original game bug: unlike every other place which puts
+		 * the crater texture on a tile, this hole filling pass did not check
+		 * for a sea texture. Water tiles are skipped while the crater is being
+		 * stamped, so to this pass they look exactly like holes left within the
+		 * crater - and filling them replaced the water surface with scorched
+		 * ground. */
+		imul   $0x12,0x34(%esp),%edx
+		mov    EXPORT_SYMBOL(game_my_big_map),%eax
+		mov    (%eax,%edx,1),%ax
+		and    $0x3f,%ah
+		cwtl
+		call   is_that_a_sea_texture
+		test   %eax,%eax
+		jne    jump_8c060
 		imul   $0x12,0x34(%esp),%edx
 		mov    EXPORT_SYMBOL(game_my_big_map),%eax
 		add    %edx,%eax
