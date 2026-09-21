@@ -539,6 +539,9 @@ TbBool map_floor_is_sludge(MapCoord cor_x, MapCoord cor_z)
 
 void quick_crater(int x, int z, int size)
 {
+    // Water tiles are left intact - the tile stamping loops skip sea textures,
+    // and so does the hole filling pass which follows them (the latter check is
+    // a fix of an original game bug; see jump_8c033 within ASM_quick_crater).
     asm volatile ("call ASM_quick_crater\n"
         :  : "a" (x), "d" (z), "b" (size));
 }
