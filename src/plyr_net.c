@@ -37,6 +37,8 @@ ubyte net_players_num = 1;
 struct NetPlayerChat net_player_chat[NET_CHAT_MSG_LIMIT];
 ubyte net_player_chat_plyr[NET_CHAT_MSG_LIMIT];
 
+struct WeaponsFourPack net_agents__FourPacks[NET_PLAYERS_COUNT][AGENTS_SQUAD_MAX_COUNT];
+
 /******************************************************************************/
 
 TbBool netgame_service_is_multi_client_capable(void)

@@ -47,6 +47,7 @@
 #include "thing.h"
 #include "pepgroup.h"
 #include "player.h"
+#include "plyr_net.h"
 #include "research.h"
 #include "thing_search.h"
 #include "wadfile.h"

@@ -21,6 +21,8 @@
 
 #include "bftypes.h"
 #include "game_bstype.h"
+#include "network.h"
+#include "weapon.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -48,6 +50,9 @@ extern ubyte net_players_num;
 
 extern struct NetPlayerChat net_player_chat[NET_CHAT_MSG_LIMIT];
 extern ubyte net_player_chat_plyr[NET_CHAT_MSG_LIMIT];
+
+//TODO maybe make it a part of larger struct
+extern struct WeaponsFourPack net_agents__FourPacks[NET_PLAYERS_COUNT][4];
 
 /******************************************************************************/
 TbBool netgame_service_is_multi_client_capable(void);

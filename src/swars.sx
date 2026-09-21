@@ -128999,8 +128999,6 @@ ascS_7:	/* 0x15EB57 */
 		.string "%s"
 		.align  4
 
-GLOBAL (net_agents__FourPacks)	/* 0x176C04 */
-		.fill   0x0a0
 data_176ca4:			/* 0x176ca4 no purpose, remove pending */
 		.fill   0x8
 GLOBAL (dword_176CAC)	/* 0x176CAC */

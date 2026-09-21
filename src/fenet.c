@@ -97,7 +97,7 @@ ubyte byte_1C4805 = 0;
 ubyte byte_1C4806 = 0;
 ubyte byte_1C4994 = 0;
 ubyte net_autostart_done = 0;
-char net_unkn1_text[25];
+char net_unkn1_text[NET_CHAT_MSG_LEN];
 char byte_1811E2[16];
 TbClockMSec sessionlist_last_update[MONITORED_SESSIONS_COUNT] = {0};
 ubyte byte_1C6D48 = 0;

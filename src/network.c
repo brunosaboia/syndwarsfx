@@ -568,7 +568,7 @@ int ipx_join_session(struct IPXSessionList *p_ipxsess, char *a2)
         IPXHandler->SessionActive = 1;
         IPXHandler->field_D = p_plyrdt->Header.field_2B;
         IPXPlayer.Data.num_players = p_plyrdt->Data.num_players;
-        IPXPlayer.Data.field_10E = p_plyrdt->Data.field_10E;
+        IPXPlayer.Data.MaxPlayers = p_plyrdt->Data.MaxPlayers;
         IPXPlayer.Header.field_26 = p_plyrdt->Header.field_26;
         IPXPlayer.Header.field_2B = my_plyr;
         strcpy(IPXPlayer.Header.field_C, a2);
@@ -707,7 +707,7 @@ void ipx_stop_network(int plyr)
         IPXPlayer.Header.field_2A = 0;
         IPXPlayer.Header.field_26 = 0;
         IPXPlayer.Header.field_2C = 0;
-        IPXPlayer.Data.field_10E = 0;
+        IPXPlayer.Data.MaxPlayers = 0;
         IPXPlayer.Header.field_2B = 0;
         IPXPlayer.Data.num_players = 0;
         LbMemorySet(&IPXPlayer.Data, 0, 0xE0u);
@@ -1880,7 +1880,7 @@ int LbCommExchange(ushort idx, void *data, int datalen)
     if (p_serdev->num_players <= 1) {
         return 1;
     }
-    if ( p_serdev->field_10A9 )
+    if (p_serdev->SessionOwnerLocal)
     {
         if (run_exchange_func() == -7)
             return -7;
@@ -2486,7 +2486,7 @@ TbResult LbNetworkHostPlayerNumber(void)
     case NetSvc_COM3:
     case NetSvc_COM4:
         serhead = NetworkServicePtr.I.Id;
-        if (!serhead->field_10A9)
+        if (!serhead->SessionOwnerLocal)
             ret = 0;
         else
             ret = 1;
@@ -2525,7 +2525,7 @@ int LbNetworkPlayerNumber(void)
     case NetSvc_COM3:
     case NetSvc_COM4:
         serhead = NetworkServicePtr.I.Id;
-        if (!serhead->field_10A9)
+        if (!serhead->SessionOwnerLocal)
             ret = 0;
         else
             ret = 1;
@@ -2755,7 +2755,7 @@ TbResult LbCommSessionCreate(struct TbSerialDev *serhead, const char *sess_name,
     TbResult ret;
 
     LOGDBG("Starting");
-    serhead->field_10A9 = 1;
+    serhead->SessionOwnerLocal = 1;
     strcpy(serhead->field_10AD, a2);
 
     exchange_cb_bkp = NetworkServicePtr.F.SessionExchange;
@@ -2780,7 +2780,7 @@ TbResult LbCommSessionJoin(struct TbSerialDev *serhead, char *sess_name, const c
 
     LOGDBG("Starting");
     LbMemorySet(locstr, 0, sizeof(locstr));
-    serhead->field_10A9 = 0;
+    serhead->SessionOwnerLocal = 0;
     strcpy(&serhead->field_10AD[16], a2);
 
     exchange_cb_bkp = NetworkServicePtr.F.SessionExchange;
@@ -2809,7 +2809,7 @@ TbResult LbNetworkSessionCreate(struct TbNetworkSession *session, char *a2)
     switch (NetworkServicePtr.I.Type)
     {
     case NetSvc_IPX:
-        IPXPlayer.Data.field_10E = session->MaxPlayers;
+        IPXPlayer.Data.MaxPlayers = session->MaxPlayers;
         ret = ipx_create_session(session->Name, a2);
         break;
     case NetSvc_COM1:
