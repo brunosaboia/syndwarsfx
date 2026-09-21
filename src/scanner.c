@@ -273,6 +273,7 @@ static void SCANNER_scanconvert_fill_row(int left_fx, int right_fx, int row, uby
  */
 void SCANNER_scanconvert(int x0, int y0, int x1, int y1, int x2, int y2, int colour)
 {
+#if 0
     // Pushed through a register holding them: a "g" operand may be placed
     // relative to the stack pointer, which each push moves.
     int stkargs[3];
@@ -288,6 +289,124 @@ void SCANNER_scanconvert(int x0, int y0, int x1, int y1, int x2, int y2, int col
       "call ASM_SCANNER_scanconvert\n"
         : : "a" (x0), "d" (y0), "b" (x1), "c" (y1), "S" (stkargs)
         : "cc", "memory");
+    return;
+#endif
+    int total_height, dx02, long_slope;
+    int long_tracker, other_tracker;
+    int row;
+
+    if ((x0 < 0) || (x0 > 256) || (x1 < 0) || (x1 > 256) || (x2 < 0) || (x2 > 256)
+     || (y0 < 0) || (y0 > 256) || (y1 < 0) || (y1 > 256) || (y2 < 0) || (y2 > 256))
+        return;
+
+    // Sort the 3 points by Y ascending (compare-exchange network of 3).
+    if (y0 > y1) {
+        int tx = x0, ty = y0;
+        x0 = x1; y0 = y1;
+        x1 = tx; y1 = ty;
+    }
+    if (y1 > y2) {
+        int tx = x1, ty = y1;
+        x1 = x2; y1 = y2;
+        x2 = tx; y2 = ty;
+    }
+    if (y0 > y1) {
+        int tx = x0, ty = y0;
+        x0 = x1; y0 = y1;
+        x1 = tx; y1 = ty;
+    }
+
+    if (y0 == y1)
+    {
+        int dx12, edge_slope;
+
+        if (y1 == y2)
+            return; // fully degenerate (zero-height) triangle
+
+        total_height = y2 - y0;
+        dx02 = x2 - x0;
+        long_slope = (dx02 << 16) / total_height;
+        dx12 = x2 - x1;
+        edge_slope = (dx12 << 16) / total_height;
+
+        if (x0 < x1) {
+            long_tracker = x0 << 16;
+            other_tracker = x1 << 16;
+            for (row = y0; row < y2; row++) {
+                SCANNER_scanconvert_fill_row(long_tracker, other_tracker, row, (ubyte)colour);
+                long_tracker += long_slope;
+                other_tracker += edge_slope;
+            }
+        } else {
+            long_tracker = x1 << 16;
+            other_tracker = x0 << 16;
+            for (row = y0; row < y2; row++) {
+                SCANNER_scanconvert_fill_row(other_tracker, long_tracker, row, (ubyte)colour);
+                other_tracker += long_slope;
+                long_tracker += edge_slope;
+            }
+        }
+        return;
+    }
+
+    total_height = y2 - y0;
+    dx02 = x2 - x0;
+    long_slope = (dx02 << 16) / total_height;
+
+    {
+        int height_top, dx01, short_slope_top;
+        int short_tracker;
+        TbBool long_is_left;
+
+        height_top = y1 - y0;
+        dx01 = x1 - x0;
+        short_slope_top = (dx01 << 16) / height_top;
+
+        long_tracker = x0 << 16;
+        short_tracker = x0 << 16;
+        long_is_left = (long_slope < short_slope_top);
+
+        if (long_is_left) {
+            for (row = y0; row < y1; row++) {
+                SCANNER_scanconvert_fill_row(long_tracker, short_tracker, row, (ubyte)colour);
+                long_tracker += long_slope;
+                short_tracker += short_slope_top;
+            }
+        } else {
+            for (row = y0; row < y1; row++) {
+                SCANNER_scanconvert_fill_row(short_tracker, long_tracker, row, (ubyte)colour);
+                short_tracker += short_slope_top;
+                long_tracker += long_slope;
+            }
+        }
+
+        if (y1 == y2)
+            return; // flat-bottom triangle, done after the top phase
+
+        {
+            int height_bottom, dx12, short_slope_bottom;
+            int short_tracker2;
+
+            height_bottom = y2 - y1;
+            dx12 = x2 - x1;
+            short_slope_bottom = (dx12 << 16) / height_bottom;
+            short_tracker2 = x1 << 16;
+
+            if (long_is_left) {
+                for (row = y1; row < y2; row++) {
+                    SCANNER_scanconvert_fill_row(long_tracker, short_tracker2, row, (ubyte)colour);
+                    long_tracker += long_slope;
+                    short_tracker2 += short_slope_bottom;
+                }
+            } else {
+                for (row = y1; row < y2; row++) {
+                    SCANNER_scanconvert_fill_row(short_tracker2, long_tracker, row, (ubyte)colour);
+                    short_tracker2 += short_slope_bottom;
+                    long_tracker += long_slope;
+                }
+            }
+        }
+    }
 }
 
 void SCANNER_fill_triangle(int z1, int x1, int z2, int x2, int z3, int x3, TbPixel colour)
