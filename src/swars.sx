@@ -216,7 +216,8 @@
 .global EXPORT_SYMBOL(minimum_explode_size);	/* 0x1AA5E8 */
 .global EXPORT_SYMBOL(minimum_explode_and);	/* 0x1AA5EC */
 .global EXPORT_SYMBOL(minimum_explode_depth);	/* 0x1AA5F0 */
-.global EXPORT_SYMBOL(triangulation);	/* 0x1AABE0 */
+.global EXPORT_SYMBOL(unkn01_thing_idx);	/* 0x1AABD2 */
+.global EXPORT_SYMBOL(triangulation);		/* 0x1AABE0 */
 .global EXPORT_SYMBOL(triangulation_initied);	/* 0x1AAE38 */
 
 .global EXPORT_SYMBOL(outro_hot_chars);	/* 0x1ddb70 */
@@ -735,191 +736,6 @@ GLOBAL_FUNC(ASM_place_default_player)	/* 0x0101F0 */
 		pop    %ebp
 		pop    %edi
 		pop    %esi
-		pop    %ecx
-		pop    %ebx
-		ret
-
-
-/*----------------------------------------------------------------*/
-GLOBAL_FUNC(ASM_unkn_truce_groups)	/* 0x010CA0 */
-/*----------------------------------------------------------------*/
-		push   %ebx
-		push   %ecx
-		push   %edx
-		push   %esi
-		push   %edi
-		push   %ebp
-		sub    $0xb8,%esp
-		lea    0x8c(%esp),%edi
-		mov    $EXPORT_SYMBOL(dword_152E38),%esi
-		movsl  %ds:(%esi),%es:(%edi)
-		movsl  %ds:(%esi),%es:(%edi)
-		movsl  %ds:(%esi),%es:(%edi)
-		movsl  %ds:(%esi),%es:(%edi)
-		movsl  %ds:(%esi),%es:(%edi)
-		lea    0xa0(%esp),%edi
-		mov    $data_176ca4,%esi
-		mov    EXPORT_SYMBOL(colour_lookup)+3,%al
-		movsl  %ds:(%esi),%es:(%edi)
-		movsl  %ds:(%esi),%es:(%edi)
-		mov    %al,0xa0(%esp)
-		mov    EXPORT_SYMBOL(colour_lookup)+2,%al
-		mov    %al,0xa1(%esp)
-		mov    EXPORT_SYMBOL(colour_lookup)+1,%al
-		mov    %al,0xa2(%esp)
-		mov    EXPORT_SYMBOL(colour_lookup)+7,%al
-		mov    %al,0xa3(%esp)
-		mov    EXPORT_SYMBOL(colour_lookup)+0x06,%al
-		mov    %al,0xa4(%esp)
-		mov    EXPORT_SYMBOL(colour_lookup)+0x05,%al
-		mov    %al,0xa5(%esp)
-		mov    EXPORT_SYMBOL(colour_lookup)+0x09,%al
-		mov    $0x28,%ebx
-		mov    %al,0xa6(%esp)
-		mov    EXPORT_SYMBOL(colour_lookup),%al
-		xor    %edx,%edx
-		mov    %al,0xa7(%esp)
-		lea    0x64(%esp),%eax
-		call   ac_memset
-		mov    $0x5,%ebx
-		lea    0xa8(%esp),%eax
-		xor    %edx,%edx
-		call   ac_memset
-		xor    %edx,%edx
-		jmp    jump_10d53
-	jump_10d52:
-		inc    %edx
-	jump_10d53:
-		xor    %ebx,%ebx
-		mov    %dx,%bx
-		cmp    $0x8,%ebx
-		jge    jump_10d9d
-		mov    $0x1,%eax
-		mov    %edx,%ecx
-		movzbl EXPORT_SYMBOL(ingame)+0x995,%esi # ingame.InNetGame_UNSURE
-		shl    %cl,%eax
-		test   %eax,%esi
-		je     jump_10d52
-		xor    %eax,%eax
-		mov    EXPORT_SYMBOL(net_player_teams)(%ebx),%al
-		lea    0x0(,%eax,8),%ecx
-		movzbl 0xa8(%esp,%eax,1),%esi
-		add    %esi,%ecx
-		mov    EXPORT_SYMBOL(level_def)+0x00(%ebx),%bl # level_def.PlayableGroups
-		mov    %bl,0x64(%esp,%ecx,1)
-		incb   0xa8(%esp,%eax,1)
-		jmp    jump_10d52
-	jump_10d9d:
-		movl   $0x1,0xb0(%esp)
-		mov    $0x1,%ebp
-		jmp    jump_10db6
-	jump_10daf:
-		incl   0xb0(%esp)
-	jump_10db6:
-		xor    %eax,%eax
-		mov    0xb0(%esp),%ax
-		cmp    $0x5,%eax
-		jge    jump_10e82
-		xor    %ebx,%ebx
-		mov    %ebx,0xb4(%esp)
-		jmp    jump_10ddb
-	jump_10dd4:
-		incl   0xb4(%esp)
-	jump_10ddb:
-		xor    %eax,%eax
-		mov    0xb0(%esp),%ax
-		mov    0xa8(%esp,%eax,1),%al
-		xor    %ebx,%ebx
-		and    $0xff,%eax
-		mov    0xb4(%esp),%bx
-		cmp    %eax,%ebx
-		jge    jump_10daf
-		xor    %edx,%edx
-		jmp    jump_10e04
-	jump_10e03:
-		inc    %edx
-	jump_10e04:
-		xor    %eax,%eax
-		xor    %ebx,%ebx
-		mov    0xb0(%esp),%ax
-		xor    %ecx,%ecx
-		mov    %dx,%bx
-		mov    0xa8(%esp,%eax,1),%cl
-		cmp    %ecx,%ebx
-		jge    jump_10dd4
-		mov    0xb4(%esp),%edi
-		cmp    %di,%dx
-		je     jump_10e03
-		lea    0x0(,%eax,8),%esi
-		xor    %eax,%eax
-		mov    %di,%ax
-		add    %esi,%eax
-		movzbl 0x64(%esp,%eax,1),%edi
-		imul   $0x28,%edi,%eax
-		add    %ebx,%esi
-		mov    %ebp,%ebx
-		mov    0x64(%esp,%esi,1),%cl
-		shl    %cl,%ebx
-		or     %ebx,EXPORT_SYMBOL(war_flags)+0x0C(%eax) # war_flags[].Truce
-		not    %ebx
-		and    %ebx,EXPORT_SYMBOL(war_flags)(%eax)
-		and    %ebx,EXPORT_SYMBOL(war_flags)+0x08(%eax) # war_flags[].KillIfArmed
-		and    %ebx,EXPORT_SYMBOL(war_flags)+0x04(%eax) # war_flags[].KillIfWeaponOut
-		xor    %eax,%eax
-		mov    0x64(%esp,%esi,1),%al
-		push   %eax
-		push   %edi
-		push   $aGroupDTrucedWi
-		lea    0xc(%esp),%eax
-		push   %eax
-		call   ac_sprintf
-		add    $0x10,%esp
-		jmp    jump_10e03
-	jump_10e82:
-		xor    %ebx,%ebx
-		xor    %eax,%eax
-		jmp    jump_10ebd
-	jump_10e88:
-		mov    0xa0(%esp,%ebx,1),%dl
-		mov    %dl,%bl
-		mov    %dl,EXPORT_SYMBOL(net_player_colours)(%eax)
-		and    $0xff,%ebx
-		mov    %ebx,0x8c(%esp,%ecx,1)
-		mov    %esi,%ebx
-		jmp    jump_10eb7
-	jump_10ea8:
-		mov    0xa0(%esp,%ebx,1),%dl
-		mov    %esi,%ebx
-		mov    %dl,EXPORT_SYMBOL(net_player_colours)(%eax)
-	jump_10eb7:
-		inc    %eax
-		cmp    $0x8,%eax
-		jge    jump_10f02
-	jump_10ebd:
-		mov    $0x1,%edi
-		mov    %al,%cl
-		movzbl EXPORT_SYMBOL(ingame)+0x995,%esi # ingame.InNetGame_UNSURE
-		shl    %cl,%edi
-		test   %edi,%esi
-		je     jump_10eb7
-		mov    EXPORT_SYMBOL(net_player_teams)(%eax),%cl
-		lea    0x1(%ebx),%esi
-		test   %cl,%cl
-		je     jump_10ea8
-		xor    %ecx,%ecx
-		mov    EXPORT_SYMBOL(net_player_teams)(%eax),%cl
-		shl    $0x2,%ecx
-		cmpl   $0xffffffff,0x8c(%esp,%ecx,1)
-		je     jump_10e88
-		mov    0x8c(%esp,%ecx,1),%dl
-		mov    %dl,EXPORT_SYMBOL(net_player_colours)(%eax)
-		jmp    jump_10eb7
-	jump_10f02:
-		add    $0xb8,%esp
-		pop    %ebp
-		pop    %edi
-		pop    %esi
-		pop    %edx
 		pop    %ecx
 		pop    %ebx
 		ret
@@ -63084,7 +62900,7 @@ GLOBAL_FUNC(ASM_replace_thing_given_thing_idx)	/* 0x075674 */
 		mov    %edx,%eax
 		call   ac_delete_node
 	jump_756b4:
-		mov    %cx,unkn01_thing_idx
+		mov    %cx,EXPORT_SYMBOL(unkn01_thing_idx)
 		mov    %esi,%edx
 		mov    %edi,%eax
 		mov    $0x65,%ecx
@@ -63367,7 +63183,7 @@ GLOBAL_FUNC(ASM_new_sim_person)	/* 0x0759DC */
 		cmp    $0x64,%eax
 		jle    jump_759ff
 		mov    $0x1,%ch
-		mov    unkn01_thing_idx,%di
+		mov    EXPORT_SYMBOL(unkn01_thing_idx),%di
 		jmp    jump_75a06
 	jump_759ff:
 		call   ac_get_new_thing
@@ -64034,11 +63850,11 @@ swoosh_veh:	/* 0x076270 */
 		push   %edx
 		push   %esi
 		mov    %eax,%esi
-		mov    data_1aabd8,%ax
+		mov    EXPORT_SYMBOL(last_swoosh_thing),%ax
 		cmp    0x16(%esi),%ax
 		jne    jump_76298
 		mov    EXPORT_SYMBOL(gameturn),%eax
-		sub    data_1aabd4,%eax
+		sub    EXPORT_SYMBOL(last_swoosh_turn),%eax
 		cmp    $0x96,%eax
 		jb     jump_7634c
 	jump_76298:
@@ -64089,10 +63905,10 @@ swoosh_veh:	/* 0x076270 */
 		mov    $0x11,%edx
 		mov    0x16(%esi),%ax
 		push   $0x0
-		mov    %ax,data_1aabd8
+		mov    %ax,EXPORT_SYMBOL(last_swoosh_thing)
 		mov    EXPORT_SYMBOL(gameturn),%eax
 		push   $0x64
-		mov    %eax,data_1aabd4
+		mov    %eax,EXPORT_SYMBOL(last_swoosh_turn)
 		mov    %esi,%eax
 		call   ac_play_dist_sample
 		pop    %esi
@@ -78716,7 +78532,7 @@ reduce_point:
 		xor    %edi,%edi
 		mov    $0x1,%edx
 		mov    %ebx,%ebp
-		mov    %edx,data_1aae3c
+		/* mov    %edx,data_1aae3c # no purpose */
 	jump_80a86:
 		mov    %ebx,%edx
 		mov    EXPORT_SYMBOL(triangulation)+0x20,%eax # triangulation[0].Triangles
@@ -128999,8 +128815,6 @@ ascS_7:	/* 0x15EB57 */
 		.string "%s"
 		.align  4
 
-data_176ca4:			/* 0x176ca4 no purpose, remove pending */
-		.fill   0x8
 GLOBAL (dword_176CAC)	/* 0x176CAC */
 		.long	0x0
 GLOBAL (dword_176CB0)	/* 0x176CB0 */
@@ -129124,18 +128938,11 @@ data_1aab7c:
 data_1aab80:
 		.long	0x0
 
-GLOBAL (word_1AABD0)	/* 0x1AABD0 */
+GLOBAL (last_swoosh_turn)
+		.long	0x0
+GLOBAL (last_swoosh_thing)	/* 0x1AABD8 */
 		.short  0x0
-GLOBAL (unkn01_thing_idx)	/* 0x1AABD2 */
-		.short  0x0
-GLOBAL (data_1aabd4)
-		.long	0x0
-GLOBAL (data_1aabd8)	/* 0x1AABD8 */
-		.long	0x0
-		.long	0x0
-
-data_1aae3c:
-		.fill   0xc
+		.align  4
 
 /* Path fwd_path;
  */

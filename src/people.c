@@ -228,6 +228,8 @@ extern short word_1AA390;
 extern short word_1AA392;
 extern short word_1AA394;
 
+short unkn01_thing_idx = 0;
+
 void read_people_conf_file(void)
 {
     char conf_fname[DISKPATH_SIZE];

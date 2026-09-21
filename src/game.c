@@ -304,7 +304,7 @@ s32 navi2_unkn_counter_max = 0;
 
 extern long dword_1AAB74;
 extern long dword_1AAB78;
-extern ushort word_1AABD0;
+ushort word_1AABD0 = 0;
 
 ubyte old_screentype;
 ubyte screentype = 0;
@@ -2028,10 +2028,6 @@ void net_player_colors_reassign(void)
 
 void unkn_truce_groups(void)
 {
-#if 0
-    asm volatile ("call ASM_unkn_truce_groups\n"
-        :  :  : "eax" );
-#endif
     unkn_truce_groups_sub1();
     net_player_colors_reassign();
 }
