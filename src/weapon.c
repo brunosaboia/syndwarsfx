@@ -2359,7 +2359,7 @@ TbBool weapon_shooting_floor_creates_smoke(MapCoord cor_x, MapCoord cor_z)
     return false;
 }
 
-TbBool weapon_shooting_fluid_creates_splash(MapCoord cor_x, MapCoord cor_z, ushort first_size, short timer)
+TbBool fluid_floor_creates_splash(MapCoord cor_x, MapCoord cor_z, ushort first_size, short timer)
 {
     struct SimpleThing *p_sthing;
     MapCoord cor_y;
@@ -2703,7 +2703,7 @@ void init_uzi(struct Thing *p_owner)
 
     if (allow_gnd_hit_eff)
     {
-        if (weapon_shooting_fluid_creates_splash(cor_fin_x, cor_fin_z, 62, 8))
+        if (fluid_floor_creates_splash(cor_fin_x, cor_fin_z, 62, 8))
             return;
         do_shockwave(cor_fin_x, cor_fin_y, cor_fin_z, -50, 1, p_owner);
     }
@@ -2846,7 +2846,7 @@ void init_minigun(struct Thing *p_owner)
 
     if (allow_gnd_hit_eff)
     {
-        if (weapon_shooting_fluid_creates_splash(cor_fin_x, cor_fin_z, 62, 8))
+        if (fluid_floor_creates_splash(cor_fin_x, cor_fin_z, 62, 8))
             return;
         do_shockwave(cor_fin_x, cor_fin_y, cor_fin_z, -50, 1, p_owner);
     }
@@ -2998,7 +2998,7 @@ void init_long_range(struct Thing *p_owner)
 
     if (allow_gnd_hit_eff)
     {
-        if (weapon_shooting_fluid_creates_splash(cor_fin_x, cor_fin_z, 62, 1))
+        if (fluid_floor_creates_splash(cor_fin_x, cor_fin_z, 62, 1))
             return;
         do_shockwave(cor_fin_x, cor_fin_y, cor_fin_z, -50, 1, p_owner);
     }

@@ -1093,8 +1093,18 @@ void process_shuttle_pod(struct Thing *p_vehicle)
 
 void init_vehicle_explode(struct Thing *p_vehicle)
 {
+    MapCoord cor_x, cor_z;
+
+    cor_x = PRCCOORD_TO_MAPCOORD(p_vehicle->X);
+    cor_z = PRCCOORD_TO_MAPCOORD(p_vehicle->Z);
+
     asm volatile ("call ASM_init_vehicle_explode\n"
         : : "a" (p_vehicle));
+
+    // Over a fluid the blast leaves no crater, as the surface is not damaged;
+    // throw up a splash instead. A whole wreck drops into it, so the splash is
+    // larger and lasts longer than the one made by a weapon impact.
+    fluid_floor_creates_splash(cor_x, cor_z, 128, 16);
 }
 
 void process_tank_stationary(struct Thing *p_vehicle)
@@ -1340,8 +1350,18 @@ void process_parked_flyer(struct Thing *p_vehicle)
 
 void init_mech_explode(struct Thing *p_vehicle)
 {
+    MapCoord cor_x, cor_z;
+
+    cor_x = PRCCOORD_TO_MAPCOORD(p_vehicle->X);
+    cor_z = PRCCOORD_TO_MAPCOORD(p_vehicle->Z);
+
     asm volatile ("call ASM_init_mech_explode\n"
         : : "a" (p_vehicle));
+
+    // Over a fluid the blast leaves no crater, as the surface is not damaged;
+    // throw up a splash instead. A whole wreck drops into it, so the splash is
+    // larger and lasts longer than the one made by a weapon impact.
+    fluid_floor_creates_splash(cor_x, cor_z, 128, 16);
 }
 
 void process_train(struct Thing *p_vehicle)

@@ -354,6 +354,16 @@ void finalise_razor_wire(struct Thing *p_person);
 void init_lay_razor(struct Thing *p_thing, short x, short y, short z, int flag);
 void init_mgun_laser(struct Thing *p_owner, ushort start_age);
 
+/** Creates a splash effect if the floor at given position is a fluid.
+ *
+ * Both water and sludge are recognized, each with its own effect and sound.
+ * The `first_size` parameter is a base scale of the splash sprite, and `timer`
+ * decides for how long secondary splashes keep sprouting around the first one.
+ *
+ * @return Gives true if the floor was a fluid, and the effect was created.
+ */
+TbBool fluid_floor_creates_splash(MapCoord cor_x, MapCoord cor_z, ushort first_size, short timer);
+
 void process_clone_disguise(struct Thing *p_person);
 
 /******************************************************************************/
