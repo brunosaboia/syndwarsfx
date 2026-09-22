@@ -74,15 +74,12 @@
 .global EXPORT_SYMBOL(dword_176D00);		/* 0x176D00 */
 .global EXPORT_SYMBOL(dword_176D04);		/* 0x176D04 */
 .global EXPORT_SYMBOL(tnext_floor_texture);	/* 0x176d08 */
-.global EXPORT_SYMBOL(dword_176D0C);		/* 0x176D0C */
-.global EXPORT_SYMBOL(dword_176D10);		/* 0x176D10 */
-.global EXPORT_SYMBOL(dword_176D14);		/* 0x176D14 */
-.global EXPORT_SYMBOL(dword_176D18);		/* 0x176D18 */
-.global EXPORT_SYMBOL(dword_176D1C);		/* 0x176D1C */
-.global EXPORT_SYMBOL(dword_176D3C);		/* 0x176D3C */
-.global EXPORT_SYMBOL(dword_176D40);		/* 0x176D40 */
-.global EXPORT_SYMBOL(dword_176D44);		/* 0x176D44 */
-.global EXPORT_SYMBOL(dword_176D4C);		/* 0x176D4C */
+.global EXPORT_SYMBOL(transf_vec_yaw_x);		/* 0x176D10 */
+.global EXPORT_SYMBOL(transf_vec_yaw_z);		/* 0x176D14 */
+.global EXPORT_SYMBOL(transf_vec_tlt_y);		/* 0x176D18 */
+.global EXPORT_SYMBOL(transf_vec_tlt_xz);		/* 0x176D1C */
+.global EXPORT_SYMBOL(transf_scr_center_x);		/* 0x176D3C */
+.global EXPORT_SYMBOL(transf_scr_center_y);		/* 0x176D40 */
 .global EXPORT_SYMBOL(engn_cam_yaw_vel);	/* 0x176D54 */
 .global EXPORT_SYMBOL(engn_cam_yaw);		/* 0x176D58 */
 .global EXPORT_SYMBOL(byte_176D49);			/* 0x176D49 */
@@ -1571,33 +1568,33 @@ GLOBAL_FUNC(ASM_draw_target_vehicle)	/* 0x0202C0 */
 		cmp    $0x1400,%eax
 		jg     jump_2063e
 		mov    0x14(%esp),%esi
-		mov    EXPORT_SYMBOL(dword_176D14),%edi
+		mov    EXPORT_SYMBOL(transf_vec_yaw_z),%edi
 		imul   %esi,%edi
 		mov    EXPORT_SYMBOL(engn_yc),%edx
 		mov    0x18(%esp),%ecx
 		shl    $0x3,%edx
-		mov    EXPORT_SYMBOL(dword_176D10),%ebp
+		mov    EXPORT_SYMBOL(transf_vec_yaw_x),%ebp
 		sub    %edx,%ecx
 		mov    0x1c(%esp),%edx
 		imul   %ebp,%edx
 		imul   %ebp,%esi
 		mov    %ecx,0x18(%esp)
-		mov    EXPORT_SYMBOL(dword_176D14),%ecx
+		mov    EXPORT_SYMBOL(transf_vec_yaw_z),%ecx
 		sub    %edx,%edi
 		mov    0x1c(%esp),%edx
 		imul   %ecx,%edx
 		mov    0x18(%esp),%ebp
 		add    %esi,%edx
-		imul   EXPORT_SYMBOL(dword_176D1C),%ebp
+		imul   EXPORT_SYMBOL(transf_vec_tlt_xz),%ebp
 		sar    $0x10,%edx
-		mov    EXPORT_SYMBOL(dword_176D18),%esi
+		mov    EXPORT_SYMBOL(transf_vec_tlt_y),%esi
 		imul   %edx,%esi
 		sub    %esi,%ebp
-		mov    EXPORT_SYMBOL(dword_176D18),%ecx
+		mov    EXPORT_SYMBOL(transf_vec_tlt_y),%ecx
 		mov    %ebp,%esi
 		mov    0x18(%esp),%ebp
 		imul   %ecx,%ebp
-		imul   EXPORT_SYMBOL(dword_176D1C),%edx
+		imul   EXPORT_SYMBOL(transf_vec_tlt_xz),%edx
 		add    %ebp,%edx
 		sar    $0x10,%edx
 		mov    %edx,0x1c(%esp)
@@ -1615,14 +1612,14 @@ GLOBAL_FUNC(ASM_draw_target_vehicle)	/* 0x0202C0 */
 		sar    $0xb,%edx
 		cmp    $0x5,%esi
 		je     jump_203e6
-		mov    EXPORT_SYMBOL(dword_176D3C),%esi
+		mov    EXPORT_SYMBOL(transf_scr_center_x),%esi
 		jmp    jump_203fe
 	jump_203e6:
 		mov    0x1c(%esp),%esi
 		neg    %esi
 		add    $0x4000,%esi
 		imul   %esi,%edx
-		mov    EXPORT_SYMBOL(dword_176D3C),%esi
+		mov    EXPORT_SYMBOL(transf_scr_center_x),%esi
 		sar    $0xe,%edx
 	jump_203fe:
 		add    %edx,%esi
@@ -1649,7 +1646,7 @@ GLOBAL_FUNC(ASM_draw_target_vehicle)	/* 0x0202C0 */
 		cmp    $0x5,%edx
 		je     jump_20452
 		mov    0x18(%eax),%edx
-		mov    EXPORT_SYMBOL(dword_176D40),%esi
+		mov    EXPORT_SYMBOL(transf_scr_center_y),%esi
 		sar    $0xb,%edx
 		jmp    jump_2046f
 	jump_20452:
@@ -1659,7 +1656,7 @@ GLOBAL_FUNC(ASM_draw_target_vehicle)	/* 0x0202C0 */
 		sar    $0xb,%esi
 		add    $0x4000,%edx
 		imul   %esi,%edx
-		mov    EXPORT_SYMBOL(dword_176D40),%esi
+		mov    EXPORT_SYMBOL(transf_scr_center_y),%esi
 		sar    $0xe,%edx
 	jump_2046f:
 		sub    %edx,%esi
@@ -1847,27 +1844,27 @@ GLOBAL_FUNC(ASM_draw_target_person)	/* 0x020648 */
 		mov    %esi,0x1c(%esp)
 		mov    %ebx,0x18(%esp)
 		mov    0x14(%esp),%ebx
-		mov    EXPORT_SYMBOL(dword_176D14),%esi
+		mov    EXPORT_SYMBOL(transf_vec_yaw_z),%esi
 		imul   %ebx,%esi
-		mov    EXPORT_SYMBOL(dword_176D10),%edi
+		mov    EXPORT_SYMBOL(transf_vec_yaw_x),%edi
 		mov    0x1c(%esp),%edx
 		imul   %edi,%edx
 		imul   %edi,%ebx
 		sub    %edx,%esi
 		mov    0x1c(%esp),%edx
-		imul   EXPORT_SYMBOL(dword_176D14),%edx
-		mov    EXPORT_SYMBOL(dword_176D1C),%ebp
+		imul   EXPORT_SYMBOL(transf_vec_yaw_z),%edx
+		mov    EXPORT_SYMBOL(transf_vec_tlt_xz),%ebp
 		mov    0x18(%esp),%edi
 		imul   %ebp,%edi
 		add    %ebx,%edx
-		mov    EXPORT_SYMBOL(dword_176D18),%ebx
+		mov    EXPORT_SYMBOL(transf_vec_tlt_y),%ebx
 		sar    $0x10,%edx
 		imul   %edx,%ebx
-		mov    EXPORT_SYMBOL(dword_176D18),%ebp
+		mov    EXPORT_SYMBOL(transf_vec_tlt_y),%ebp
 		sub    %ebx,%edi
 		mov    0x18(%esp),%ebx
 		imul   %ebp,%ebx
-		imul   EXPORT_SYMBOL(dword_176D1C),%edx
+		imul   EXPORT_SYMBOL(transf_vec_tlt_xz),%edx
 		add    %ebx,%edx
 		sar    $0x10,%edx
 		mov    %edx,0x1c(%esp)
@@ -1888,14 +1885,14 @@ GLOBAL_FUNC(ASM_draw_target_person)	/* 0x020648 */
 		sar    $0xb,%edx
 		cmp    $0x5,%ebx
 		je     jump_2074f
-		mov    EXPORT_SYMBOL(dword_176D3C),%ebx
+		mov    EXPORT_SYMBOL(transf_scr_center_x),%ebx
 		jmp    jump_20767
 	jump_2074f:
 		mov    0x1c(%esp),%ebx
 		neg    %ebx
 		add    $0x4000,%ebx
 		imul   %ebx,%edx
-		mov    EXPORT_SYMBOL(dword_176D3C),%ebx
+		mov    EXPORT_SYMBOL(transf_scr_center_x),%ebx
 		sar    $0xe,%edx
 	jump_20767:
 		add    %edx,%ebx
@@ -1925,7 +1922,7 @@ GLOBAL_FUNC(ASM_draw_target_person)	/* 0x020648 */
 		cmp    $0x5,%edx
 		je     jump_207c2
 		mov    0x18(%eax),%ebx
-		mov    EXPORT_SYMBOL(dword_176D40),%edx
+		mov    EXPORT_SYMBOL(transf_scr_center_y),%edx
 		sar    $0xb,%ebx
 		jmp    jump_207df
 	jump_207c2:
@@ -1935,7 +1932,7 @@ GLOBAL_FUNC(ASM_draw_target_person)	/* 0x020648 */
 		sar    $0xb,%ebx
 		add    $0x4000,%edx
 		imul   %edx,%ebx
-		mov    EXPORT_SYMBOL(dword_176D40),%edx
+		mov    EXPORT_SYMBOL(transf_scr_center_y),%edx
 		sar    $0xe,%ebx
 	jump_207df:
 		sub    %ebx,%edx
@@ -2736,7 +2733,7 @@ GLOBAL_FUNC(ASM_check_mouse_overvehicle)	/* 0x024758 */
 		mov    0x18(%esp),%ebp
 		mov    0x20(%ebx),%eax
 		sub    %edx,%ebp
-		mov    EXPORT_SYMBOL(dword_176D14),%edx
+		mov    EXPORT_SYMBOL(transf_vec_yaw_z),%edx
 		mov    %ebp,0x18(%esp)
 		mov    0x14(%esp),%ebp
 		imul   %edx,%ebp
@@ -2744,27 +2741,27 @@ GLOBAL_FUNC(ASM_check_mouse_overvehicle)	/* 0x024758 */
 		sar    $0x8,%eax
 		mov    0x14(%esp),%esi
 		sub    %edi,%eax
-		mov    EXPORT_SYMBOL(dword_176D10),%edi
+		mov    EXPORT_SYMBOL(transf_vec_yaw_x),%edi
 		imul   %edi,%esi
 		mov    %eax,0x1c(%esp)
 		mov    0x1c(%esp),%edx
 		imul   %edi,%edx
-		mov    EXPORT_SYMBOL(dword_176D14),%edi
+		mov    EXPORT_SYMBOL(transf_vec_yaw_z),%edi
 		sub    %edx,%ebp
 		mov    0x1c(%esp),%edx
 		imul   %edi,%edx
 		mov    0x18(%esp),%edi
 		add    %esi,%edx
-		imul   EXPORT_SYMBOL(dword_176D1C),%edi
+		imul   EXPORT_SYMBOL(transf_vec_tlt_xz),%edi
 		sar    $0x10,%edx
-		mov    EXPORT_SYMBOL(dword_176D18),%esi
+		mov    EXPORT_SYMBOL(transf_vec_tlt_y),%esi
 		imul   %edx,%esi
 		sub    %esi,%edi
 		sar    $0x10,%edi
 		mov    0x18(%esp),%esi
 		mov    %edi,0x28(%esp)
-		imul   EXPORT_SYMBOL(dword_176D18),%esi
-		imul   EXPORT_SYMBOL(dword_176D1C),%edx
+		imul   EXPORT_SYMBOL(transf_vec_tlt_y),%esi
+		imul   EXPORT_SYMBOL(transf_vec_tlt_xz),%edx
 		add    %esi,%edx
 		sar    $0x10,%edx
 		mov    %edx,0x1c(%esp)
@@ -2782,14 +2779,14 @@ GLOBAL_FUNC(ASM_check_mouse_overvehicle)	/* 0x024758 */
 		sar    $0xb,%edx
 		cmp    $0x5,%esi
 		je     jump_24851
-		mov    EXPORT_SYMBOL(dword_176D3C),%esi
+		mov    EXPORT_SYMBOL(transf_scr_center_x),%esi
 		jmp    jump_24869
 	jump_24851:
 		mov    0x1c(%esp),%esi
 		neg    %esi
 		add    $0x4000,%esi
 		imul   %esi,%edx
-		mov    EXPORT_SYMBOL(dword_176D3C),%esi
+		mov    EXPORT_SYMBOL(transf_scr_center_x),%esi
 		sar    $0xe,%edx
 	jump_24869:
 		add    %edx,%esi
@@ -2819,7 +2816,7 @@ GLOBAL_FUNC(ASM_check_mouse_overvehicle)	/* 0x024758 */
 		cmp    $0x5,%edx
 		je     jump_248c4
 		mov    0x18(%eax),%esi
-		mov    EXPORT_SYMBOL(dword_176D40),%edx
+		mov    EXPORT_SYMBOL(transf_scr_center_y),%edx
 		sar    $0xb,%esi
 		jmp    jump_248e1
 	jump_248c4:
@@ -2829,7 +2826,7 @@ GLOBAL_FUNC(ASM_check_mouse_overvehicle)	/* 0x024758 */
 		sar    $0xb,%esi
 		add    $0x4000,%edx
 		imul   %edx,%esi
-		mov    EXPORT_SYMBOL(dword_176D40),%edx
+		mov    EXPORT_SYMBOL(transf_scr_center_y),%edx
 		sar    $0xe,%esi
 	jump_248e1:
 		sub    %esi,%edx
@@ -62200,12 +62197,12 @@ GLOBAL_FUNC (ASM_gproc3_unknsub2)	/* 0x73798 */
 		sub    %edx,%eax
 		sar    %eax
 		mov    EXPORT_SYMBOL(vec_window_height),%edx
-		mov    %eax,EXPORT_SYMBOL(dword_176D3C)
+		mov    %eax,EXPORT_SYMBOL(transf_scr_center_x)
 		mov    %edx,%eax
 		sar    $0x1f,%edx
 		sub    %edx,%eax
 		sar    %eax
-		mov    %eax,EXPORT_SYMBOL(dword_176D40)
+		mov    %eax,EXPORT_SYMBOL(transf_scr_center_y)
 		mov    0x8(%esp),%eax
 		mov    %ax,EXPORT_SYMBOL(render_area_b)
 		mov    0x10(%esp),%eax

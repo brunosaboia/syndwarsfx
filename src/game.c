@@ -3363,10 +3363,10 @@ void recalc_mouse_pos(void)
     short mag;
     short i;
 
-    cor_dy = (dword_176D18 >> 8);
-    fctr_xz = (dword_176D1C >> 8);
-    cor_dx = (fctr_xz * dword_176D10) >> 16;
-    cor_dz = (fctr_xz * dword_176D14) >> 16;
+    cor_dy = (transf_vec_tlt_y >> 8);
+    fctr_xz = (transf_vec_tlt_xz >> 8);
+    cor_dx = (fctr_xz * transf_vec_yaw_x) >> 16;
+    cor_dz = (fctr_xz * transf_vec_yaw_z) >> 16;
 
     chk_x = 200 * cor_dx + 16 * mouse_map_x;
     chk_y = 200 * cor_dy;
