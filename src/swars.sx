@@ -98271,8 +98271,8 @@ GLOBAL_FUNC(ASM_SCANNER_process_arcpoints)	/* 0x0AB5A0 */
 		neg    %edx
 		imul   $0x200,%edx,%edx
 		add    $0x10,%eax
-		mov    %esi,data_1db194(%eax)
-		mov    %edi,data_1db198(%eax)
+		mov    %esi,EXPORT_SYMBOL(SCANNER_people_colours)+0x08(%eax)
+		mov    %edi,EXPORT_SYMBOL(SCANNER_people_colours)+0x0C(%eax)
 		sar    $0x8,%ebx
 		sar    $0x8,%edx
 		mov    %ebx,EXPORT_SYMBOL(SCANNER_keep_arcs)(%eax)
@@ -98312,13 +98312,13 @@ GLOBAL_FUNC(ASM_SCANNER_process_arcpoints)	/* 0x0AB5A0 */
 	jump_ab6da:
 		add    $0x10,%eax
 		mov    EXPORT_SYMBOL(SCANNER_keep_arcs)(%eax),%edx
-		mov    data_1db194(%eax),%esi
-		mov    data_1db198(%eax),%edi
+		mov    EXPORT_SYMBOL(SCANNER_people_colours)+0x08(%eax),%esi
+		mov    EXPORT_SYMBOL(SCANNER_people_colours)+0x0C(%eax),%edi
 		add    %edx,%esi
 		mov    EXPORT_SYMBOL(dword_1DB1A0)(%eax),%edx
-		mov    %esi,data_1db194(%eax)
+		mov    %esi,EXPORT_SYMBOL(SCANNER_people_colours)+0x08(%eax)
 		add    %edx,%edi
-		mov    %edi,data_1db198(%eax)
+		mov    %edi,EXPORT_SYMBOL(SCANNER_people_colours)+0x0C(%eax)
 		cmp    %ebx,%eax
 		jne    jump_ab6da
 		mov    0x18(%esp),%eax
@@ -98488,8 +98488,8 @@ GLOBAL_FUNC(ASM_SCANNER_init_arcpoint)	/* 0x0AB7AC */
 		neg    %edx
 		imul   $0x200,%edx,%edx
 		add    $0x10,%eax
-		mov    %edi,data_1db194(%eax)
-		mov    %ebp,data_1db198(%eax)
+		mov    %edi,EXPORT_SYMBOL(SCANNER_people_colours)+0x08(%eax)
+		mov    %ebp,EXPORT_SYMBOL(SCANNER_people_colours)+0x0C(%eax)
 		add    $0x1e,%ecx
 		sar    $0x8,%edx
 		sar    $0x8,%ebx
@@ -98624,39 +98624,39 @@ GLOBAL_FUNC (ASM_SCANNER_init)	/* 0x0ABA1C */
 		xor    %eax,%eax
 		mov    EXPORT_SYMBOL(colour_lookup)+2,%al
 		mov    EXPORT_SYMBOL(pixmap)+0x1800(%eax),%al # pixmap.fade_table[0x1800+?]
-		mov    %al,data_1db18d
+		mov    %al,EXPORT_SYMBOL(SCANNER_people_colours)+0x01
 		xor    %eax,%eax
 		mov    EXPORT_SYMBOL(colour_lookup)+3,%al
 		mov    EXPORT_SYMBOL(pixmap)+0x1800(%eax),%dl # pixmap.fade_table[0x1800+?]
 		xor    %eax,%eax
 		mov    EXPORT_SYMBOL(colour_lookup)+7,%al
 		mov    EXPORT_SYMBOL(pixmap)+0x0A00(%eax),%al # pixmap.fade_table[0x0A00+?]
-		mov    %al,data_1db192
+		mov    %al,EXPORT_SYMBOL(SCANNER_people_colours)+0x06
 		xor    %eax,%eax
 		mov    EXPORT_SYMBOL(colour_lookup)+4,%al
 		mov    EXPORT_SYMBOL(pixmap)+0x3600(%eax),%al # pixmap.fade_table[0x3600+?]
-		mov    %al,data_1db194
+		mov    %al,EXPORT_SYMBOL(SCANNER_people_colours)+0x08
 		xor    %eax,%eax
 		mov    EXPORT_SYMBOL(colour_lookup)+0x05,%al
 		mov    EXPORT_SYMBOL(pixmap)+0x1800(%eax),%al # pixmap.fade_table[0x1800+?]
-		mov    %al,data_1db196
+		mov    %al,EXPORT_SYMBOL(SCANNER_people_colours)+0x0A
 		xor    %eax,%eax
 		mov    EXPORT_SYMBOL(colour_lookup)+1,%al
-		mov    %dl,data_1db18f
-		mov    %dl,data_1db195
+		mov    %dl,EXPORT_SYMBOL(SCANNER_people_colours)+0x03
+		mov    %dl,EXPORT_SYMBOL(SCANNER_people_colours)+0x09
 		mov    EXPORT_SYMBOL(pixmap)+0x2000(%eax),%dl # pixmap.fade_table[0x2000+?]
 		xor    %eax,%eax
-		mov    %dl,data_1db18e
+		mov    %dl,EXPORT_SYMBOL(SCANNER_people_colours)+0x02
 		mov    EXPORT_SYMBOL(colour_lookup)+0x09,%al
-		mov    %dl,data_1db198
-		mov    %dl,data_1db193
+		mov    %dl,EXPORT_SYMBOL(SCANNER_people_colours)+0x0C
+		mov    %dl,EXPORT_SYMBOL(SCANNER_people_colours)+0x07
 		mov    EXPORT_SYMBOL(pixmap)+0x2800(%eax),%dl # pixmap.fade_table[0x2800+?]
-		mov    %dl,data_1db197
+		mov    %dl,EXPORT_SYMBOL(SCANNER_people_colours)+0x0B
 		mov    EXPORT_SYMBOL(pixmap)+0x2000(%eax),%dl # pixmap.fade_table[0x2000+?]
-		mov    %dl,data_1db190
-		mov    %dl,data_1db191
-		mov    %dl,data_1db199
-		mov    %dl,data_1db19a
+		mov    %dl,EXPORT_SYMBOL(SCANNER_people_colours)+0x04
+		mov    %dl,EXPORT_SYMBOL(SCANNER_people_colours)+0x05
+		mov    %dl,EXPORT_SYMBOL(SCANNER_people_colours)+0x0D
+		mov    %dl,EXPORT_SYMBOL(SCANNER_people_colours)+0x0E
 		mov    %edi,EXPORT_SYMBOL(display_palette)
 		add    $0x4,%esp
 		pop    %edi
@@ -100399,10 +100399,10 @@ GLOBAL_FUNC(ASM_SCANNER_find_position)	/* 0x0AD188 */
 
 GLOBAL_FUNC(ASM_SCANNER_map_line_dim)
 		pusha
-		mov    EXPORT_SYMBOL(SCANNER_dw06C),%ecx
-		mov    EXPORT_SYMBOL(SCANNER_dw070),%ebp
+		mov    EXPORT_SYMBOL(SCANNER_scr_x),%ecx
+		mov    EXPORT_SYMBOL(SCANNER_scr_y),%ebp
 		mov    EXPORT_SYMBOL(SCANNER_screenptr),%edi
-		mov    EXPORT_SYMBOL(SCANNER_dw074),%esi
+		mov    EXPORT_SYMBOL(SCANNER_ln_width),%esi
 		mov    EXPORT_SYMBOL(SCANNER_brig),%dl
 	jump_ae3b6:
 		xor    %eax,%eax
@@ -100414,14 +100414,14 @@ GLOBAL_FUNC(ASM_SCANNER_map_line_dim)
 		mov    EXPORT_SYMBOL(pixmap)(%eax),%dh # pixmap.fade_table[?]
 		mov    %dh,(%edi)
 		inc    %edi
-		add    EXPORT_SYMBOL(SCANNER_dw064),%ecx
-		add    EXPORT_SYMBOL(SCANNER_dw068),%ebp
+		add    EXPORT_SYMBOL(SCANNER_nrp_sh_y),%ecx
+		add    EXPORT_SYMBOL(SCANNER_nrp_sh_x),%ebp
 		dec    %esi
 		jne    jump_ae3b6
-		mov    %ecx,EXPORT_SYMBOL(SCANNER_dw06C)
-		mov    %ebp,EXPORT_SYMBOL(SCANNER_dw070)
+		mov    %ecx,EXPORT_SYMBOL(SCANNER_scr_x)
+		mov    %ebp,EXPORT_SYMBOL(SCANNER_scr_y)
 		mov    %edi,EXPORT_SYMBOL(SCANNER_screenptr)
-		mov    %esi,EXPORT_SYMBOL(SCANNER_dw074)
+		mov    %esi,EXPORT_SYMBOL(SCANNER_ln_width)
 		popa
 		ret
 
@@ -100429,8 +100429,8 @@ GLOBAL_FUNC(ASM_SCANNER_map_line_dim)
 GLOBAL_FUNC(ASM_SCANNER_map_line_sample_blend)
 		pusha
 		xor    %ebx,%ebx
-		mov    EXPORT_SYMBOL(SCANNER_dw06C),%eax
-		mov    EXPORT_SYMBOL(SCANNER_dw070),%edx
+		mov    EXPORT_SYMBOL(SCANNER_scr_x),%eax
+		mov    EXPORT_SYMBOL(SCANNER_scr_y),%edx
 		rol    $0x10,%eax
 		rol    $0x10,%edx
 		mov    %al,%bh
@@ -100439,14 +100439,14 @@ GLOBAL_FUNC(ASM_SCANNER_map_line_sample_blend)
 		mov    %edx,%ebp
 		and    $0xffff0000,%ecx
 		and    $0xffff0000,%ebp
-		mov    EXPORT_SYMBOL(SCANNER_dw07C),%eax
+		mov    EXPORT_SYMBOL(SCANNER_hip_sh_y),%eax
 		mov    EXPORT_SYMBOL(SCANNER_screenptr),%edi
-		mov    EXPORT_SYMBOL(SCANNER_dw074),%esi
+		mov    EXPORT_SYMBOL(SCANNER_ln_width),%esi
 		mov    EXPORT_SYMBOL(SCANNER_brig),%dl
 		mov    EXPORT_SYMBOL(SCANNER_cont),%dh
 		ror    $0x10,%edx
-		mov    EXPORT_SYMBOL(SCANNER_bt084),%dl
-		mov    EXPORT_SYMBOL(SCANNER_bt085),%dh
+		mov    EXPORT_SYMBOL(SCANNER_lop_sh_y),%dl
+		mov    EXPORT_SYMBOL(SCANNER_lop_sh_x),%dh
 	jump_ae939:
 		push   %ecx
 		xor    %eax,%eax
@@ -100464,10 +100464,10 @@ GLOBAL_FUNC(ASM_SCANNER_map_line_sample_blend)
 		mov    EXPORT_SYMBOL(pixmap)(%eax),%al # pixmap.fade_table[?]
 		pop    %ecx
 		mov    %al,(%edi)
-		add    EXPORT_SYMBOL(SCANNER_dw07C),%ecx
+		add    EXPORT_SYMBOL(SCANNER_hip_sh_y),%ecx
 		inc    %edi
 		adc    %dl,%bh
-		add    EXPORT_SYMBOL(SCANNER_dw080),%ebp
+		add    EXPORT_SYMBOL(SCANNER_hip_sh_x),%ebp
 		adc    %dh,%bl
 		dec    %esi
 		jne    jump_ae939
@@ -100475,14 +100475,14 @@ GLOBAL_FUNC(ASM_SCANNER_map_line_sample_blend)
 		mov    %bh,%al
 		xor    %ah,%ah
 		rol    $0x10,%eax
-		mov    %eax,EXPORT_SYMBOL(SCANNER_dw06C)
+		mov    %eax,EXPORT_SYMBOL(SCANNER_scr_x)
 		mov    %ebp,%eax
 		mov    %bl,%al
 		xor    %ah,%ah
 		rol    $0x10,%eax
-		mov    %eax,EXPORT_SYMBOL(SCANNER_dw070)
+		mov    %eax,EXPORT_SYMBOL(SCANNER_scr_y)
 		mov    %edi,EXPORT_SYMBOL(SCANNER_screenptr)
-		mov    %esi,EXPORT_SYMBOL(SCANNER_dw074)
+		mov    %esi,EXPORT_SYMBOL(SCANNER_ln_width)
 		popa
 		ret
 
@@ -101554,7 +101554,7 @@ SCANNER_draw_new_transparent_sub3:	/* 0xAEFFD */
 		cmp    $0x1e,%eax
 		jne    jump_af7a2
 		xor    %eax,%eax
-		mov    data_1db190,%al
+		mov    EXPORT_SYMBOL(SCANNER_people_colours)+0x04,%al
 		jmp    jump_af7c9
 	jump_af7a2:
 		xor    %eax,%eax
@@ -129075,25 +129075,25 @@ data_1c8a5c:
 
 GLOBAL (SCANNER_map)	/* 0x1CAF88 */
 		.fill   0xdc
-GLOBAL (SCANNER_dw064)
+GLOBAL (SCANNER_nrp_sh_y)
 		.long	0x0
-GLOBAL (SCANNER_dw068)	/* 0x1CB068 */
+GLOBAL (SCANNER_nrp_sh_x)	/* 0x1CB068 */
 		.long	0x0
-GLOBAL (SCANNER_dw06C)	/* 0x1CB06C */
+GLOBAL (SCANNER_scr_x)	/* 0x1CB06C */
 		.long	0x0
-GLOBAL (SCANNER_dw070)
+GLOBAL (SCANNER_scr_y)
 		.long	0x0
-GLOBAL (SCANNER_dw074)	/* 0x1CB074 */
+GLOBAL (SCANNER_ln_width)	/* 0x1CB074 */
 		.long	0x0
 GLOBAL (SCANNER_screenptr)
 		.long	0x0
-GLOBAL (SCANNER_dw07C)	/* 0x1CB07C */
+GLOBAL (SCANNER_hip_sh_y)	/* 0x1CB07C */
 		.long	0x0
-GLOBAL (SCANNER_dw080)
+GLOBAL (SCANNER_hip_sh_x)
 		.long	0x0
-GLOBAL (SCANNER_bt084)	/* 0x1CB084 */
+GLOBAL (SCANNER_lop_sh_y)	/* 0x1CB084 */
 		.byte	0x0
-GLOBAL (SCANNER_bt085)
+GLOBAL (SCANNER_lop_sh_x)
 		.byte	0x0
 GLOBAL (SCANNER_brig)	/* 0x1CB086 */
 		.byte	0x0
@@ -129107,35 +129107,7 @@ GLOBAL (low_trans_grey_bright_limit)	/* 0x1DB088 */
 GLOBAL (SCANNER_width)	/* 0x1DB188 */
 		.long	0x0
 GLOBAL (SCANNER_people_colours)	/* 0x1DB18C */
-		.byte	0x0
-data_1db18d:
-		.byte	0x0
-data_1db18e:
-		.byte	0x0
-data_1db18f:
-		.byte	0x0
-data_1db190:
-		.byte	0x0
-data_1db191:
-		.byte	0x0
-data_1db192:
-		.byte	0x0
-data_1db193:
-		.byte	0x0
-data_1db194:
-		.byte	0x0
-data_1db195:
-		.byte	0x0
-data_1db196:
-		.byte	0x0
-data_1db197:
-		.byte	0x0
-data_1db198:
-		.byte	0x0
-data_1db199:
-		.byte	0x0
-data_1db19a:
-		.short  0x0
+		.fill   0x10
 GLOBAL (SCANNER_keep_arcs)	/* 0x1DB19C */
 		.long	0x0
 GLOBAL (dword_1DB1A0)	/* 0x1DB1A0 */
@@ -129143,13 +129115,7 @@ GLOBAL (dword_1DB1A0)	/* 0x1DB1A0 */
 GLOBAL (SCANNER_arcpoint)	/* 0x1DB1A4 */
 		.fill   0x140
 GLOBAL (SCANNER_colour)	/* 0x1DB2E4 */
-		.byte	0x0
-		.byte	0x0
-		.byte	0x0
-		.byte	0x0
-		.byte	0x0
-GLOBAL (byte_1DB2E9)	/* 0x1DB2E9 */
-		.ascii  "\x00\x00\x00"
+		.fill   0x8
 GLOBAL (SCANNER_bbpoint)	/* 0x1DB2EC */
 		.fill   0x800
 GLOBAL (SCANNER_bbpadds)	/* 0x1DBAEC */

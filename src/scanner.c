@@ -81,17 +81,6 @@ ushort SCANNER_base_zoom_factor = 180;
 ushort SCANNER_user_zoom_factor = 192;
 ubyte SCANNER_scale_dots = true;
 
-extern s32 SCANNER_dw064;
-extern s32 SCANNER_dw068;
-extern s32 SCANNER_dw06C;
-extern s32 SCANNER_dw070;
-extern s32 SCANNER_dw074;
-extern s32 SCANNER_dw07C;
-extern s32 SCANNER_dw080;
-
-extern ubyte SCANNER_bt084;
-extern ubyte SCANNER_bt085;
-
 /******************************************************************************/
 
 void SCANNER_set_zoom(int zoom)
