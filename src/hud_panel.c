@@ -544,6 +544,18 @@ void draw_players_chat_talk(int x, int y)
         lbDisplay.DrawColour = net_player_colours[plyr];
         AppTextDrawMissionChatMessage(base_x, &pos_y, plyr,
           player_message_timer[plyr], locstr);
+    }
+}
+
+void players_chat_talk_process_turn(void)
+{
+    int plyr;
+
+    for (plyr = 0; plyr < PLAYERS_LIMIT; plyr++)
+    {
+        if (player_message_timer[plyr] == 0)
+            continue;
+
         player_message_timer_tick(plyr);
     }
 }
@@ -2084,7 +2096,6 @@ void draw_panel_objective_info(short panel)
     p_panel = &game_panel[panel];
 
     if (in_network_game) {
-        SCANNER_unkn_func_205();
         bkgd_x = 0;
         text_x = bkgd_x + 1;
         bkgd_w = lbDisplay.GraphicsScreenWidth;
@@ -2101,7 +2112,7 @@ void draw_panel_objective_info(short panel)
     draw_objective_info_text(text_x, p_panel->dyn.Y, text_w, p_panel->dyn.Height);
 }
 
-void update_panel_objective_info(short panel)
+void panel_objective_info_process_turn(short panel)
 {
     struct GamePanel *p_panel;
     int end_pos;
@@ -2110,6 +2121,7 @@ void update_panel_objective_info(short panel)
     p_panel = &game_panel[panel];
 
     if (in_network_game) {
+        SCANNER_unkn_func_205();
         bkgd_w = lbDisplay.GraphicsScreenWidth;
         text_w = bkgd_w - 2;
     } else {
@@ -2504,12 +2516,13 @@ void draw_new_panel(void)
             SCANNER_draw_new_transparent();
             break;
         case PanT_Objective:
+            panel_objective_info_process_turn(panel);
             draw_panel_objective_info(panel);
-            update_panel_objective_info(panel);
             break;
         }
     }
 
+    players_chat_talk_process_turn();
     draw_players_chat();
 
     lbDisplay.DrawFlags = 0;
