@@ -273,7 +273,7 @@ static void SCANNER_scanconvert_fill_row(int left_fx, int right_fx, int row, uby
  */
 void SCANNER_scanconvert(int x0, int y0, int x1, int y1, int x2, int y2, int colour)
 {
-#if 1
+#if 0
     // Pushed through a register holding them: a "g" operand may be placed
     // relative to the stack pointer, which each push moves.
     int stkargs[3];
@@ -296,8 +296,11 @@ void SCANNER_scanconvert(int x0, int y0, int x1, int y1, int x2, int y2, int col
     int row;
 
     if ((x0 < 0) || (x0 > 256) || (x1 < 0) || (x1 > 256) || (x2 < 0) || (x2 > 256)
-     || (y0 < 0) || (y0 > 256) || (y1 < 0) || (y1 > 256) || (y2 < 0) || (y2 > 256))
+     || (y0 < 0) || (y0 > 256) || (y1 < 0) || (y1 > 256) || (y2 < 0) || (y2 > 256)) {
+        LOGWARN("cannot draw scanner triangle outside of map bounds: (%d,%d), (%d,%d), (%d,%d)",
+          x0, y0, x1, y1, x2, y2);
         return;
+    }
 
     // Sort the 3 points by Y ascending (compare-exchange network of 3).
     if (y0 > y1) {
@@ -333,7 +336,7 @@ void SCANNER_scanconvert(int x0, int y0, int x1, int y1, int x2, int y2, int col
             long_tracker = x0 << 16;
             other_tracker = x1 << 16;
             for (row = y0; row < y2; row++) {
-                SCANNER_scanconvert_fill_row(long_tracker, other_tracker, row, (ubyte)colour);
+                SCANNER_scanconvert_fill_row(long_tracker, other_tracker, row, colour);
                 long_tracker += long_slope;
                 other_tracker += edge_slope;
             }
@@ -341,7 +344,7 @@ void SCANNER_scanconvert(int x0, int y0, int x1, int y1, int x2, int y2, int col
             long_tracker = x1 << 16;
             other_tracker = x0 << 16;
             for (row = y0; row < y2; row++) {
-                SCANNER_scanconvert_fill_row(other_tracker, long_tracker, row, (ubyte)colour);
+                SCANNER_scanconvert_fill_row(long_tracker, other_tracker, row, colour);
                 other_tracker += long_slope;
                 long_tracker += edge_slope;
             }
