@@ -99520,20 +99520,20 @@ GLOBAL_FUNC(ASM_SCANNER_outline)	/* 0x0AC57C */
 		jne    jump_ac650
 		cmp    EXPORT_SYMBOL(SCANNER_data)+257(%eax),%bh
 		jne    jump_ac650
-		cmp    EXPORT_SYMBOL(SCANNER_map)(%eax),%bh
+		cmp    EXPORT_SYMBOL(SCANNER_data)-256(%eax),%bh
 		jne    jump_ac650
 		cmp    EXPORT_SYMBOL(SCANNER_data)+1(%eax),%bh
 		jne    jump_ac650
-		cmp    EXPORT_SYMBOL(SCANNER_cont)(%eax),%bh
+		cmp    EXPORT_SYMBOL(SCANNER_data)-1(%eax),%bh
 		jne    jump_ac650
 		mov    (%esp,%edx,1),%bl
-		mov    %bl,EXPORT_SYMBOL(SCANNER_map)(%eax)
+		mov    %bl,EXPORT_SYMBOL(SCANNER_data)-256(%eax)
 		mov    EXPORT_SYMBOL(SCANNER_colour),%bl
 		mov    %bl,(%esp,%edx,1)
 		jmp    jump_ac60a
 	jump_ac650:
 		mov    (%esp,%edx,1),%bl
-		mov    %bl,EXPORT_SYMBOL(SCANNER_map)(%eax)
+		mov    %bl,EXPORT_SYMBOL(SCANNER_data)-256(%eax)
 		mov    EXPORT_SYMBOL(SCANNER_data)(%eax),%bl
 		mov    %bl,(%esp,%edx,1)
 		jmp    jump_ac60a
@@ -99546,7 +99546,7 @@ GLOBAL_FUNC(ASM_SCANNER_outline)	/* 0x0AC57C */
 		inc    %edx
 		mov    (%esp,%eax,1),%bl
 		inc    %eax
-		mov    %bl,EXPORT_SYMBOL(SCANNER_map)-0x01(%edx)
+		mov    %bl,EXPORT_SYMBOL(SCANNER_data)-257(%edx)
 		cmp    $0xff,%eax
 		jl     jump_ac670
 		add    $0x100,%esp

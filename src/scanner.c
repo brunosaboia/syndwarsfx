@@ -273,7 +273,7 @@ static void SCANNER_scanconvert_fill_row(int left_fx, int right_fx, int row, uby
  */
 void SCANNER_scanconvert(int x0, int y0, int x1, int y1, int x2, int y2, int colour)
 {
-#if 0
+#if 1
     // Pushed through a register holding them: a "g" operand may be placed
     // relative to the stack pointer, which each push moves.
     int stkargs[3];
