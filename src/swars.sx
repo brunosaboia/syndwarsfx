@@ -95166,7 +95166,7 @@ GLOBAL_FUNC (ASM_test_missions)	/* 0x0A8FF8 */
 		xor    %eax,%eax
 		mov    EXPORT_SYMBOL(ingame)+0x991,%ax # ingame.fld_unkCB5
 		mov    EXPORT_SYMBOL(objective_text)(,%eax,4),%eax
-		mov    %eax,EXPORT_SYMBOL(scroll_text)
+		mov    %eax,EXPORT_SYMBOL(scrollinfo_text)
 	jump_a911f:
 		mov    $0xffffffff,%eax
 		pop    %edi
@@ -95243,7 +95243,7 @@ GLOBAL_FUNC (ASM_test_missions)	/* 0x0A8FF8 */
 		xor    %eax,%eax
 		mov    %dx,%ax
 		mov    EXPORT_SYMBOL(objective_text)(,%eax,4),%eax
-		mov    %eax,EXPORT_SYMBOL(scroll_text)
+		mov    %eax,EXPORT_SYMBOL(scrollinfo_text)
 	jump_a91fb:
 		xor    %eax,%eax
 		mov    %bx,%ax
@@ -102126,11 +102126,11 @@ GLOBAL_FUNC(ASM_SCANNER_unkn_func_205)	/* 0x0B0908 */
 		push   %eax
 		push   $0x1
 		push   $ascCCSC
-		push   $data_1dc374
-		mov    $data_1dc374,%edx
+		push   $EXPORT_SYMBOL(panel_objective_text)
+		mov    $EXPORT_SYMBOL(panel_objective_text),%edx
 		call   ac_sprintf
 		add    $0x18,%esp
-		mov    %edx,EXPORT_SYMBOL(scroll_text)
+		mov    %edx,EXPORT_SYMBOL(scrollinfo_text)
 		jmp    jump_b0bc3
 	jump_b099d:
 		xor    %eax,%eax
@@ -102202,8 +102202,8 @@ GLOBAL_FUNC(ASM_SCANNER_unkn_func_205)	/* 0x0B0908 */
 		mov    %esi,%eax
 		jmp    jump_b09d5
 	jump_b0a6c:
-		movb   $0x20,data_1dc374
-		mov    $data_1dc374,%edx
+		movb   $0x20,EXPORT_SYMBOL(panel_objective_text)
+		mov    $EXPORT_SYMBOL(panel_objective_text),%edx
 		inc    %edx
 		xor    %ebx,%ebx
 		xor    %edi,%edi
@@ -102323,9 +102323,9 @@ GLOBAL_FUNC(ASM_SCANNER_unkn_func_205)	/* 0x0B0908 */
 		add    $0x10,%esp
 		jmp    jump_b0aac
 	jump_b0bb5:
-		mov    $data_1dc374,%ecx
+		mov    $EXPORT_SYMBOL(panel_objective_text),%ecx
 		movb   $0x0,(%edx)
-		mov    %ecx,EXPORT_SYMBOL(scroll_text)
+		mov    %ecx,EXPORT_SYMBOL(scrollinfo_text)
 	jump_b0bc3:
 		add    $0x58,%esp
 		pop    %ebp
@@ -128586,11 +128586,8 @@ GLOBAL (scanner_arrow_mode)	/* 0x155308 */
 		.ascii  "\x01\x00\x00\x00"
 		.align  4
 
-GLOBAL (scroll_text)	/* 0x1553C8 */
+GLOBAL (scrollinfo_text)	/* 0x1553C8 */
 		.long   aNoObjective
-
-GLOBAL (scanner_unkn3CC)	/* 0x1553CC */
-		.ascii  "\x5a\x00\x00\x00"
 
 /* struct ScreenPoint proj_origin;
  */
@@ -129161,11 +129158,8 @@ GLOBAL (SCANNER_unknarr_1DBB6C)	/* 0x1DBB6C */
 		.long	0x0
 GLOBAL (dword_1DBB70)
 		.fill   0x7fc
-GLOBAL (dword_1DC36C)	/* 0x1DC36C */
-		.long	0x0
-GLOBAL (scanner_unkn370)	/* 0x1DC370 */
-		.long	0x0
-data_1dc374:
+
+GLOBAL (panel_objective_text)	/* 0x1DC374 */
 		.fill   0x168
 		.align  4
 

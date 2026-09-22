@@ -62,7 +62,7 @@ static inline void LbDrawBufferTrRemap(unsigned char **buf_out, const char *buf_
 
             k0 = (low_trans_grey_pal_bright[col1] >> 1);
             k1 = (low_trans_grey_pal_bright[col2] >> 1);
-            bri = dword_1DC36C + k0 + k1;
+            bri = low_trans_grey_brightness + k0 + k1;
             bri = low_trans_grey_bright_limit[bri];
             pxmap = (bri << 8) | col1;
             **buf_out = transmap[pxmap];
@@ -85,7 +85,7 @@ static inline void LbDrawBufferTrRemap(unsigned char **buf_out, const char *buf_
 
             k0 = (low_trans_grey_pal_bright[col1] >> 1);
             k1 = (low_trans_grey_pal_bright[col2] >> 1);
-            bri = dword_1DC36C + k0 + k1;
+            bri = low_trans_grey_brightness + k0 + k1;
             bri = low_trans_grey_bright_limit[bri];
             pxmap = bri | (col1 << 8);
             **buf_out = transmap[pxmap];
@@ -111,7 +111,7 @@ static inline void LbDrawBufferTrRemap(unsigned char **buf_out, const char *buf_
 
             k0 = (low_trans_grey_pal_bright[col1] >> 1);
             k1 = (low_trans_grey_pal_bright[col2] >> 1);
-            bri = dword_1DC36C + k0 + k1;
+            bri = low_trans_grey_brightness + k0 + k1;
             bri = low_trans_grey_bright_limit[bri];
             pxmap = (bri << 8) | col1;
             **buf_out = transmap[pxmap];
@@ -134,7 +134,7 @@ static inline void LbDrawBufferTrRemap(unsigned char **buf_out, const char *buf_
 
             k0 = (low_trans_grey_pal_bright[col1] >> 1);
             k1 = (low_trans_grey_pal_bright[col2] >> 1);
-            bri = dword_1DC36C + k0 + k1;
+            bri = low_trans_grey_brightness + k0 + k1;
             bri = low_trans_grey_bright_limit[bri];
             pxmap = bri | (col1 << 8);
             **buf_out = transmap[pxmap];
@@ -262,13 +262,13 @@ TbResult ApSpriteDrawLowTransGreyRemap(long x, long y, const TbSprite *spr, cons
     } else
     if ((lbDisplay.DrawFlags & Lb_SPRITE_FLIP_HORIZ) != 0) {
         ubyte bri;
-        bri = (dword_1DC36C <= 8) ? (24 + dword_1DC36C) : (32 + (dword_1DC36C - 8) / 2);
+        bri = (low_trans_grey_brightness <= 8) ? (24 + low_trans_grey_brightness) : (32 + (low_trans_grey_brightness - 8) / 2);
         return LbSpriteDrawSlRemap(spd.sp,spd.Wd,spd.Ht,spd.r,&transmap[bri * PALETTE_8b_COLORS],
           spd.nextRowDelta,spd.startShift,spd.mirror);
     } else
     {
         ubyte bri;
-        bri = (dword_1DC36C <= 8) ? (24 + dword_1DC36C) : (32 + (dword_1DC36C - 8) / 2);
+        bri = (low_trans_grey_brightness <= 8) ? (24 + low_trans_grey_brightness) : (32 + (low_trans_grey_brightness - 8) / 2);
         return LbSpriteDrawFCRemap(spd.sp,spd.Wd,spd.Ht,spd.r,&transmap[bri * PALETTE_8b_COLORS],
           spd.nextRowDelta,spd.startShift,spd.mirror);
     }

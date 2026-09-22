@@ -118,7 +118,7 @@ TbResult ApSpriteDrawLTGreyRemapUsingScalingUpDataTrans1RL(uchar *outbuf, int sc
                                 for (;xdup > 0; xdup--)
                                 {
                                     k1 = (low_trans_grey_pal_bright[*out_end] >> 1);
-                                    bri = dword_1DC36C + k0 + k1;
+                                    bri = low_trans_grey_brightness + k0 + k1;
                                     bri = low_trans_grey_bright_limit[bri];
                                     pxmap = (bri << 8) | ((*sprdata));
                                     *out_end = transmap[pxmap];
@@ -233,7 +233,7 @@ TbResult ApSpriteDrawLTGreyRemapUsingScalingUpDataTrans1LR(uchar *outbuf, int sc
                                 for (;xdup > 0; xdup--)
                                 {
                                     k1 = (low_trans_grey_pal_bright[*out_end] >> 1);
-                                    bri = dword_1DC36C + k0 + k1;
+                                    bri = low_trans_grey_brightness + k0 + k1;
                                     bri = low_trans_grey_bright_limit[bri];
                                     pxmap = (bri << 8) | ((*sprdata));
                                     *out_end = transmap[pxmap];
@@ -348,7 +348,7 @@ TbResult ApSpriteDrawLTGreyRemapUsingScalingUpDataTrans2RL(uchar *outbuf, int sc
                                 for (;xdup > 0; xdup--)
                                 {
                                     k1 = (low_trans_grey_pal_bright[*out_end] >> 1);
-                                    bri = dword_1DC36C + k0 + k1;
+                                    bri = low_trans_grey_brightness + k0 + k1;
                                     bri = low_trans_grey_bright_limit[bri];
                                     pxmap = bri | ((*sprdata) << 8);
                                     *out_end = transmap[pxmap];
@@ -463,7 +463,7 @@ TbResult ApSpriteDrawLTGreyRemapUsingScalingUpDataTrans2LR(uchar *outbuf, int sc
                                 for (;xdup > 0; xdup--)
                                 {
                                     k1 = (low_trans_grey_pal_bright[*out_end] >> 1);
-                                    bri = dword_1DC36C + k0 + k1;
+                                    bri = low_trans_grey_brightness + k0 + k1;
                                     bri = low_trans_grey_bright_limit[bri];
                                     pxmap = bri | ((*sprdata) << 8);
                                     *out_end = transmap[pxmap];
@@ -565,7 +565,7 @@ TbResult ApSpriteDrawLTGreyRemapUsingScalingDownDataTrans1RL(uchar *outbuf, int 
                             k0 = (low_trans_grey_pal_bright[*sprdata] >> 1);
                             {
                                 k1 = (low_trans_grey_pal_bright[*out_end] >> 1);
-                                bri = dword_1DC36C + k0 + k1;
+                                bri = low_trans_grey_brightness + k0 + k1;
                                 bri = low_trans_grey_bright_limit[bri];
                                 pxmap = (bri << 8) | ((*sprdata));
                                 *out_end = transmap[pxmap];
@@ -665,7 +665,7 @@ TbResult ApSpriteDrawLTGreyRemapUsingScalingDownDataTrans1LR(uchar *outbuf, int 
                             k0 = (low_trans_grey_pal_bright[*sprdata] >> 1);
                             {
                                 k1 = (low_trans_grey_pal_bright[*out_end] >> 1);
-                                bri = dword_1DC36C + k0 + k1;
+                                bri = low_trans_grey_brightness + k0 + k1;
                                 bri = low_trans_grey_bright_limit[bri];
                                 pxmap = (bri << 8) | ((*sprdata));
                                 *out_end = transmap[pxmap];
@@ -765,7 +765,7 @@ TbResult ApSpriteDrawLTGreyRemapUsingScalingDownDataTrans2RL(uchar *outbuf, int 
                             k0 = (low_trans_grey_pal_bright[*sprdata] >> 1);
                             {
                                 k1 = (low_trans_grey_pal_bright[*out_end] >> 1);
-                                bri = dword_1DC36C + k0 + k1;
+                                bri = low_trans_grey_brightness + k0 + k1;
                                 bri = low_trans_grey_bright_limit[bri];
                                 pxmap = bri | ((*sprdata) << 8);
                                 *out_end = transmap[pxmap];
@@ -865,7 +865,7 @@ TbResult ApSpriteDrawLTGreyRemapUsingScalingDownDataTrans2LR(uchar *outbuf, int 
                             k0 = (low_trans_grey_pal_bright[*sprdata] >> 1);
                             {
                                 k1 = (low_trans_grey_pal_bright[*out_end] >> 1);
-                                bri = dword_1DC36C + k0 + k1;
+                                bri = low_trans_grey_brightness + k0 + k1;
                                 bri = low_trans_grey_bright_limit[bri];
                                 pxmap = bri | ((*sprdata) << 8);
                                 *out_end = transmap[pxmap];
@@ -981,7 +981,7 @@ TbResult ApSpriteDrawLowTransGreyRemapUsingScalingData(long posx, long posy, con
         else
         {
           ubyte bri;
-          bri = (dword_1DC36C <= 8) ? (24 + dword_1DC36C) : (32 + (dword_1DC36C - 8) / 2);
+          bri = (low_trans_grey_brightness <= 8) ? (24 + low_trans_grey_brightness) : (32 + (low_trans_grey_brightness - 8) / 2);
           if ((lbDisplay.DrawFlags & Lb_SPRITE_FLIP_HORIZ) != 0)
           {
               return LbSpriteDrawRemapUsingScalingUpDataSolidRL(outbuf, scanline,
@@ -1028,7 +1028,7 @@ TbResult ApSpriteDrawLowTransGreyRemapUsingScalingData(long posx, long posy, con
         else
         {
           ubyte bri;
-          bri = (dword_1DC36C <= 8) ? (24 + dword_1DC36C) : (32 + (dword_1DC36C - 8) / 2);
+          bri = (low_trans_grey_brightness <= 8) ? (24 + low_trans_grey_brightness) : (32 + (low_trans_grey_brightness - 8) / 2);
           if ((lbDisplay.DrawFlags & Lb_SPRITE_FLIP_HORIZ) != 0)
           {
               return LbSpriteDrawRemapUsingScalingDownDataSolidRL(outbuf, scanline,

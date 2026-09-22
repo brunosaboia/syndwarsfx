@@ -5281,8 +5281,7 @@ ubyte do_user_interface(void)
                 p_locplayer->PanelState[mouser] = PANEL_STATE_SEND_MESSAGE;
                 reset_buffered_keys();
                 player_message_clear(local_player_no);
-                scanner_unkn370 = 0;
-                scanner_unkn3CC = 0;
+                panel_objective_info_start();
                 did_inp |= GINPUT_DIRECT;
             }
         }
@@ -6560,7 +6559,7 @@ void draw_mission_concluded(void)
     if (ingame.fld_unkCB5)
     {
         sprintf(mission_status_text, "%s %s: %s ", gui_strings[GSTR_CHK_MISSION_STA_PRE],
-          gui_strings[GSTR_ENM_MISSION_STATUS + 1 + ingame.MissionStatus], scroll_text);
+          gui_strings[GSTR_ENM_MISSION_STATUS + 1 + ingame.MissionStatus], scrollinfo_text);
         data_15319c = mission_status_text;
     }
     else
@@ -6577,7 +6576,7 @@ void draw_mission_concluded(void)
           tm_h, tm_m % 60, tm_s);
         LbStringToUpper(mission_status_text);
         data_15319c = mission_status_text;
-        scroll_text = mission_status_text;
+        scrollinfo_text = mission_status_text;
     }
     {
         int scr_x, scr_y;

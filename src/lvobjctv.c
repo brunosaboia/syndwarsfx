@@ -636,12 +636,12 @@ void draw_objective(ushort objectv, ubyte flag)
     if (!byte_1C844F)
     {
         if ((p_objectv->Flags & GObjF_HIDDEN) != 0)
-            scroll_text = "-";
+            scrollinfo_text = "-";
         else if (p_objectv->ObjText != 0) {
             assert(p_objectv->ObjText < OBJECTIVE_TEXT_MAX);
-            scroll_text = objective_text[p_objectv->ObjText];
+            scrollinfo_text = objective_text[p_objectv->ObjText];
         } else {
-            scroll_text = p_odef->DefText;
+            scrollinfo_text = p_odef->DefText;
         }
         ++dword_1C8464;
     }
@@ -671,7 +671,7 @@ void draw_objective(ushort objectv, ubyte flag)
 TbBool screen_objective_text_set_failed(void)
 {
     if (ingame.fld_unkCB5 > 0) {
-        scroll_text = objective_text[ingame.fld_unkCB5];
+        scrollinfo_text = objective_text[ingame.fld_unkCB5];
         return true;
     }
     return false;

@@ -62,8 +62,6 @@
 #include "thing.h"
 #include "swlog.h"
 /******************************************************************************/
-extern long dword_1DC36C;
-
 char player_message_text[PLAYERS_LIMIT][128];
 ubyte player_message_timer[PLAYERS_LIMIT];
 
@@ -74,6 +72,15 @@ ubyte player_message_timer[PLAYERS_LIMIT];
 sbyte agent_with_mouse_over_weapon = -1;
 
 ubyte byte_153198 = 1;
+
+int scrollinfo_vel = 0;
+
+/** Scrolling info text position, scaled to resolution.
+ *
+ * Range of the position is related to actual width of the text on screen,
+ * so switching resolution changes the range of this value.
+ */
+int scrollinfo_pos = 90;
 
 /** Momentary flags - filled and used only while updating the panel, then forgitten.
  */
@@ -380,6 +387,38 @@ int SCANNER_text_draw(const char *text, int start_x, int height)
     return x;
 }
 
+int SCANNER_text_width(const char *text, int height)
+{
+    const ubyte *str;
+    int x;
+    short fnt_height, height_base;
+
+    lbFontPtr = small_font;
+    fnt_height = my_char_height('A');
+    height_base = 9 * fnt_height / 6;
+    str = (const ubyte *)text;
+    x = 0;
+    {
+        while (*str != '\0')
+        {
+            const struct TbSprite *p_spr;
+            int chr_width;
+            ubyte ch;
+
+            if (*str == '\1') {
+              str++;
+            } else {
+              ch = my_char_to_upper(*str);
+              p_spr = LbFontCharSprite(lbFontPtr, ch);
+              chr_width = p_spr->SWidth * height / height_base;
+              x += chr_width;
+            }
+            str++;
+        }
+    }
+    return x;
+}
+
 short panel_state_to_player_agent(ushort panstate)
 {
     if ((panstate >= PANEL_STATE_WEP_SEL_ONE) && (panstate <= PANEL_STATE_MOOD_SET_GRP + 3))
@@ -387,7 +426,13 @@ short panel_state_to_player_agent(ushort panstate)
     return -1;
 }
 
-void SCANNER_move_objective_info(int width, int height, int end_pos)
+void panel_objective_info_start(void)
+{
+    scrollinfo_vel = 0;
+    scrollinfo_pos = 0;
+}
+
+void SCANNER_objective_info_move(int width, int height, int end_pos)
 {
     PlayerInfo *p_locplayer;
 
@@ -395,27 +440,27 @@ void SCANNER_move_objective_info(int width, int height, int end_pos)
     if (in_network_game && p_locplayer->PanelState[mouser] == PANEL_STATE_SEND_MESSAGE)
     {
       if ( end_pos < lbDisplay.PhysicalScreenWidth - (lbDisplay.PhysicalScreenWidth >> 2) )
-          scanner_unkn370 = -20;
+          scrollinfo_vel = -20;
       if (end_pos > lbDisplay.PhysicalScreenWidth - 16)
-          scanner_unkn370 = 10;
-      if (scanner_unkn370 > 0)
+          scrollinfo_vel = 10;
+      if (scrollinfo_vel > 0)
       {
-          scanner_unkn370--;
-          scanner_unkn3CC -= 1 * height / 9;
+          scrollinfo_vel--;
+          scrollinfo_pos -= 1 * height / 9;
       }
-      if (scanner_unkn370 < 0)
+      if (scrollinfo_vel < 0)
       {
-          scanner_unkn370++;
-          scanner_unkn3CC += 1 * height / 9;
-          if (scanner_unkn3CC > 0)
-              scanner_unkn3CC = 0;
+          scrollinfo_vel++;
+          scrollinfo_pos += 1 * height / 9;
+          if (scrollinfo_pos > 0)
+              scrollinfo_pos = 0;
       }
     }
     else
     {
-        if (end_pos < 0)
-            scanner_unkn3CC = width;
-        scanner_unkn3CC -= 2 * height / 9;
+        if (end_pos <= 0)
+            scrollinfo_pos = width;
+        scrollinfo_pos -= 2 * height / 9;
     }
 }
 
@@ -503,7 +548,7 @@ void draw_players_chat_talk(int x, int y)
     }
 }
 
-void draw_objective_info_background(int scr_x, int scr_y, int width, int height)
+static void draw_objective_info_background(int scr_x, int scr_y, int width, int height)
 {
     int y;
     int i;
@@ -517,19 +562,16 @@ void draw_objective_info_background(int scr_x, int scr_y, int width, int height)
     }
 }
 
-void draw_objective_info_text(int scr_x, int scr_y, int width, int height)
+static void draw_objective_info_text(int scr_x, int scr_y, int width, int height)
 {
     struct TbAnyWindow bkpwnd;
-    int end_pos;
 
     LbScreenStoreGraphicsWindow(&bkpwnd);
     LbScreenSetGraphicsWindow(scr_x + 1, scr_y, width - 2, height);
 
-    end_pos = SCANNER_text_draw(scroll_text, scanner_unkn3CC, height);
+    SCANNER_text_draw(scrollinfo_text, scrollinfo_pos, height);
 
     LbScreenLoadGraphicsWindow(&bkpwnd);
-
-    SCANNER_move_objective_info(width, height, end_pos);
 }
 
 void draw_players_chat(void)
@@ -704,7 +746,7 @@ void draw_new_panel_sprite_std(int px, int py, ulong spr_id)
     struct TbSprite *p_spr;
 
     p_spr = &pop1_sprites[spr_id];
-    dword_1DC36C = ingame.Scanner.Brightness;
+    low_trans_grey_brightness = ingame.Scanner.Brightness;
 
     if (ingame.PanelPermutation == -1) {
         lbDisplay.DrawFlags |= Lb_SPRITE_TRANSPAR4;
@@ -728,7 +770,7 @@ void draw_new_panel_sprite_scaled_std(int px, int py, ulong spr_id, int dest_wid
     struct TbSprite *p_spr;
 
     p_spr = &pop1_sprites[spr_id];
-    dword_1DC36C = ingame.Scanner.Brightness;
+    low_trans_grey_brightness = ingame.Scanner.Brightness;
 
     if (ingame.PanelPermutation == -1) {
         lbDisplay.DrawFlags |= Lb_SPRITE_TRANSPAR4;
@@ -751,7 +793,7 @@ void draw_new_panel_sprite_dark(int px, int py, ulong spr_id)
     struct TbSprite *p_spr;
 
     p_spr = &pop1_sprites[spr_id];
-    dword_1DC36C = 8;
+    low_trans_grey_brightness = 8;
 
     if (ingame.PanelPermutation == -1) {
         lbDisplay.DrawFlags |= Lb_SPRITE_TRANSPAR4;
@@ -774,7 +816,7 @@ void draw_new_panel_sprite_scaled_dark(int px, int py, ulong spr_id, int dest_wi
     struct TbSprite *p_spr;
 
     p_spr = &pop1_sprites[spr_id];
-    dword_1DC36C = 8;
+    low_trans_grey_brightness = 8;
 
     if (ingame.PanelPermutation == -1) {
         lbDisplay.DrawFlags |= Lb_SPRITE_TRANSPAR4;
@@ -798,7 +840,7 @@ void draw_new_panel_sprite_prealp(int px, int py, ulong spr_id)
     struct TbSprite *p_spr;
 
     p_spr = &pop1_sprites[spr_id];
-    dword_1DC36C = ingame.Scanner.Brightness;
+    low_trans_grey_brightness = ingame.Scanner.Brightness;
 
     if (ingame.PanelPermutation == -1) {
         lbDisplay.DrawFlags |= Lb_SPRITE_TRANSPAR4;
@@ -2059,6 +2101,26 @@ void draw_panel_objective_info(short panel)
     draw_objective_info_text(text_x, p_panel->dyn.Y, text_w, p_panel->dyn.Height);
 }
 
+void update_panel_objective_info(short panel)
+{
+    struct GamePanel *p_panel;
+    int end_pos;
+    short bkgd_w, text_w;
+
+    p_panel = &game_panel[panel];
+
+    if (in_network_game) {
+        bkgd_w = lbDisplay.GraphicsScreenWidth;
+        text_w = bkgd_w - 2;
+    } else {
+        bkgd_w = p_panel->pos.Width;
+        text_w = p_panel->dyn.Width;
+    }
+
+    end_pos = scrollinfo_pos + SCANNER_text_width(scrollinfo_text, p_panel->dyn.Height);
+    SCANNER_objective_info_move(text_w, p_panel->dyn.Height, end_pos);
+}
+
 void draw_weapon_energy_bar(short panel)
 {
     struct GamePanel *p_panel;
@@ -2443,6 +2505,7 @@ void draw_new_panel(void)
             break;
         case PanT_Objective:
             draw_panel_objective_info(panel);
+            update_panel_objective_info(panel);
             break;
         }
     }

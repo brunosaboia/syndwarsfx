@@ -32,7 +32,7 @@ struct TbSprite;
 
 #pragma pack()
 
-extern long dword_1DC36C;
+extern s32 low_trans_grey_brightness;
 extern ubyte low_trans_grey_pal_bright[];
 extern ubyte low_trans_grey_bright_limit[];
 
