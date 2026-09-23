@@ -955,12 +955,47 @@ TbBool current_weapon_has_targetting(struct Thing *p_person)
     return weapon_has_targetting(wtype);
 }
 
-ubyte find_nth_weapon_held(ushort index, ubyte n)
+WeaponType find_nth_weapon_held(ThingIdx person, ubyte n)
 {
+#if 0
     char ret;
     asm volatile ("call ASM_find_nth_weapon_held\n"
-        : "=r" (ret) : "a" (index), "d" (n));
+        : "=r" (ret) : "a" (person), "d" (n));
     return ret;
+#endif
+    struct Thing *p_person;
+    u32 weapons;
+    WeaponType wtype;
+    ubyte count;
+
+    if (person > THINGS_LIMIT)
+        return 0;
+    if (person <= 0)
+        return 0;
+
+    p_person = &things[person];
+    if (p_person->State == PerSt_PERSON_BURNING)
+        return 0;
+    if ((p_person->Flag & TngF_Destroyed) != 0)
+        return 0;
+
+    weapons = p_person->U.UPerson.WeaponsCarried & ~(1 << (WEP_ENERGYSHLD-1));
+
+    wtype = WEP_NULL;
+    count = 0;
+    while (1)
+    {
+        if (count >= n)
+            break;
+        wtype++;
+        if (wtype >= WEP_TYPES_COUNT)
+            break;
+        if (weapons_has_weapon(weapons, wtype))
+            count++;
+    }
+    if (count == n)
+        return (ubyte)wtype;
+    return 0;
 }
 
 ulong person_carried_weapons_pesuaded_sell_value(struct Thing *p_person)
