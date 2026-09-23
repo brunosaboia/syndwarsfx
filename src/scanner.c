@@ -501,10 +501,84 @@ void SCANNER_fill_in_road(int thing_idx)
     SCANNER_fill_quad(p1z, p1x, p2z, p2x, p3z, p3x, p4z, p4x, colour);
 }
 
+/** Use border detection filter on buildings.
+ *
+ * Replaces pixels surrounded by a specific outline colour with
+ * the ground colour instead.
+ */
 void SCANNER_outline(void)
 {
+#if 0
     asm volatile ("call ASM_SCANNER_outline\n"
         : : : "eax" );
+    return;
+#endif
+    ubyte *const map = &SCANNER_data[0][0];
+    ubyte scratch[256];
+    ubyte outline_colour;
+    ubyte text_colour;
+    int row, col;
+
+    // The decided value for a row is written one row late (buffered
+    // in `scratch[]`), so a row's own neighbour tests can still see
+    // the not-yet-overwritten value of the row above it.
+    outline_colour = SCANNER_colour[ScnClr_Outline];
+    text_colour = SCANNER_colour[ScnClr_Text];
+
+    // Seed `scratch[]` with the decided values for row 1.
+    row = 1;
+    {
+        for (col = 1; col < 255; col++)
+        {
+            uint off;
+            TbBool erode;
+
+            off = (row << 8) + col + 1;
+            erode = (map[off] == outline_colour) &&
+              (map[off + 256 - 1] == outline_colour) &&
+              (map[off - 256 - 1] == outline_colour) &&
+              (map[off + 1] == outline_colour) &&
+              (map[off - 1] == outline_colour);
+
+            scratch[col] = erode ? text_colour : map[off];
+        }
+    }
+
+    // Sweep rows 2..255; decide the thinned value for every column
+    // of the current row (buffering it in `scratch[]`), while
+    // flushing the previous row's already-decided value into the map.
+    for (row = 2; row < 256; row++)
+    {
+        for (col = 1; col < 255; col++)
+        {
+            uint off;
+            ubyte flushed;
+            TbBool erode;
+
+            off = (row << 8) + col;
+            erode = (map[off] == outline_colour) &&
+              (map[off + 256 + 1] == outline_colour) &&
+              (map[off - 256] == outline_colour) &&
+              (map[off + 1] == outline_colour) &&
+              (map[off - 1] == outline_colour);
+
+            flushed = scratch[col];
+            map[off - 256] = flushed;
+            scratch[col] = erode ? text_colour : map[off];
+        }
+    }
+
+    // Flush the final buffered row.
+    row = 255;
+    {
+        for (col = 1; col < 255; col++)
+        {
+            uint off;
+
+            off = (row << 8) + col;
+            map[off] = scratch[col];
+        }
+    }
 }
 
 //TODO why coordinates are backward?
