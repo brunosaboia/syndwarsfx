@@ -876,6 +876,14 @@ short calc_person_speed(struct Thing *p_person)
     return speed;
 }
 
+short calc_person_heavy_weapon_spread(struct Thing *p_person)
+{
+    // The wider the shooter's mood swing and the less arm mod level
+    // they have, the more the shot is allowed to stray off target.
+    return 60 + abs(p_person->U.UPerson.Mood)
+      - 16 * cybmod_arms_level(&p_person->U.UPerson.UMod);
+}
+
 void person_set_helath_to_max_limit(struct Thing *p_person)
 {
     p_person->U.UPerson.MaxHealth = PERSON_MAX_HEALTH_LIMIT;

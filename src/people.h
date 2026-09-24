@@ -393,6 +393,13 @@ void init_person_thing(struct Thing *p_person);
 void person_give_best_mods(struct Thing *p_person);
 short calc_person_speed(struct Thing *p_person);
 
+/** Returns angle of a deviation cone when shooting heavy weapons.
+ *
+ * The returned value is the opposite to accuracy, meaning the greater the
+ * value, the lower accuracy is.
+ */
+short calc_person_heavy_weapon_spread(struct Thing *p_person);
+
 void check_persons_target(struct Thing *p_person);
 void check_persons_target2(struct Thing *p_person);
 ushort check_col_collision(int x, int y, int z);

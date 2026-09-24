@@ -994,7 +994,7 @@ WeaponType find_nth_weapon_held(ThingIdx person, ubyte n)
             count++;
     }
     if (count == n)
-        return (ubyte)wtype;
+        return wtype;
     return 0;
 }
 
@@ -1141,10 +1141,46 @@ void player_agent_set_weapon_quantities_proper(struct Thing *p_person)
     }
 }
 
+/** Alter target coordinates due to weapon shooting inaccuracy.
+ */
 void weapon_sweep(struct Thing *p_owner, int *vx, int *vy, int *vz)
 {
+#if 0
     asm volatile ("call ASM_weapon_sweep\n"
         : : "a" (p_owner), "d" (vx), "b" (vy), "c" (vz));
+    return;
+#endif
+    int spread;
+    struct MapCoords own_cor;
+    int dist;
+    int angle, noise, nsangle;
+
+    spread = calc_person_heavy_weapon_spread(p_owner);
+    if (spread < 10)
+        return;
+
+    own_cor.X = PRCCOORD_TO_MAPCOORD(p_owner->X);
+    own_cor.Y = PRCCOORD_TO_MAPCOORD(p_owner->Y);
+    own_cor.Z = PRCCOORD_TO_MAPCOORD(p_owner->Z);
+
+    dist = map_distance_coords_fast(own_cor.X, own_cor.Y, own_cor.Z, *vx, *vy, *vz);
+
+    angle = arctan(*vx - own_cor.X, own_cor.Z - *vz);
+
+    // higher bits of deviation are not really random, making
+    // a sweep within the code as game turn increases
+    noise = ((p_owner->ThingOffset + gameturn) << 4) % (2 * spread);
+    // lower bits - those are random
+    noise += (LbRandomAnyShort() & 0x1f) - 0x10;
+    // allow only deviations in range (-spread/2 .. spread/2)
+    if (noise > spread)
+        noise = 2 * spread - noise;
+    noise -= spread >> 1;
+
+    nsangle = (angle + noise) & LbFPMath_AngleMask;
+
+    *vx = own_cor.X + ((dist * lbSinTable[nsangle]) >> 16);
+    *vz = own_cor.Z + ((dist * lbSinTable[nsangle + LbFPMath_PI/2]) >> 16);
 }
 
 struct SimpleThing *init_spark(int x, int y, int z)
@@ -2801,7 +2837,6 @@ void init_minigun(struct Thing *p_owner)
           &prc_beg_pt, p_owner, wtype);
         allow_gnd_hit_eff = true;
     }
-    weapon_sweep(p_owner, &cor_fin_x, &cor_fin_y, &cor_fin_z);
     cor_beg_x = PRCCOORD_TO_MAPCOORD(prc_beg_pt.R[0]);
     cor_beg_y = PRCCOORD_TO_MAPCOORD(prc_beg_pt.R[1]);
     cor_beg_z = PRCCOORD_TO_MAPCOORD(prc_beg_pt.R[2]);
@@ -2809,6 +2844,7 @@ void init_minigun(struct Thing *p_owner)
     cor_fin_x = PRCCOORD_TO_MAPCOORD(prc_fin_pt.R[0]);
     cor_fin_y = PRCCOORD_TO_MAPCOORD(prc_fin_pt.R[1]);
     cor_fin_z = PRCCOORD_TO_MAPCOORD(prc_fin_pt.R[2]);
+    weapon_sweep(p_owner, &cor_fin_x, &cor_fin_y, &cor_fin_z);
     rhit = bul_path_end(cor_beg_x, cor_beg_y, cor_beg_z, &cor_fin_x, &cor_fin_y, &cor_fin_z, 50, p_owner, &status);
 
     if ((rhit & 0x80000000) != 0) // hit 3D object collision vector
