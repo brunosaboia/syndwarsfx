@@ -48,8 +48,8 @@ TbBool hud_show_target_health = false;
 
 s32 target_old_frameno= 0;
 
-extern short word_176CB4;
-extern short word_176CB6;
+extern short goto_point_frame_no;
+extern short goto_point_frame_count;
 
 /******************************************************************************/
 
@@ -77,29 +77,30 @@ void show_goto_point(u32 flag)
 
     if (flag & 0xff)
     {
-        word_176CB6 = 0;
-        word_176CB4 = nstart_ani[926];
+        goto_point_frame_count = 0;
+        goto_point_frame_no = nstart_ani[926];
         return;
     }
-    if (word_176CB4 != 0)
-    {
-      frame_count = word_176CB6++;
-      frame_no = word_176CB4;
-      if (frame_count > 5)
-        word_176CB4 = 0;
-      else
-        word_176CB4 = frame[word_176CB4].Next;
+    frame_no = goto_point_frame_no;
+    if (frame_no == 0) {
+        return;
+    }
+    frame_count = goto_point_frame_count++;
+    if (frame_count > 5)
+        goto_point_frame_no = 0;
+    else
+        goto_point_frame_no = frame[goto_point_frame_no].Next;
 
-      dcthing = players[local_player_no].DirectControl[mouser];
-      p_thing = &things[dcthing];
-      if (((p_thing->Flag & 0x10000000) != 0 || (p_thing->State == PerSt_GOTO_POINT)) &&
-        ((p_thing->Flag2 & 0x40) == 0))
-      {
+    dcthing = players[local_player_no].DirectControl[mouser];
+    p_thing = &things[dcthing];
+    if ((((p_thing->Flag & TngF_InVehicle) != 0) || (p_thing->State == PerSt_GOTO_POINT)) &&
+      ((p_thing->Flag2 & TgF2_Unkn0040) == 0))
+    {
         int height;
         int cor_x, cor_y, cor_z;
         TbPixel colour;
 
-        if (word_176CB6 == 1)
+        if (goto_point_frame_count == 1)
             play_sample_using_heap(0, 92, 127, 64, 100, 0, 3u);
 
         colour = 0;
@@ -110,8 +111,8 @@ void show_goto_point(u32 flag)
         {
             int prc_x, prc_z;
 
-            prc_x = cor_x << 8;
-            prc_z = cor_z << 8;
+            prc_x = MAPCOORD_TO_PRCCOORD(cor_x,0);
+            prc_z = MAPCOORD_TO_PRCCOORD(cor_z,0);
             if (face <= 0)
                 height = get_height_on_face_quad(prc_x, prc_z, -face);
             else
@@ -122,11 +123,10 @@ void show_goto_point(u32 flag)
             height = alt_at_point(cor_x, cor_z);
         }
 
-        cor_y = height >> 8;
-        if ((p_thing->Flag2 & 0x80000) != 0)
-          colour = 48;
+        cor_y = PRCCOORD_TO_MAPCOORD(height);
+        if ((p_thing->Flag2 & TgF2_Unkn00080000) != 0)
+            colour = 48;
         func_70a88(&cor_x, &cor_y, cor_z, frame_no, colour);
-      }
     }
 }
 

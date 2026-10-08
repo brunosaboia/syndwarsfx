@@ -2056,28 +2056,28 @@ GLOBAL_FUNC(ASM_show_goto_point)	/* 0x020938 */
 		mov    EXPORT_SYMBOL(nstart_ani),%eax
 		xor    %esi,%esi
 		mov    0x73c(%eax),%ax
-		mov    %si,EXPORT_SYMBOL(word_176CB6)
-		mov    %ax,EXPORT_SYMBOL(word_176CB4)
+		mov    %si,EXPORT_SYMBOL(goto_point_frame_count)
+		mov    %ax,EXPORT_SYMBOL(goto_point_frame_no)
 		jmp    jump_20b04
 	jump_2096a:
-		cmpw   $0x0,EXPORT_SYMBOL(word_176CB4)
+		cmpw   $0x0,EXPORT_SYMBOL(goto_point_frame_no)
 		je     jump_20b04
-		mov    EXPORT_SYMBOL(word_176CB6),%ax
+		mov    EXPORT_SYMBOL(goto_point_frame_count),%ax
 		xor    %edx,%edx
 		mov    %ax,%dx
 		inc    %eax
-		mov    %ax,EXPORT_SYMBOL(word_176CB6)
+		mov    %ax,EXPORT_SYMBOL(goto_point_frame_count)
 		cmp    $0x5,%edx
 		jle    jump_20998
 		xor    %ebx,%ebx
-		mov    %bx,EXPORT_SYMBOL(word_176CB4)
+		mov    %bx,EXPORT_SYMBOL(goto_point_frame_no)
 	jump_20998:
 		xor    %eax,%eax
 		mov    EXPORT_SYMBOL(frame),%edx
-		mov    EXPORT_SYMBOL(word_176CB4),%ax
+		mov    EXPORT_SYMBOL(goto_point_frame_no),%ax
 		mov    0x6(%edx,%eax,8),%ax
 		movzbl EXPORT_SYMBOL(local_player_no),%esi
-		mov    %ax,EXPORT_SYMBOL(word_176CB4)
+		mov    %ax,EXPORT_SYMBOL(goto_point_frame_no)
 		lea    0x0(,%esi,8),%eax
 		add    %esi,%eax
 		shl    $0x3,%eax
@@ -2105,7 +2105,7 @@ GLOBAL_FUNC(ASM_show_goto_point)	/* 0x020938 */
 		testb  $0x40,0x44(%esi)
 		jne    jump_20b04
 		xor    %eax,%eax
-		mov    EXPORT_SYMBOL(word_176CB6),%ax
+		mov    EXPORT_SYMBOL(goto_point_frame_count),%ax
 		cmp    $0x1,%eax
 		jne    jump_20a40
 		push   $0x3
@@ -2170,7 +2170,7 @@ GLOBAL_FUNC(ASM_show_goto_point)	/* 0x020938 */
 		mov    0x8(%esp),%al
 		xor    %ecx,%ecx
 		push   %eax
-		mov    EXPORT_SYMBOL(word_176CB4),%cx
+		mov    EXPORT_SYMBOL(goto_point_frame_no),%cx
 		lea    0x4(%esp),%eax
 		call   ac_func_70a88
 	jump_20b04:
@@ -128608,9 +128608,9 @@ GLOBAL (dword_176CAC)	/* 0x176CAC */
 		.long	0x0
 GLOBAL (dword_176CB0)	/* 0x176CB0 */
 		.long	0x0
-GLOBAL (word_176CB4)	/* 0x176CB4 */
+GLOBAL (goto_point_frame_no)	/* 0x176CB4 */
 		.short  0x0
-GLOBAL (word_176CB6)	/* 0x176CB6 */
+GLOBAL (goto_point_frame_count)	/* 0x176CB6 */
 		.short  0x0
 		.align  4
 
