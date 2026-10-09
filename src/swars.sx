@@ -1189,7 +1189,7 @@ GLOBAL_FUNC(ASM_draw_bang_start)	/* 0x01493C */
 		cmp    $0xf0,%eax
 		jle    jump_149e3
 		sub    $0xf0,%eax
-		mov    %eax,EXPORT_SYMBOL(dword_176CAC)
+		mov    %eax,EXPORT_SYMBOL(bang_wobble_line_timer)
 	jump_149e3:
 		mov    $0x7,%ecx
 		mov    EXPORT_SYMBOL(dword_152E4C),%eax
@@ -128604,9 +128604,9 @@ ascS_7:	/* 0x15EB57 */
 		.string "%s"
 		.align  4
 
-GLOBAL (dword_176CAC)	/* 0x176CAC */
+GLOBAL (bang_wobble_line_timer)	/* 0x176CAC */
 		.long	0x0
-GLOBAL (dword_176CB0)	/* 0x176CB0 */
+GLOBAL (veh_plasma_sparks_timer)	/* 0x176CB0 */
 		.long	0x0
 GLOBAL (goto_point_frame_no)	/* 0x176CB4 */
 		.short  0x0
