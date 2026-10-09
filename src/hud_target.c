@@ -53,20 +53,48 @@ extern short goto_point_frame_count;
 
 /******************************************************************************/
 
-void func_70a88(int *p_cor_x, int *p_cor_y, int cor_z, ushort frame_no, TbPixel colour)
+void draw_unkn1_standard_sprite(ushort frm, int scr_x, int scr_y)
+{
+    struct Frame *p_frm;
+    struct Element *p_elem;
+    int el;
+
+    p_frm = &frame[frm];
+    for (el = p_frm->FirstElement; el > 0; el = p_elem->Next)
+    {
+        struct TbSprite *p_spr;
+        int el_X, el_Y;
+
+        p_elem = &melement_ani[el];
+
+        p_spr = (struct TbSprite *)((ubyte *)m_sprites + p_elem->ToSprite);
+        if (p_spr <= m_sprites)
+            continue;
+
+        if ((p_elem->Flags & 0xFE00) != 0)
+            continue;
+
+        lbDisplay.DrawFlags = p_elem->Flags & 0x07;
+        el_X = scr_x + (p_elem->X >> 1);
+        el_Y = scr_y + (p_elem->Y >> 1);
+        LbSpriteDraw(el_X, el_Y, p_spr);
+    }
+    lbDisplay.DrawFlags = 0;
+}
+
+void func_70a88(int *p_cor_x, int *p_cor_y, int cor_z, ushort frm, TbPixel colour)
 {
 #if 0
     asm volatile (
       "push %4\n"
       "call ASM_func_70a88\n"
-        :  : "a" (p_cor_x), "d" (p_cor_y), "b" (cor_z), "c" (frame_no), "g" ((u32)colour));
+        :  : "a" (p_cor_x), "d" (p_cor_y), "b" (cor_z), "c" (frm), "g" ((u32)colour));
     return;
 #endif
     struct EnginePoint ep;
     struct Frame *p_frm;
     struct Element *p_elem;
     int pp_X, pp_Y;
-    int el_X, el_Y;
     int el;
 
     ep.X3d = *p_cor_x - engn_xc;
@@ -80,26 +108,29 @@ void func_70a88(int *p_cor_x, int *p_cor_y, int cor_z, ushort frame_no, TbPixel 
     *p_cor_x = pp_X;
     *p_cor_y = pp_Y;
 
-    p_frm = &frame[frame_no];
+    p_frm = &frame[frm];
 
     for (el = p_frm->FirstElement; el > 0; el = p_elem->Next)
     {
         struct TbSprite *p_spr;
+        int el_X, el_Y;
+
         p_elem = &melement_ani[el];
-        if (p_elem->ToSprite <= 0)
-            continue;
 
         p_spr = (struct TbSprite *)((ubyte *)m_sprites + p_elem->ToSprite);
-        lbDisplay.DrawFlags = p_elem->Flags & 7;
-        if ((p_elem->Flags & 0xFE00) == 0)
-        {
-            el_X = pp_X + (p_elem->X >> 1);
-            el_Y = pp_Y + (p_elem->Y >> 1);
-            if (colour != 0) {
-                LbSpriteDrawOneColour(el_X, el_Y, p_spr, colour);
-            } else {
-                LbSpriteDraw(el_X, el_Y, p_spr);
-            }
+        if (p_spr <= m_sprites)
+            continue;
+
+        if ((p_elem->Flags & 0xFE00) != 0)
+            continue;
+
+        lbDisplay.DrawFlags = p_elem->Flags & 0x07;
+        el_X = pp_X + (p_elem->X >> 1);
+        el_Y = pp_Y + (p_elem->Y >> 1);
+        if (colour != 0) {
+            LbSpriteDrawOneColour(el_X, el_Y, p_spr, colour);
+        } else {
+            LbSpriteDraw(el_X, el_Y, p_spr);
         }
     }
     lbDisplay.DrawFlags = 0;
@@ -113,7 +144,7 @@ void show_goto_point(u32 flag)
     return;
 #endif
     ushort frame_count;
-    short frame_no;
+    short frm;
     struct Thing *p_thing;
     short face;
     ThingIdx dcthing;
@@ -124,8 +155,8 @@ void show_goto_point(u32 flag)
         goto_point_frame_no = nstart_ani[926];
         return;
     }
-    frame_no = goto_point_frame_no;
-    if (frame_no == 0) {
+    frm = goto_point_frame_no;
+    if (frm == 0) {
         return;
     }
     frame_count = goto_point_frame_count++;
@@ -169,7 +200,7 @@ void show_goto_point(u32 flag)
         cor_y = PRCCOORD_TO_MAPCOORD(height);
         if ((p_thing->Flag2 & TgF2_Unkn00080000) != 0)
             colour = 48;
-        func_70a88(&cor_x, &cor_y, cor_z, frame_no, colour);
+        func_70a88(&cor_x, &cor_y, cor_z, frm, colour);
     }
 }
 
@@ -429,35 +460,6 @@ void draw_hud_shield_bar(int x, int y, struct Thing *p_thing)
             colour = colour_lookup[ColLU_RED];
         LbDrawBox(x + dx, y + dy + h_total - h_cur, w, h_cur, colour);
     }
-}
-
-void draw_unkn1_standard_sprite(ushort fr, int scr_x, int scr_y)
-{
-    struct Frame *p_frm;
-    struct Element *p_el;
-    int el;
-
-    p_frm = &frame[fr];
-    for (el = p_frm->FirstElement; ; el = p_el->Next)
-    {
-        struct TbSprite *spr;
-        int sscr_x, sscr_y;
-
-        p_el = &melement_ani[el];
-        if (p_el <= melement_ani)
-            break;
-        if ((p_el->Flags & 0xFE00) != 0)
-            continue;
-        spr = (struct TbSprite *)((ubyte *)m_sprites + p_el->ToSprite);
-        if (spr <= m_sprites)
-            continue;
-
-        lbDisplay.DrawFlags = p_el->Flags & 0x07;
-        sscr_y = scr_y + (p_el->Y >> 1);
-        sscr_x = scr_x + (p_el->X >> 1);
-        LbSpriteDraw(sscr_x, sscr_y, spr);
-    }
-    lbDisplay.DrawFlags = 0;
 }
 
 void draw_hud_target_old_frame(struct Thing *p_target, int frm)
