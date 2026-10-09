@@ -68,9 +68,12 @@
 .global EXPORT_SYMBOL(follow_dist);	/* 0x153398 */
 .global EXPORT_SYMBOL(door_anim_page);	/* 0x153914 */
 .global EXPORT_SYMBOL(burning_timer_delatas);	/* 0x154F6C */
+.global EXPORT_SYMBOL(save_slot);			/* 0x1551D8 */
 .global EXPORT_SYMBOL(scanner_arrow_mode);	/* 0x155308 */
-.global EXPORT_SYMBOL(proj_origin);	/* 0x1553D0 */
+.global EXPORT_SYMBOL(proj_origin);			/* 0x1553D0 */
 
+.global EXPORT_SYMBOL(goto_point_frame_no);		/* 0x176CB4 */
+.global EXPORT_SYMBOL(goto_point_frame_count);	/* 0x176CB6 */
 .global EXPORT_SYMBOL(target_old_frameno);	/* 0x176CB8 */
 .global EXPORT_SYMBOL(mouse_over_unkn2_tng);	/* 0x176CC8 */
 .global EXPORT_SYMBOL(mouse_over_unkn2_x);	/* 0x176CCC */
@@ -128418,10 +128421,6 @@ GLOBAL (tag_current)	/* 0x1550F0 */
 		.byte	0xff
 		.align	4
 
-GLOBAL (save_slot)	/* 0x1551D8 */
-		.ascii  "\xff\xff"
-		.align  4
-
 GLOBAL (text_colours)	/* 0x1552e4 */
 		.ascii  "\x32\xf4\xb0\xae\x57\xf7\xf6"
 		.ascii  "\xf5\xf8\xda\x32\xae\xaf\xb0\x32"
@@ -128602,16 +128601,6 @@ ascS_6:	/* 0x15EB54 */
 		.string "%s"
 ascS_7:	/* 0x15EB57 */
 		.string "%s"
-		.align  4
-
-GLOBAL (bang_wobble_line_timer)	/* 0x176CAC */
-		.long	0x0
-GLOBAL (veh_plasma_sparks_timer)	/* 0x176CB0 */
-		.long	0x0
-GLOBAL (goto_point_frame_no)	/* 0x176CB4 */
-		.short  0x0
-GLOBAL (goto_point_frame_count)	/* 0x176CB6 */
-		.short  0x0
 		.align  4
 
 GLOBAL (dword_176D6C)	/* 0x176d6c */

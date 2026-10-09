@@ -46,10 +46,10 @@
 
 TbBool hud_show_target_health = false;
 
-s32 target_old_frameno= 0;
+s32 target_old_frameno = 0;
 
-extern short goto_point_frame_no;
-extern short goto_point_frame_count;
+short goto_point_frame_no = 0;
+short goto_point_frame_count = 0;
 
 /******************************************************************************/
 

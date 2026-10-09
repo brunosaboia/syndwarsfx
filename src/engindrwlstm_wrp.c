@@ -107,8 +107,8 @@ struct unkn_mech_struc3 { // sizeof=0x76
 /******************************************************************************/
 extern ubyte byte_176D49;
 
-extern s32 bang_wobble_line_timer;
-extern short veh_plasma_sparks_timer;
+s32 bang_wobble_line_timer = 0;
+short veh_plasma_sparks_timer = 0;
 u32 dword_152E4C = 0x3F69A093;
 
 struct BulStart bul_starts[4000];

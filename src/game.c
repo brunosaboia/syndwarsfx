@@ -3647,10 +3647,30 @@ ubyte load_game_slot(ubyte click)
 
 ubyte save_game_slot(ubyte click)
 {
+#if 0
     ubyte ret;
     asm volatile ("call ASM_save_game_slot\n"
         : "=r" (ret) : "a" (click));
     return ret;
+#endif
+    char *slot_str;
+    int ret;
+
+    if (login_control[0].State != 6) {
+        return 0;
+    }
+    if (save_slot == -1) {
+        alert_box_text_fmt("%s", gui_strings[564]);
+        return 1;
+    }
+    slot_str = save_slot_names[save_slot - save_slot_base - 1];
+    ret = save_game_write(save_slot, slot_str);
+    if (ret) {
+        alert_box_text_fmt("%s", gui_strings[566]);
+    } else {
+        alert_box_text_fmt("%s", gui_strings[571]);
+    }
+    return 1;
 }
 
 void reinit_unkn6_always_reset_variables(void)
