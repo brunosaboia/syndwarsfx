@@ -93,7 +93,7 @@ void draw_line_purple_list(int x1, int y1, int x2, int y2, int colour)
         p_pditem->Type = PuDT_LINE;
 }
 
-void draw_box_purple_list(int x, int y, ulong width, ulong height, int colour)
+void draw_box_purple_list(int x, int y, uint width, uint height, TbPixel colour)
 {
 #if 0
     asm volatile (
@@ -179,18 +179,42 @@ void draw_trig_purple_list(int x2, int y2, int x3, int y3)
     p_pditem->Type = PuDT_HOLORAY;
 }
 
-void copy_box_purple_list(long x, long y, ulong width, ulong height)
+void copy_box_purple_list(int x, int y, uint width, uint height)
 {
+#if 0
     asm volatile (
       "call ASM_copy_box_purple_list\n"
         : : "a" (x), "d" (y), "b" (width), "c" (height));
+#endif
+    struct PurpleDrawItem *p_pditem;
+
+    p_pditem = &purple_draw_list[purple_draw_index];
+    purple_draw_index++;
+
+    p_pditem->U.Box.Colour = 0;
+    p_pditem->Flags = lbDisplay.DrawFlags;
+    p_pditem->U.Box.X = lbDisplay.GraphicsWindowX + x;
+    p_pditem->U.Box.Y = lbDisplay.GraphicsWindowY + y;
+    p_pditem->U.Box.Width = width;
+    p_pditem->U.Box.Height = height;
+    p_pditem->Type = PuDT_COPYBOX;
 }
 
 void draw_hotspot_purple_list(int x, int y)
 {
+#if 0
     asm volatile (
       "call ASM_draw_hotspot_purple_list\n"
         : : "a" (x), "d" (y));
+#endif
+    struct PurpleDrawItem *p_pditem;
+
+    p_pditem = &purple_draw_list[purple_draw_index];
+    purple_draw_index++;
+
+    p_pditem->U.Hotspot.X = lbDisplay.GraphicsWindowX + x;
+    p_pditem->U.Hotspot.Y = lbDisplay.GraphicsWindowY + y;
+    p_pditem->Type = PuDT_HOTSPOT;
 }
 
 ubyte flashy_draw_purple_shape(struct ScreenShape *p_shape)
