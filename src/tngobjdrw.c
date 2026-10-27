@@ -735,8 +735,75 @@ struct SingleObjectFace4 *build_continuos_slice_3d(int near_x, int near_y, int n
 
 void build_laser_guided_piece(struct Thing *p_laser)
 {
+#if 0
     asm volatile ("call ASM_build_laser_guided_piece\n"
         : : "a" (p_laser));
+    return;
+#endif
+    struct Thing *p_target;
+    int cur_x, cur_y, cur_z;
+    int target_x, target_z;
+    short full_angle;
+    short cur_angle;
+    short glow_size;
+    short rate;
+    int count;
+    ushort use_cache;
+    ubyte base_colour;
+
+    cur_x = PRCCOORD_TO_MAPCOORD(p_laser->X);
+    cur_y = PRCCOORD_TO_MAPCOORD(p_laser->Y);
+    cur_z = PRCCOORD_TO_MAPCOORD(p_laser->Z);
+
+    p_target = p_laser->PTarget;
+    if (p_target == NULL) {
+        return;
+    }
+
+    target_x = PRCCOORD_TO_MAPCOORD(p_target->X);
+    target_z = PRCCOORD_TO_MAPCOORD(p_target->Z);
+
+    full_angle = angle_between_points(cur_x, cur_z, target_x, target_z);
+    cur_angle = p_laser->U.UEffect.AngleY;
+    calc_angle_rate(full_angle, cur_angle, &glow_size);
+
+    base_colour = colour_lookup[2];
+    use_cache = 0;
+
+    for (count = 5; count > 0; count--)
+    {
+        struct SingleObjectFace4 *p_face4;
+        int new_x, new_z;
+        ubyte brig;
+        TbPixel colour;
+
+        full_angle = angle_between_points(cur_x, cur_z, target_x, target_z);
+        rate = calc_angle_rate(full_angle, cur_angle, &glow_size);
+
+        new_x = cur_x + ((lbSinTable[cur_angle] * glow_size) >> 17);
+        new_z = cur_z + ((lbSinTable[cur_angle + LbFPMath_PI/2] * glow_size) >> 17);
+
+        brig = 31 + (count << 3);
+        colour = pixmap.fade_table[(brig << 8) + base_colour];
+
+        p_face4 = build_continuos_slice_3d(cur_x, cur_y, cur_z,
+          new_x, cur_y, new_z, 2, 2, use_cache, colour);
+        if (p_face4 == NULL)
+            break;
+
+        if (count == 1) {
+            p_face4->Flags = 0;
+            p_face4->ExCol = colour_lookup[ColLU_WHITE];
+        } else {
+            p_face4->Flags = 0x08 | 0x02;
+            p_face4->ExCol = 0x35 - (count * 4);
+        }
+
+        cur_angle = (cur_angle + rate) & LbFPMath_AngleMask;
+        use_cache = 1;
+        cur_x = new_x;
+        cur_z = new_z;
+    }
 }
 
 void build_dropped_item(struct SimpleThing *p_sthing)
