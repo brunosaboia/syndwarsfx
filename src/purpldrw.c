@@ -223,7 +223,8 @@ void draw_hotspot_purple_list(int x, int y)
     p_pditem->Type = PuDT_HOTSPOT;
 }
 
-void flashy_draw_projector_reaching_target_coords(int scr1_x, int scr1_y, int scr2_x, int scr2_y, short advance, TbPixel colour)
+void flashy_draw_projector_reaching_target_coords(int scr1_x, int scr1_y,
+  int scr2_x, int scr2_y, short advance, short tot_len, TbPixel colour)
 {
     struct TbSprite *p_spr;
     ushort spr;
@@ -232,10 +233,10 @@ void flashy_draw_projector_reaching_target_coords(int scr1_x, int scr1_y, int sc
 
     spr = 11 + (colour != 0xF7);
 
-    reach1_x = proj_origin.X + (advance * (scr1_x - proj_origin.X)) / FLASHY_DRAW_REACH_TURNS;
-    reach1_y = proj_origin.Y + (advance * (scr1_y - proj_origin.Y)) / FLASHY_DRAW_REACH_TURNS;
-    reach2_x = proj_origin.X + (advance * (scr2_x - proj_origin.X)) / FLASHY_DRAW_REACH_TURNS;
-    reach2_y = proj_origin.Y + (advance * (scr2_y - proj_origin.Y)) / FLASHY_DRAW_REACH_TURNS;
+    reach1_x = proj_origin.X + (advance * (scr1_x - proj_origin.X)) / tot_len;
+    reach1_y = proj_origin.Y + (advance * (scr1_y - proj_origin.Y)) / tot_len;
+    reach2_x = proj_origin.X + (advance * (scr2_x - proj_origin.X)) / tot_len;
+    reach2_y = proj_origin.Y + (advance * (scr2_y - proj_origin.Y)) / tot_len;
 
     lbDisplay.DrawFlags = Lb_SPRITE_TRANSPAR4;
     draw_line_purple_list(proj_origin.X, proj_origin.Y, reach1_x, reach1_y, colour);
@@ -247,9 +248,57 @@ void flashy_draw_projector_reaching_target_coords(int scr1_x, int scr1_y, int sc
     draw_sprite_purple_list(reach2_x - 1, reach2_y - 1, p_spr);
 }
 
-void flashy_draw_projector_reaching_target_box_coords(int box_x, int box_y, int box_w, int box_h, short advance, TbPixel colour)
+void flashy_draw_projector_reaching_target_box_coords(int box_x, int box_y,
+  int box_w, int box_h, short advance, TbPixel colour)
 {
-    flashy_draw_projector_reaching_target_coords(box_x, box_y, box_x + box_w, box_y + box_h, advance, colour);
+    flashy_draw_projector_reaching_target_coords(box_x, box_y,
+      box_x + box_w, box_y + box_h, advance, FLASHY_DRAW_REACH_TURNS, colour);
+}
+
+void flashy_draw_projector_outline_partial_line(int scr1_x, int scr1_y,
+  int scr2_x, int scr2_y, short advance, short tot_len, TbPixel colour)
+{
+    int progr_x, progr_y;
+    int scr3_x, scr3_y;
+
+    progr_x = advance * (scr2_x - scr1_x) / tot_len;
+    progr_y = advance * (scr2_y - scr1_y) / tot_len;
+    scr3_x = scr1_x + progr_x;
+    scr3_y = scr1_y + progr_y;
+
+    if (progr_x != 0 || progr_y != 0)
+    {
+        int aftim1_x, aftim1_y;
+        int aftim2_x, aftim2_y;
+
+        aftim1_x = scr3_x;
+        aftim1_y = scr3_y;
+        if (progr_x <= 0)
+            aftim2_x = min(aftim1_x + 15, scr1_x);
+        else
+            aftim2_x = max(aftim1_x - 15, scr1_x);
+        if (progr_y <= 0)
+            aftim2_y = min(aftim1_y + 15, scr1_y);
+        else
+            aftim2_y = max(aftim1_y - 15, scr1_y);
+
+        vec_colour = colour;
+        draw_trig_purple_list(aftim1_x, aftim1_y, aftim2_x, aftim2_y);
+        draw_line_purple_list(scr1_x, scr1_y,
+          scr3_x, scr3_y, colour);
+    }
+    {
+        struct TbSprite *p_spr;
+        ushort spr;
+
+        spr = 11 + (colour != 247);
+
+        draw_line_purple_list(proj_origin.X, proj_origin.Y,
+          scr3_x, scr3_y, colour);
+
+        p_spr = &fe_mouseptr_sprites[spr];
+        draw_sprite_purple_list(scr3_x - 1, scr3_y - 1, p_spr);
+    }
 }
 
 ubyte flashy_draw_purple_shape(struct ScreenShape *p_shape)
@@ -261,11 +310,8 @@ ubyte flashy_draw_purple_shape(struct ScreenShape *p_shape)
     return ret;
 #endif
     short i;
-    struct TbSprite *p_spr;
-    ushort spr;
     ubyte pt1, pt2;
 
-    spr = 11 + (p_shape->Colour != 247);
     pt1 = 0;
     pt2 = p_shape->PtLen >> 1;
 
@@ -288,22 +334,22 @@ ubyte flashy_draw_purple_shape(struct ScreenShape *p_shape)
         }
     }
 
+    // Draw lines from projector origin reaching target shape
     if (p_shape->Timer <= FLASHY_DRAW_REACH_TURNS)
     {
         short advance;
 
         advance = p_shape->Timer;
         flashy_draw_projector_reaching_target_coords(p_shape->PtX[pt1], p_shape->PtY[pt1],
-         p_shape->PtX[pt2], p_shape->PtY[pt2], advance, p_shape->Colour);
+         p_shape->PtX[pt2], p_shape->PtY[pt2], advance, FLASHY_DRAW_REACH_TURNS, p_shape->Colour);
 
         p_shape->Timer += p_shape->DrawSpeed;
         return 0;
     }
+    // Draw shape progressively appearing
     if (p_shape->Timer <= FLASHY_DRAW_REACH_TURNS + FLASHY_DRAW_OUTLN_TURNS)
     {
         int pnts_advance, frct_advance, frct_between_pts;
-        int progr_x, progr_y;
-        int scr1_x, scr1_y;
         ushort n;
 
         //TODO instead of dividing by points, we should divide by length - how many fractional
@@ -324,64 +370,12 @@ ubyte flashy_draw_purple_shape(struct ScreenShape *p_shape)
         }
 
         n = pt1 + pnts_advance;
-        progr_x = frct_advance * (p_shape->PtX[n+1] - (int)p_shape->PtX[n+0]) / frct_between_pts;
-        progr_y = frct_advance * (p_shape->PtY[n+1] - (int)p_shape->PtY[n+0]) / frct_between_pts;
-        scr1_x = p_shape->PtX[n] + progr_x;
-        scr1_y = p_shape->PtY[n] + progr_y;
-        if (progr_x != 0 || progr_y != 0)
-        {
-            dword_1DC50C = scr1_x;
-            dword_1DC510 = scr1_y;
-            if (progr_x <= 0)
-                dword_1DC534 = min(dword_1DC50C + 15, p_shape->PtX[n]);
-            else
-                dword_1DC534 = max(dword_1DC50C - 15, p_shape->PtX[n]);
-            if (progr_y <= 0)
-                dword_1DC538 = min(dword_1DC510 + 15, p_shape->PtY[n]);
-            else
-                dword_1DC538 = max(dword_1DC510 - 15, p_shape->PtY[n]);
-
-            draw_trig_purple_list(dword_1DC50C, dword_1DC510, dword_1DC534, dword_1DC538);
-            draw_line_purple_list(p_shape->PtX[n], p_shape->PtY[n],
-              scr1_x, scr1_y, p_shape->Colour);
-        }
-        {
-            draw_line_purple_list(proj_origin.X, proj_origin.Y,
-              scr1_x, scr1_y, p_shape->Colour);
-
-            p_spr = &fe_mouseptr_sprites[spr];
-            draw_sprite_purple_list(scr1_x - 1, scr1_y - 1, p_spr);
-        }
+        flashy_draw_projector_outline_partial_line(p_shape->PtX[n+0], p_shape->PtY[n+0],
+          p_shape->PtX[n+1], p_shape->PtY[n+1], frct_advance, frct_between_pts, p_shape->Colour);
 
         n = pt2 + pnts_advance;
-        progr_x = frct_advance * (p_shape->PtX[n+1] - (int)p_shape->PtX[n+0]) / frct_between_pts;
-        progr_y = frct_advance * (p_shape->PtY[n+1] - (int)p_shape->PtY[n+0]) / frct_between_pts;
-        scr1_x = p_shape->PtX[n] + progr_x;
-        scr1_y = p_shape->PtY[n] + progr_y;
-        if (progr_x != 0 || progr_y != 0)
-        {
-            dword_1DC50C = scr1_x;
-            dword_1DC510 = scr1_y;
-            if (progr_x <= 0)
-                dword_1DC534 = min(dword_1DC50C + 15, p_shape->PtX[n]);
-            else
-                dword_1DC534 = max(dword_1DC50C - 15, p_shape->PtX[n]);
-            if (progr_y <= 0)
-                dword_1DC538 = min(dword_1DC510 + 15, p_shape->PtY[n]);
-            else
-                dword_1DC538 = max(dword_1DC510 - 15, p_shape->PtY[n]);
-
-            draw_trig_purple_list(dword_1DC50C, dword_1DC510, dword_1DC534, dword_1DC538);
-            draw_line_purple_list(p_shape->PtX[n], p_shape->PtY[n],
-              scr1_x, scr1_y, p_shape->Colour);
-        }
-        {
-            draw_line_purple_list(proj_origin.X, proj_origin.Y,
-              scr1_x, scr1_y, p_shape->Colour);
-
-            p_spr = &fe_mouseptr_sprites[spr];
-            draw_sprite_purple_list(scr1_x - 1, scr1_y - 1, p_spr);
-        }
+        flashy_draw_projector_outline_partial_line(p_shape->PtX[n+0], p_shape->PtY[n+0],
+          p_shape->PtX[n+1], p_shape->PtY[n+1], frct_advance, frct_between_pts, p_shape->Colour);
 
         p_shape->Timer += p_shape->DrawSpeed;
         if (p_shape->Timer <= FLASHY_DRAW_REACH_TURNS + FLASHY_DRAW_OUTLN_TURNS)
@@ -404,7 +398,8 @@ ubyte flashy_draw_purple_shape(struct ScreenShape *p_shape)
     return 3;
 }
 
-void flashy_draw_projector_horizontal_lines(short box_x, short box_y, short box_w, short box_h, short advance, short advance_p, short delta_p, TbPixel colour)
+void flashy_draw_projector_horizontal_lines(short box_x, short box_y,
+  short box_w, short box_h, short advance, short advance_p, short delta_p, TbPixel colour)
 {
     struct TbSprite *p_spr;
     ushort spr;
@@ -443,7 +438,8 @@ void flashy_draw_projector_horizontal_lines(short box_x, short box_y, short box_
     draw_sprite_purple_list(purple_box_x1 - 1, box_y + box_h - 1, p_spr);
 }
 
-void flashy_draw_projector_vertical_lines(short box_x, short box_y, short box_w, short box_h, short advance, short advance_p, short delta_p, TbPixel colour)
+void flashy_draw_projector_vertical_lines(short box_x, short box_y,
+  short box_w, short box_h, short advance, short advance_p, short delta_p, TbPixel colour)
 {
     struct TbSprite *p_spr;
     ushort spr;
@@ -528,6 +524,7 @@ ubyte flashy_draw_purple_box(struct ScreenBox *p_box)
 
         advance = p_box->Timer;
         flashy_draw_projector_reaching_target_box_coords(p_box->X, p_box->Y, box_w, box_h, advance, p_box->Colour);
+
         p_box->Timer += p_box->DrawSpeed;
         return 0;
     }
@@ -537,8 +534,12 @@ ubyte flashy_draw_purple_box(struct ScreenBox *p_box)
     {
         short advance;
 
-        advance = ((p_box->Timer - FLASHY_DRAW_REACH_TURNS) * box_w) / (FLASHY_DRAW_OUTLN_TURNS/2);
-        flashy_draw_projector_horizontal_lines(p_box->X, p_box->Y, box_w, box_h, advance, advance, 0, p_box->Colour);
+        advance = p_box->Timer - FLASHY_DRAW_REACH_TURNS;
+        flashy_draw_projector_outline_partial_line(p_box->X, p_box->Y,
+          p_box->X + box_w, p_box->Y, advance, FLASHY_DRAW_OUTLN_TURNS/2, p_box->Colour);
+        flashy_draw_projector_outline_partial_line(p_box->X + box_w, p_box->Y + box_h,
+          p_box->X, p_box->Y + box_h, advance, FLASHY_DRAW_OUTLN_TURNS/2, p_box->Colour);
+
         p_box->Timer += p_box->DrawSpeed;
         return 0;
     }
@@ -548,8 +549,18 @@ ubyte flashy_draw_purple_box(struct ScreenBox *p_box)
     {
         short advance;
 
-        advance = ((p_box->Timer - FLASHY_DRAW_REACH_TURNS - FLASHY_DRAW_OUTLN_TURNS/2) * box_h) / (FLASHY_DRAW_OUTLN_TURNS/2);
-        flashy_draw_projector_vertical_lines(p_box->X, p_box->Y, box_w, box_h, advance, advance, 0, p_box->Colour);
+        // horizontal lines are already fully visible
+        draw_line_purple_list(p_box->X, p_box->Y,
+          p_box->X + box_w, p_box->Y, p_box->Colour);
+        draw_line_purple_list(p_box->X + box_w, p_box->Y + box_h,
+          p_box->X, p_box->Y + box_h, p_box->Colour);
+
+        advance = p_box->Timer - FLASHY_DRAW_REACH_TURNS - FLASHY_DRAW_OUTLN_TURNS/2;
+        flashy_draw_projector_outline_partial_line(p_box->X + box_w, p_box->Y,
+          p_box->X + box_w, p_box->Y + box_h, advance, FLASHY_DRAW_OUTLN_TURNS/2, p_box->Colour);
+        flashy_draw_projector_outline_partial_line(p_box->X, p_box->Y + box_h,
+          p_box->X, p_box->Y, advance, FLASHY_DRAW_OUTLN_TURNS/2, p_box->Colour);
+
         p_box->Timer += p_box->DrawSpeed;
         return 2;
     }
@@ -1039,8 +1050,12 @@ ubyte flashy_draw_purple_text_box(struct ScreenTextBox *p_box)
     {
         short advance;
 
-        advance = ((p_box->Timer - FLASHY_DRAW_REACH_TURNS) * box_w) / (FLASHY_DRAW_OUTLN_TURNS/2);
-        flashy_draw_projector_horizontal_lines(p_box->X, p_box->Y, box_w, box_h, advance, advance, 0, p_box->Colour1);
+        advance = p_box->Timer - FLASHY_DRAW_REACH_TURNS;
+        flashy_draw_projector_outline_partial_line(p_box->X, p_box->Y,
+          p_box->X + box_w, p_box->Y, advance, FLASHY_DRAW_OUTLN_TURNS/2, p_box->Colour1);
+        flashy_draw_projector_outline_partial_line(p_box->X + box_w, p_box->Y + box_h,
+          p_box->X, p_box->Y + box_h, advance, FLASHY_DRAW_OUTLN_TURNS/2, p_box->Colour1);
+
         p_box->Timer += p_box->DrawSpeed;
         return 0;
     }
@@ -1050,8 +1065,18 @@ ubyte flashy_draw_purple_text_box(struct ScreenTextBox *p_box)
     {
         short advance;
 
-        advance = ((p_box->Timer - FLASHY_DRAW_REACH_TURNS - FLASHY_DRAW_OUTLN_TURNS/2) * box_h) / (FLASHY_DRAW_OUTLN_TURNS/2);
-        flashy_draw_projector_vertical_lines(p_box->X, p_box->Y, box_w, box_h, advance, advance, 0, p_box->Colour1);
+        // horizontal lines are already fully visible
+        draw_line_purple_list(p_box->X, p_box->Y,
+          p_box->X + box_w, p_box->Y, p_box->Colour1);
+        draw_line_purple_list(p_box->X + box_w, p_box->Y + box_h,
+          p_box->X, p_box->Y + box_h, p_box->Colour1);
+
+        advance = p_box->Timer - FLASHY_DRAW_REACH_TURNS - FLASHY_DRAW_OUTLN_TURNS/2;
+        flashy_draw_projector_outline_partial_line(p_box->X + box_w, p_box->Y,
+          p_box->X + box_w, p_box->Y + box_h, advance, FLASHY_DRAW_OUTLN_TURNS/2, p_box->Colour1);
+        flashy_draw_projector_outline_partial_line(p_box->X, p_box->Y + box_h,
+          p_box->X, p_box->Y, advance, FLASHY_DRAW_OUTLN_TURNS/2, p_box->Colour1);
+
         p_box->Timer += p_box->DrawSpeed;
         return 2;
     }
@@ -1248,8 +1273,12 @@ ubyte flashy_draw_purple_info_box(struct ScreenInfoBox *p_box)
     {
         short advance;
 
-        advance = ((p_box->Timer - FLASHY_DRAW_REACH_TURNS) * box_w) / (FLASHY_DRAW_OUTLN_TURNS/2);
-        flashy_draw_projector_horizontal_lines(p_box->X, p_box->Y, box_w, box_h, advance, advance, 0, p_box->Colour);
+        advance = p_box->Timer - FLASHY_DRAW_REACH_TURNS;
+        flashy_draw_projector_outline_partial_line(p_box->X, p_box->Y,
+          p_box->X + box_w, p_box->Y, advance, FLASHY_DRAW_OUTLN_TURNS/2, p_box->Colour);
+        flashy_draw_projector_outline_partial_line(p_box->X + box_w, p_box->Y + box_h,
+          p_box->X, p_box->Y + box_h, advance, FLASHY_DRAW_OUTLN_TURNS/2, p_box->Colour);
+
         p_box->Timer += p_box->DrawSpeed;
         return 0;
     }
@@ -1259,8 +1288,18 @@ ubyte flashy_draw_purple_info_box(struct ScreenInfoBox *p_box)
     {
         short advance;
 
-        advance = ((p_box->Timer - FLASHY_DRAW_REACH_TURNS - FLASHY_DRAW_OUTLN_TURNS/2) * box_h) / (FLASHY_DRAW_OUTLN_TURNS/2);
-        flashy_draw_projector_vertical_lines(p_box->X, p_box->Y, box_w, box_h, advance, advance, 0, p_box->Colour);
+        // horizontal lines are already fully visible
+        draw_line_purple_list(p_box->X, p_box->Y,
+          p_box->X + box_w, p_box->Y, p_box->Colour);
+        draw_line_purple_list(p_box->X + box_w, p_box->Y + box_h,
+          p_box->X, p_box->Y + box_h, p_box->Colour);
+
+        advance = p_box->Timer - FLASHY_DRAW_REACH_TURNS - FLASHY_DRAW_OUTLN_TURNS/2;
+        flashy_draw_projector_outline_partial_line(p_box->X + box_w, p_box->Y,
+          p_box->X + box_w, p_box->Y + box_h, advance, FLASHY_DRAW_OUTLN_TURNS/2, p_box->Colour);
+        flashy_draw_projector_outline_partial_line(p_box->X, p_box->Y + box_h,
+          p_box->X, p_box->Y, advance, FLASHY_DRAW_OUTLN_TURNS/2, p_box->Colour);
+
         p_box->Timer += p_box->DrawSpeed;
         return 2;
     }
