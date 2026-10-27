@@ -20,6 +20,7 @@
 
 #include "bfkeybd.h"
 #include "bfgentab.h"
+#include "bfmemut.h"
 #include "bfpalette.h"
 #include <assert.h>
 #include <stdlib.h>
@@ -698,18 +699,18 @@ struct SingleObjectFace4 *build_continuos_slice_3d(int near_x, int near_y, int n
     int sort_key;
 
     if (!use_cache) {
-        memset(&ep, 0, sizeof(ep));
+        LbMemorySet(&ep, 0, sizeof(struct EnginePoint));
         ep.X3d = near_x - engn_xc;
-        ep.Y3d = (near_y << 3) - (engn_yc >> 3);
+        ep.Y3d = (near_y << 3); // subtracted within transform_point(): - 8 * engn_yc;
         ep.Z3d = near_z - engn_zc;
         transform_point(&ep);
-        near_scr_x = (short)ep.pp.X;
-        near_scr_y = (short)ep.pp.Y;
+        near_scr_x = ep.pp.X;
+        near_scr_y = ep.pp.Y;
     }
 
-    memset(&ep, 0, sizeof(ep));
+    LbMemorySet(&ep, 0, sizeof(struct EnginePoint));
     ep.X3d = far_x - engn_xc;
-    ep.Y3d = (far_y << 3) - (engn_yc >> 3);
+    ep.Y3d = (far_y << 3); // subtracted within transform_point(): - 8 * engn_yc;
     ep.Z3d = far_z - engn_zc;
     transform_point(&ep);
 
