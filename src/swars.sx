@@ -51738,7 +51738,7 @@ gproc3_unkn_null_func_3:	/* 0x06B138 */
 
 
 /*----------------------------------------------------------------*/
-build_continuos_slice_3d:	/* 0x06B13C */
+GLOBAL_FUNC(ASM_build_continuos_slice_3d)	/* 0x06B13C */
 /*----------------------------------------------------------------*/
 		push   %esi
 		push   %edi
@@ -51830,7 +51830,7 @@ build_continuos_slice_3d:	/* 0x06B13C */
 
 
 /*----------------------------------------------------------------*/
-calc_angle_rate:	/* 0x06B3D4 */
+GLOBAL_FUNC(ASM_calc_angle_rate)	/* 0x06B3D4 */
 /*----------------------------------------------------------------*/
 		push   %ecx
 		push   %esi
@@ -51966,7 +51966,7 @@ GLOBAL_FUNC(ASM_build_laser_guided_piece)	/* 0x06B490 */
 		mov    0x1e(%esp),%edx
 		cwtl
 		sar    $0x10,%edx
-		call   calc_angle_rate
+		call   ac_calc_angle_rate
 		mov    EXPORT_SYMBOL(colour_lookup)+2,%al
 		mov    %al,0x2c(%esp)
 		movl   $0x14,0x24(%esp)
@@ -51985,7 +51985,7 @@ GLOBAL_FUNC(ASM_build_laser_guided_piece)	/* 0x06B490 */
 		sar    $0x10,%ecx
 		cwtl
 		mov    %ecx,%edx
-		call   calc_angle_rate
+		call   ac_calc_angle_rate
 		mov    %eax,0x1c(%esp)
 		mov    0x16(%esp),%eax
 		mov    EXPORT_SYMBOL(lbSinTable)(,%ecx,4),%ebx
@@ -52017,7 +52017,7 @@ GLOBAL_FUNC(ASM_build_laser_guided_piece)	/* 0x06B490 */
 		push   %eax
 		mov    %eax,%edx
 		mov    %esi,%eax
-		call   build_continuos_slice_3d
+		call   ac_build_continuos_slice_3d
 		test   %eax,%eax
 		je     jump_6af7d
 		cmp    $0x1,%ebp
@@ -112026,7 +112026,7 @@ GLOBAL_FUNC(ASM_process_laser_guided)	/* 0x0C8D80 */
 		mov    0x5e(%esi),%edx
 		cwtl
 		sar    $0x10,%edx
-		call   calc_angle_rate
+		call   ac_calc_angle_rate
 		add    0x60(%esi),%ax
 		add    $0x8,%ah
 		and    $0x7,%ah

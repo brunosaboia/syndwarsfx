@@ -19,6 +19,7 @@
 #include "tngobjdrw.h"
 
 #include "bfkeybd.h"
+#include "bfgentab.h"
 #include "bfpalette.h"
 #include <assert.h>
 #include <stdlib.h>
@@ -621,6 +622,114 @@ void build_static(struct SimpleThing *p_sthing)
       PRCCOORD_TO_YCOORD(p_sthing->Y) >> 3,
       PRCCOORD_TO_MAPCOORD(p_sthing->Z) - engn_zc,
       frame, p_sthing->Radius, p_mapel->ShadeR);
+}
+
+/** Computes an angular turn rate to steer a laser beam.
+ *
+ *  The turn rate is to guide the beam segment from cur_angle
+ *  towards target_angle, in fixed (stepped) increments.
+ *  Also outputs the current glow size, depending on how
+ *  far off the current angle is.
+ */
+short calc_angle_rate(short target_angle, short cur_angle, short *p_glow_size)
+{
+    short delta;
+    short absdelta;
+
+    delta = target_angle - cur_angle;
+    if (delta < -LbFPMath_PI)
+        delta += 2 * LbFPMath_PI;
+    else if (delta > LbFPMath_PI)
+        delta -= 2 * LbFPMath_PI;
+
+    absdelta = (delta < 0) ? -delta : delta;
+    *p_glow_size = (absdelta > 256) ? 0x30 : (((LbFPMath_PI - absdelta) >> 2) + 0x10);
+
+    if (delta < -LbFPMath_PI/2)
+        return -100;
+    else if (delta < -100)
+        return -70;
+    else if (delta < 0)
+        return -10;
+    else if (delta == 0)
+        return 0;
+    else if (delta <= 100)
+        return 10;
+    else if (delta <= LbFPMath_PI/2)
+        return 70;
+    return 100;
+}
+
+/** Builds a single slice (quad) of a 3D beam betweeen two points.
+ *
+ *  The slice is connecting a near point to a far point. When use_cache
+ *  is set, the near point is not re-computed - the screen position
+ *  left over from the previous  call (the earlier far point) is reused.
+ */
+struct SingleObjectFace4 *build_continuos_slice_3d(int near_x, int near_y, int near_z,
+  int far_x, int far_y, int far_z, int w1, int w2, ubyte use_cache, ubyte col)
+{
+#if 0
+    // Pushed through a register holding them: a "g" operand may be placed
+    // relative to the stack pointer, which each push moves.
+    int stkargs[6];
+
+    stkargs[0] = (int)(intptr_t)far_y;
+    stkargs[1] = (int)(intptr_t)far_z;
+    stkargs[2] = (int)(intptr_t)w1;
+    stkargs[3] = (int)(intptr_t)w2;
+    stkargs[4] = (int)(intptr_t)use_cache;
+    stkargs[5] = (int)(intptr_t)col;
+
+    asm volatile (
+      "push 12(%4)\n"
+      "push 8(%4)\n"
+      "push 4(%4)\n"
+      "push 0(%4)\n"
+      "call ASM_build_continuos_slice_3d\n"
+        : : "a" (near_x), "d" (near_y), "b" (near_z), "c" (far_x), "S" (stkargs)
+        : "cc", "memory");
+#endif
+    static short near_scr_x = 0;
+    static short near_scr_y = 0;
+    struct EnginePoint ep;
+    struct SingleObjectFace4 *p_face4;
+    short x1, y1, x2, y2;
+    int sort_key;
+
+    if (!use_cache) {
+        memset(&ep, 0, sizeof(ep));
+        ep.X3d = near_x - engn_xc;
+        ep.Y3d = (near_y << 3) - (engn_yc >> 3);
+        ep.Z3d = near_z - engn_zc;
+        transform_point(&ep);
+        near_scr_x = (short)ep.pp.X;
+        near_scr_y = (short)ep.pp.Y;
+    }
+
+    memset(&ep, 0, sizeof(ep));
+    ep.X3d = far_x - engn_xc;
+    ep.Y3d = (far_y << 3) - (engn_yc >> 3);
+    ep.Z3d = far_z - engn_zc;
+    transform_point(&ep);
+
+    sort_key = ep.Z3d + 0x1288;
+    if (sort_key < 0)
+        sort_key = 0;
+    else if (sort_key > 9999)
+        sort_key = 9999;
+
+    x2 = ep.pp.X;
+    y2 = ep.pp.Y;
+    x1 = near_scr_x;
+    y1 = near_scr_y;
+
+    p_face4 = build_polygon_slice(x1, y1, x2, y2,
+      w1, w2, col, sort_key, use_cache);
+
+    near_scr_x = x2;
+    near_scr_y = y2;
+    return p_face4;
 }
 
 void build_laser_guided_piece(struct Thing *p_laser)
