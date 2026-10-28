@@ -336,7 +336,8 @@ void draw_bang_wobble_line(struct SimpleThing *p_pow)
     enlist_draw_bang_wobble_line(p_pow->U.UBang.shrapnel);
 }
 
-void build_laser(int x1, int y1, int z1, int x2, int y2, int z2,
+void build_laser(int cor1_x, int cor1_y, int cor1_z,
+  int cor2_x, int cor2_y, int cor2_z,
   int itime, struct Thing *p_owner, int colour)
 {
     int depth_shift;
@@ -354,9 +355,9 @@ void build_laser(int x1, int y1, int z1, int x2, int y2, int z2,
         else
             angle = p_owner->U.UObject.ZZ_unused_but_pads_to_long_ObjectNo - 48;
         angle = ((angle + 0x0800) & 0x0700) | (angle & 0xFF);
-        x1 = (3 * lbSinTable[angle] / 2 + p_owner->X) >> 8;
-        y1 = p_owner->Y >> 8;
-        z1 = (p_owner->Z - 3 * lbSinTable[angle + LbFPMath_PI/2] / 2) >> 8;
+        cor1_x = PRCCOORD_TO_MAPCOORD(p_owner->X + 3 * lbSinTable[angle] / 2);
+        cor1_y = PRCCOORD_TO_MAPCOORD(p_owner->Y);
+        cor1_z = PRCCOORD_TO_MAPCOORD(p_owner->Z - 3 * lbSinTable[angle + LbFPMath_PI/2] / 2);
     }
     if ((p_owner != NULL) && (p_owner->Type != TT_BUILDING))
     {
@@ -371,8 +372,63 @@ void build_laser(int x1, int y1, int z1, int x2, int y2, int z2,
     if ((itime < 0) || (colour == colour_lookup[ColLU_GREEN]))
         depth_shift -= 400;
 
-    enlist_draw_laser(x1, y1, z1, x2, y2, z2,
+    enlist_draw_laser(cor1_x, cor1_y, cor1_z, cor2_x, cor2_y, cor2_z,
       depth_shift, itime, ofs_x, ofs_y, colour);
+}
+
+void build_electricity(int cor1_x, int cor1_y, int cor1_z,
+  int cor2_x, int cor2_y, int cor2_z, int itime, struct Thing *p_owner)
+{
+#if 0
+    // Pushed through a register holding them: a "g" operand may be placed
+    // relative to the stack pointer, which each push moves.
+    int stkargs[4];
+
+    stkargs[0] = (int)(intptr_t)cor2_y;
+    stkargs[1] = (int)(intptr_t)cor2_z;
+    stkargs[2] = (int)(intptr_t)itime;
+    stkargs[3] = (int)(intptr_t)p_owner;
+
+    asm volatile (
+      "push 12(%4)\n"
+      "push 8(%4)\n"
+      "push 4(%4)\n"
+      "push 0(%4)\n"
+      "call ASM_build_electricity\n"
+        : : "a" (cor1_x), "d" (cor1_y), "b" (cor1_z), "c" (cor2_x), "S" (stkargs)
+        : "cc", "memory");
+#endif
+    struct EnginePoint ep;
+    int scr1_x, scr1_y;
+    int scr1_depth;
+    short ofs_x, ofs_y;
+
+    if (p_owner != NULL) {
+        ushort mangle, frame;
+        mangle = (p_owner->U.UPerson.Angle + 8 - byte_176D49) & 7;
+        frame = p_owner->StartFrame + 1 + mangle;
+        ofs_x = bul_starts[frame].OffsetX;
+        ofs_y = bul_starts[frame].OffsetY;
+    } else {
+        ofs_x = 0;
+        ofs_y = 0;
+    }
+
+    ep.X3d = cor1_x - engn_xc;
+    ep.Y3d = 8 * cor1_y; // subtracted within transform_point(): - 8 * engn_yc;
+    ep.Z3d = cor1_z - engn_zc;
+    transform_point(&ep);
+
+    scr1_x = ep.pp.X + ((overall_scale * ofs_x) >> 9);
+    scr1_y = ep.pp.Y + ((overall_scale * ofs_y) >> 9);
+    scr1_depth = ep.Z3d;
+
+    ep.X3d = cor2_x - engn_xc;
+    ep.Y3d = 8 * cor2_y; // subtracted within transform_point(): - 8 * engn_yc;
+    ep.Z3d = cor2_z - engn_zc;
+    transform_point(&ep);
+
+    build_wobble_line(scr1_x, scr1_y, scr1_depth, ep.pp.X, ep.pp.Y, ep.Z3d, 0, itime);
 }
 
 void draw_bang(struct SimpleThing *p_pow)

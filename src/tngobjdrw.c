@@ -842,27 +842,6 @@ void build_unkn18(struct Thing *p_thing)
       nstart_ani[900], p_thing->Radius, 63);
 }
 
-void build_electricity(int x1, int y1, int z1, int x2, int y2, int z2, int itime, struct Thing *p_owner)
-{
-    // Pushed through a register holding them: a "g" operand may be placed
-    // relative to the stack pointer, which each push moves.
-    int stkargs[4];
-
-    stkargs[0] = (int)(intptr_t)y2;
-    stkargs[1] = (int)(intptr_t)z2;
-    stkargs[2] = (int)(intptr_t)itime;
-    stkargs[3] = (int)(intptr_t)p_owner;
-
-    asm volatile (
-      "push 12(%4)\n"
-      "push 8(%4)\n"
-      "push 4(%4)\n"
-      "push 0(%4)\n"
-      "call ASM_build_electricity\n"
-        : : "a" (x1), "d" (y1), "b" (z1), "c" (x2), "S" (stkargs)
-        : "cc", "memory");
-}
-
 void build_laser_elec(struct Thing *p_thing)
 {
     struct Thing *p_owntng;
