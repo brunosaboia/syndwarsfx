@@ -22,6 +22,7 @@
 #include "bfgentab.h"
 #include "bfmemut.h"
 #include "bfpalette.h"
+#include "bfutility.h"
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
@@ -896,8 +897,272 @@ void build_nuclear_bomb(struct SimpleThing *p_sthing)
       game_textures, colour_lookup[ColLU_WHITE], 32, 96);
 }
 
+/** Draws a single jittered "lightning bolt" line effect between two 3D points.
+ *
+ *  The line is split into 17 steps; at each step (other than the end points)
+ *  a sine-based perpendicular jitter (independently re-randomized per axis)
+ *  is added to the otherwise straight interpolated point, and a line segment
+ *  is drawn from the previous jittered point to the current one.
+ */
+static void do_beam_electric(int x1, int y1, int z1, int x2, int y2, int z2)
+{
+    int dx, dy, dz;
+    int nx, ny, nz;
+    int step_dx, step_dy, step_dz;
+    int prc_x, prc_y, prc_z;
+    int length;
+    int step;
+    int jit_x, jit_y, jit_z;
+    int beg_cor_x, beg_cor_y, beg_cor_z;
+    TbPixel colour;
+
+    //TODO make coords relative later, only for transformation
+    x1 -= engn_xc;
+    y1 -= (engn_yc >> 3);
+    z1 -= engn_zc;
+    x2 -= engn_xc;
+    y2 -= (engn_yc >> 3);
+    z2 -= engn_zc;
+
+    dx = x2 - x1;
+    dy = y2 - y1;
+    dz = z2 - z1;
+
+    length = LbSqrL(dx * dx + dy * dy + dz * dz);
+    if (length == 0)
+        return;
+
+    nx = (dx << 8) / length;
+    ny = (dy << 8) / length;
+    nz = -((dz << 8) / length);
+
+    step_dx = dx << 4;
+    step_dy = dy << 4;
+    step_dz = dz << 4;
+
+    if ((LbRandomPosShort() & 1) != 0) {
+        nx = -nx;
+        nz = -nz;
+    }
+
+    prc_x = (x1 << 8) + (step_dx << 1);
+    prc_y = (y1 << 8) + (step_dy << 1);
+    prc_z = (z1 << 8) + (step_dz << 1);
+
+    colour = colour_lookup[ColLU_WHITE];
+
+    jit_x = jit_y = jit_z = 0;
+    beg_cor_x = beg_cor_y = beg_cor_z = 0;
+
+    for (step = 0; step <= LbFPMath_PI; step += LbFPMath_PI/16)
+    {
+        int new_jit_x, new_jit_y, new_jit_z;
+
+        new_jit_x = (lbSinTable[step] * nz) >> 7;
+        new_jit_y = (lbSinTable[step] * ny) >> 7;
+        new_jit_z = (lbSinTable[step] * nx) >> 7;
+
+        if (step != LbFPMath_PI) {
+            new_jit_x = (new_jit_x * (LbRandomPosShort() + 0x20)) >> 8;
+            new_jit_y = (new_jit_y * (LbRandomPosShort() + 0x20)) >> 8;
+            new_jit_z = (new_jit_z * (LbRandomPosShort() + 0x20)) >> 8;
+        }
+
+        if (step != 0) {
+            int end_cor_x, end_cor_y, end_cor_z;
+
+            end_cor_x = (prc_x + new_jit_x) >> 8;
+            end_cor_y = (prc_y + new_jit_y) >> 8;
+            end_cor_z = (prc_z + new_jit_z) >> 8;
+            enlist_draw_mapwho_vect(beg_cor_x, beg_cor_y, beg_cor_z,
+              end_cor_x, end_cor_y, end_cor_z, colour);
+        }
+
+        beg_cor_x = (prc_x + jit_x) >> 8;
+        beg_cor_y = (prc_y + jit_y) >> 8;
+        beg_cor_z = (prc_z + jit_z) >> 8;
+        prc_x += step_dx;
+        prc_y += step_dy;
+        prc_z += step_dz;
+
+        jit_x = new_jit_x;
+        jit_y = new_jit_y;
+        jit_z = new_jit_z;
+    }
+}
+
+/** Draws one pass of a segmented laser beam line.
+ *
+ *  Draws beam chunk from a starting screen position, moving forward by
+ *  the given per-segment step, for num_segments segments.
+ *
+ *  Screen coords are fixed point, with 8 fractional bits.
+ */
+static void build_laser_beam_segments(int start_x, int start_y, int start_depth,
+  int step_x, int step_y, int step_depth, int num_segments, short width,
+  int itime, TbPixel beam_colour)
+{
+    int cur_x, cur_y, cur_depth;
+    ubyte use_cache;
+    int i;
+
+    cur_x = start_x;
+    cur_y = start_y;
+    cur_depth = start_depth;
+    use_cache = 0;
+
+    for (i = 0; i < num_segments; i++)
+    {
+        int next_x, next_y, next_depth;
+
+        next_x = cur_x + step_x;
+        next_y = cur_y + step_y;
+        next_depth = cur_depth + step_depth;
+
+        if ((cur_x > 0) && ((cur_x >> 8) < lbDisplay.GraphicsScreenWidth)
+         && (cur_y > 0) && ((cur_y >> 8) < lbDisplay.GraphicsScreenHeight))
+        {
+            struct SingleObjectFace4 *p_face4;
+            int sort_key;
+            ushort brig;
+            TbPixel fade_colour;
+
+            sort_key = (cur_depth >> 8) + 0x1107;
+            if (sort_key < 0)
+                sort_key = 0;
+            else if (sort_key > 9999)
+                sort_key = 9999;
+
+            brig = 32 + 2 * itime;
+            fade_colour = pixmap.fade_table[256 * brig + colour_lookup[ColLU_BLUE]];
+
+            p_face4 = build_polygon_slice(cur_x >> 8, cur_y >> 8,
+              next_x >> 8, next_y >> 8, width, width, fade_colour, sort_key, use_cache);
+            if (p_face4 != NULL) {
+                p_face4->Flags = 0x0f;
+                p_face4->ExCol = beam_colour;
+            }
+        }
+
+        cur_x = next_x;
+        cur_y = next_y;
+        cur_depth = next_depth;
+        use_cache = 1;
+    }
+}
+
+/** Draws a glowing laser beam line between two 3D points, including a muzzle flash.
+ *
+ *  The flash is drawn at the weapon-specific muzzle offset of p_owner.
+ *
+ * @param beam_colour Colour used for the muzzle flash circles and for the
+ *   ExCol of the drawn beam segments (colour_lookup[] index).
+ */
+static void build_laser_beam_generic(int x1, int y1, int z1, int x2, int y2, int z2,
+  int itime, struct Thing *p_owner, int num_electric_strands, TbPixel beam_colour,
+  int circle_depth_bias)
+{
+    struct EnginePoint ep_near, ep_far;
+    int circle_x, circle_y;
+    int dx, dy, dz;
+    int screen_dist;
+    int num_segments;
+    int spread_x, spread_y;
+    int step_x, step_y, step_z;
+    short width1, width2, width3;
+    int circle_sort_key;
+    int i;
+    short ofs_x, ofs_y;
+
+    for (i = 0; i < num_electric_strands; i++)
+        do_beam_electric(x1, y1 + 20, z1, x2, y2, z2);
+
+    ep_near.Flags = 0;
+    ep_near.X3d = x1 - engn_xc;
+    ep_near.Y3d = (y1 << 3) - (engn_yc >> 3);
+    ep_near.Z3d = z1 - engn_zc;
+    transform_point(&ep_near);
+
+    get_bullet_start_offsets(&ofs_x, &ofs_y, p_owner);
+
+    ep_far.Flags = 0;
+    ep_far.X3d = x2 - engn_xc;
+    ep_far.Y3d = (y2 << 3) - (engn_yc >> 3);
+    ep_far.Z3d = z2 - engn_zc;
+    transform_point(&ep_far);
+
+    if ((ep_near.Flags & ep_far.Flags) & 0xf)
+        return;
+
+    circle_x = (ep_near.pp.X << 8) + ((ofs_x * overall_scale) >> 1);
+    circle_y = (ep_near.pp.Y << 8) + ((ofs_y * overall_scale) >> 1);
+
+    dx = (ep_far.pp.X << 8) - circle_x;
+    dy = (ep_far.pp.Y << 8) - circle_y;
+    dz = (ep_far.Z3d << 8) - (ep_near.Z3d << 8);
+
+    screen_dist = LbSqrL(dx * dx + dy * dy);
+    if (screen_dist == 0)
+        return;
+
+    num_segments = (screen_dist / 20) >> 8;
+
+    circle_x += ((dx * 150) / screen_dist) << 2;
+    circle_y += ((dy * 150) / screen_dist) << 2;
+
+    circle_sort_key = ep_near.Z3d + circle_depth_bias;
+    if (circle_sort_key < 0)
+        circle_sort_key = 0;
+    else if (circle_sort_key > 9999)
+        circle_sort_key = 9999;
+
+    build_polygon_circle_2d(circle_x >> 8, circle_y >> 8, 13, 13,
+      0xf, game_textures, beam_colour, 32, 127, circle_sort_key);
+    build_polygon_circle_2d(circle_x >> 8, circle_y >> 8, 10, 10,
+      0xf, game_textures, beam_colour, 32, 127, circle_sort_key);
+
+    circle_x += ((dx * 150) / screen_dist) << 4;
+    circle_y += ((dy * 150) / screen_dist) << 4;
+
+    if (num_segments < 1)
+        num_segments = 1;
+
+    if (itime <= 2) {
+        spread_x = 0;
+        spread_y = 0;
+    } else {
+        int perp_x, perp_y, perp_len;
+
+        perp_x = dy >> 3;
+        perp_y = -(dx >> 3);
+        perp_len = LbSqrL((perp_x * perp_x + perp_y * perp_y) << 4);
+        if (perp_len == 0)
+            perp_len = 1;
+        spread_x = ((perp_x << 10) / perp_len) << 2;
+        spread_y = ((perp_y << 10) / perp_len) << 2;
+    }
+
+    step_x = dx / num_segments;
+    step_y = dy / num_segments;
+    step_z = dz / num_segments;
+
+    width1 = (itime > 2) ? 8 : itime;
+    width2 = (itime > 2) ? 6 : itime;
+    width3 = (itime > 2) ? 2 : itime;
+
+    build_laser_beam_segments(circle_x, circle_y, ep_near.Z3d << 8,
+      step_x, step_y, step_z, num_segments, width1, itime, beam_colour);
+
+    build_laser_beam_segments(circle_x + spread_x, circle_y + spread_y, ep_near.Z3d << 8,
+      step_x, step_y, step_z, num_segments, width2, itime, beam_colour);
+
+    build_laser_beam_segments(circle_x - spread_x, circle_y - spread_y, ep_near.Z3d << 8,
+      step_x, step_y, step_z, num_segments, width3, itime, beam_colour);
+}
+
 void build_laser_beam(int x1, int y1, int z1, int x2, int y2, int z2, int itime, struct Thing *p_owner)
 {
+#if 1
     // Pushed through a register holding them: a "g" operand may be placed
     // relative to the stack pointer, which each push moves.
     int stkargs[4];
@@ -915,10 +1180,15 @@ void build_laser_beam(int x1, int y1, int z1, int x2, int y2, int z2, int itime,
       "call ASM_build_laser_beam\n"
         : : "a" (x1), "d" (y1), "b" (z1), "c" (x2), "S" (stkargs)
         : "cc", "memory");
+    return;
+#endif
+    build_laser_beam_generic(x1, y1, z1, x2, y2, z2, itime, p_owner,
+      2, colour_lookup[ColLU_WHITE], 0x1107);
 }
 
 void build_laser_beam_q(int x1, int y1, int z1, int x2, int y2, int z2, int itime, struct Thing *p_owner)
 {
+#if 1
     // Pushed through a register holding them: a "g" operand may be placed
     // relative to the stack pointer, which each push moves.
     int stkargs[4];
@@ -936,6 +1206,10 @@ void build_laser_beam_q(int x1, int y1, int z1, int x2, int y2, int z2, int itim
       "call ASM_build_laser_beam_q\n"
         : : "a" (x1), "d" (y1), "b" (z1), "c" (x2), "S" (stkargs)
         : "cc", "memory");
+    return;
+#endif
+    build_laser_beam_generic(x1, y1, z1, x2, y2, z2, itime, p_owner,
+      4, colour_lookup[ColLU_BLUE], 0x1288);
 }
 
 void build_laser29(struct Thing *p_thing)
