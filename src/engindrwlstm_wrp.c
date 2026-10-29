@@ -112,6 +112,8 @@ s32 bang_wobble_line_timer = 0;
 short veh_plasma_sparks_timer = 0;
 u32 dword_152E4C = 0x3F69A093;
 
+/** Bullets/shots start point for each frame.
+ */
 struct BulStart bul_starts[4000];
 
 ubyte pers_shield_spr_vers[][5] = {
@@ -336,15 +338,31 @@ void draw_bang_wobble_line(struct SimpleThing *p_pow)
     enlist_draw_bang_wobble_line(p_pow->U.UBang.shrapnel);
 }
 
+void calc_bul_offsets(void)
+{
+#if 1
+    asm volatile ("call ASM_calc_bul_offsets\n"
+        :  :  : "eax", "cc", "memory" );
+    return;
+#endif
+}
+
+void get_bullet_start_offsets(short *p_ofs_x, short *p_ofs_y, const struct Thing *p_person)
+{
+    ushort mangle, frame;
+
+    mangle = (p_person->U.UPerson.Angle + 8 - byte_176D49) & 7;
+    frame = p_person->StartFrame + 1 + mangle;
+    *p_ofs_x = bul_starts[frame].OffsetX;
+    *p_ofs_y = bul_starts[frame].OffsetY;
+}
+
 void build_laser(int cor1_x, int cor1_y, int cor1_z,
   int cor2_x, int cor2_y, int cor2_z,
-  int itime, struct Thing *p_owner, int colour)
+  int itime, struct Thing *p_owner, TbPixel colour)
 {
     int depth_shift;
     short ofs_x, ofs_y;
-
-    ofs_x = 0;
-    ofs_y = 0;
 
     if ((p_owner != NULL) && (p_owner->Type == TT_BUILDING))
     {
@@ -359,13 +377,10 @@ void build_laser(int cor1_x, int cor1_y, int cor1_z,
         cor1_y = PRCCOORD_TO_MAPCOORD(p_owner->Y);
         cor1_z = PRCCOORD_TO_MAPCOORD(p_owner->Z - 3 * lbSinTable[angle + LbFPMath_PI/2] / 2);
     }
-    if ((p_owner != NULL) && (p_owner->Type != TT_BUILDING))
-    {
-        ushort mangle, frame;
-        mangle = (p_owner->U.UPerson.Angle + 8 - byte_176D49) & 7;
-        frame = p_owner->StartFrame + 1 + mangle;
-        ofs_x = bul_starts[frame].OffsetX;
-        ofs_y = bul_starts[frame].OffsetY;
+    if ((p_owner != NULL) && (p_owner->Type != TT_BUILDING)) {
+        get_bullet_start_offsets(&ofs_x, &ofs_y, p_owner);
+    } else {
+        ofs_x = ofs_y = 0;
     }
 
     depth_shift = -641;
@@ -404,14 +419,9 @@ void build_electricity(int cor1_x, int cor1_y, int cor1_z,
     short ofs_x, ofs_y;
 
     if (p_owner != NULL) {
-        ushort mangle, frame;
-        mangle = (p_owner->U.UPerson.Angle + 8 - byte_176D49) & 7;
-        frame = p_owner->StartFrame + 1 + mangle;
-        ofs_x = bul_starts[frame].OffsetX;
-        ofs_y = bul_starts[frame].OffsetY;
+        get_bullet_start_offsets(&ofs_x, &ofs_y, p_owner);
     } else {
-        ofs_x = 0;
-        ofs_y = 0;
+        ofs_x = ofs_y = 0;
     }
 
     ep.X3d = cor1_x - engn_xc;

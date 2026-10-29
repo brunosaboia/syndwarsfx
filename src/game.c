@@ -1201,15 +1201,6 @@ TbBool setup_host(void)
     return ret;
 }
 
-void calc_bul_offsets(void)
-{
-#if 1
-    asm volatile ("call ASM_calc_bul_offsets\n"
-        :  :  : "eax", "cc", "memory" );
-    return;
-#endif
-}
-
 void init_engine(void)
 {
     p_current_sort_sprite = game_sort_sprites;

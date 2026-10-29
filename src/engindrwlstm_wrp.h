@@ -34,6 +34,10 @@ struct SingleFloorTexture;
 
 #pragma pack()
 /******************************************************************************/
+
+void calc_bul_offsets(void);
+void get_bullet_start_offsets(short *p_ofs_x, short *p_ofs_y, const struct Thing *p_person);
+
 void draw_thing_e_graphic(struct Thing *p_thing, int x, int y, int z, ushort frame,
   int radius, int intensity);
 void draw_pers_e_graphic(struct Thing *p_thing, int x, int y, int z, int frame, int radius, int intensity);
@@ -51,7 +55,9 @@ void draw_vehicle_health(struct Thing *p_thing, int bckt);
 
 int mech_unkn_func_03(struct Thing *p_thing);
 
-void build_laser(int x1, int y1, int z1, int x2, int y2, int z2, int itime, struct Thing *p_owner, int colour);
+void build_laser(int cor1_x, int cor1_y, int cor1_z,
+  int cor2_x, int cor2_y, int cor2_z,
+  int itime, struct Thing *p_owner, TbPixel colour);
 
 void build_electricity(int cor1_x, int cor1_y, int cor1_z,
   int cor2_x, int cor2_y, int cor2_z, int itime, struct Thing *p_owner);
