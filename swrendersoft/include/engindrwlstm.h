@@ -114,6 +114,9 @@ struct SingleObjectFace4 *draw_item_add_special_obj_face4_no_pts(ubyte ditype, i
  */
 struct SingleObjectFace4 *draw_item_add_special_obj_face4(ubyte ditype, int bckt);
 
+ushort enlist_draw_mapwho_vect(int x1, int y1, int z1,
+  int x2, int y2, int z2, int col);
+
 void enlist_draw_mapwho_vect_len(int x1, int y1, int z1,
   int x2, int y2, int z2, int len, int col);
 
@@ -187,6 +190,10 @@ struct SingleObjectFace4 *build_polygon_slice(short x1, short y1,
 
 void build_polygon_circle(int cor_x, int cor_y, int cor_z, int r1, int r2, int flag,
   struct SingleFloorTexture *p_tex, int col, int bright1, int bright2);
+
+void build_polygon_circle_2d(int x1, int y1, int r1, int r2,
+  int flag, struct SingleFloorTexture *p_tex, ushort col,
+  short bright1, short bright2, int depth_shift);
 
 struct SingleObjectFace4 *build_glare(short cor_x, short cor_y, short cor_z,
   short r1);
